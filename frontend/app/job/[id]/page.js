@@ -1,6 +1,6 @@
 "use client";
 
-import JobCard from "../../components/JobCard";
+import JobCard from "../../../components/JobCard";
 
 export default function Jobs() {
   const jobs = [
@@ -29,19 +29,13 @@ export default function Jobs() {
 
   return (
     <div className="max-w-6xl mx-auto py-12 px-4">
-
-      <h1 className="text-3xl font-bold mb-6">
-        Latest Jobs
-      </h1>
+      <h1 className="text-3xl font-bold mb-6">Latest Jobs</h1>
 
       <div className="grid md:grid-cols-3 gap-6">
-
         {jobs.map((job) => (
           <JobCard key={job.id} job={job} />
         ))}
-
       </div>
-
     </div>
   );
 }
