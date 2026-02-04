@@ -977,7 +977,7 @@
 //   );
 // }
 "use client";
-
+import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -1045,7 +1045,7 @@ export default function PostJobPage() {
     salaryMin: "",
     salaryMax: "",
     currency: "INR",
-    type: "Full-time",
+    type: "full-time",
     workMode: "Hybrid",
     experienceMin: "",
     experienceMax: "",
@@ -1056,6 +1056,9 @@ export default function PostJobPage() {
     skills: [],
     newSkill: "",
     vacancies: "1",
+
+
+    
     deadline: "",
     category: "Engineering",
     tags: ["Remote Friendly", "Flexible Hours"],
@@ -1078,15 +1081,15 @@ export default function PostJobPage() {
   ];
 
   const jobTypes = [
-    { value: "Full-time", label: "Full Time", icon: <Clock size={18} /> },
-    { value: "Part-time", label: "Part Time", icon: <Clock size={18} /> },
-    { value: "Contract", label: "Contract", icon: <FileText size={18} /> },
+    { value: "full-time", label: "Full Time", icon: <Clock size={18} /> },
+    { value: "part-time", label: "Part Time", icon: <Clock size={18} /> },
+    { value: "contract", label: "Contract", icon: <FileText size={18} /> },
     {
-      value: "Internship",
+      value: "internship",
       label: "Internship",
       icon: <GraduationCap size={18} />,
     },
-    { value: "Freelance", label: "Freelance", icon: <Sun size={18} /> },
+    { value: "freelance", label: "Freelance", icon: <Sun size={18} /> },
   ];
 
   const workModes = [
@@ -1182,12 +1185,72 @@ export default function PostJobPage() {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Please login first");
+        router.push("/login");
+        return;
+      }
+
+      const API = "http://localhost:5000/api";
+
+      // Backend format me data bhejo
+      const jobData = {
+        title: form.title,
+        company: form.company,
+        location: form.location,
+
+        salary: {
+          min: Number(form.salaryMin),
+          max: Number(form.salaryMax),
+        },
+
+        jobType: form.type,
+        workMode: form.workMode,
+
+        experience: {
+          min: Number(form.experienceMin),
+          max: Number(form.experienceMax),
+        },
+
+        description: form.description,
+        responsibilities: form.responsibilities,
+        requirements: form.requirements,
+        benefits: form.benefits,
+
+        skills: form.skills,
+
+        vacancies: Number(form.vacancies),
+        deadline: form.deadline,
+
+        category: form.category,
+
+        applyLink: form.applyLink,
+        contactEmail: form.contactEmail,
+        contactPhone: form.contactPhone,
+
+        isUrgent: form.isUrgent,
+        isFeatured: form.isFeatured,
+      };
+
+      await axios.post(`${API}/jobs`, jobData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       alert("🎉 Job Posted Successfully!");
-      router.push("/employer/my-jobs");
-    }, 1500);
+
+      router.push("/jobs"); // public jobs page
+    } catch (err) {
+      console.log("POST JOB ERROR:", err.response?.data || err);
+
+      alert(err.response?.data?.message || "Job post failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const nextStep = () => {

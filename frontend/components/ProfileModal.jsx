@@ -1,878 +1,1479 @@
+// "use client";
+
+// import { useState, useEffect } from "react";
+
+// export default function ProfileModal({ type, close, profile, setProfile }) {
+//   const [formData, setFormData] = useState({});
+//   const [imagePreview, setImagePreview] = useState(
+//     profile.userInfo?.image || "/images/freasher.png",
+//   );
+
+//   /* ================= INIT ================= */
+//   useEffect(() => {
+//     switch (type) {
+//       case "basic":
+//         setFormData(profile.basic || {});
+//         break;
+
+//       case "userInfo":
+//         setFormData(profile.userInfo || {});
+//         setImagePreview(profile.userInfo?.image || "/images/freasher.png");
+//         break;
+
+//       case "education":
+//         setFormData({
+//           degree: "",
+//           college: "",
+//           field: "",
+//           batch: "",
+//           type: "Graduate",
+//         });
+//         break;
+
+//       case "skills":
+//         setFormData({ skill: "" });
+//         break;
+
+//       case "language":
+//         setFormData({ language: "", proficiency: "Basic" });
+//         break;
+
+//       case "experience":
+//         setFormData({
+//           company: "",
+//           position: "",
+//           startDate: "",
+//           endDate: "",
+//           currentlyWorking: false,
+//           description: "",
+//         });
+//         break;
+
+//       case "certificate":
+//         setFormData({
+//           name: "",
+//           issuer: "",
+//           issueDate: "",
+//           expiryDate: "",
+//           credentialId: "",
+//           url: "",
+//         });
+//         break;
+
+//       case "resume":
+//         setFormData({ resume: null });
+//         break;
+
+//       default:
+//         setFormData({});
+//     }
+//   }, [type, profile]);
+
+//   /* ================= IMAGE UPLOAD ================= */
+//   const handleImageUpload = (e) => {
+//     const file = e.target.files[0];
+//     if (!file) return;
+
+//     const reader = new FileReader();
+//     reader.onloadend = () => {
+//       setImagePreview(reader.result);
+//       setFormData((p) => ({ ...p, image: reader.result }));
+//     };
+//     reader.readAsDataURL(file);
+//   };
+
+//   /* ================= SUBMIT - SIMPLE VERSION ================= */
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     let updatedProfile = { ...profile };
+
+//     // ================= UPDATE LOCAL DATA =================
+
+//     switch (type) {
+//       case "basic":
+//         updatedProfile.basic = formData;
+//         break;
+
+//       case "userInfo":
+//         updatedProfile.userInfo = {
+//           ...formData,
+//           image: imagePreview,
+//         };
+//         break;
+
+//       case "education":
+//         updatedProfile.education = [
+//           ...(Array.isArray(profile.education) ? profile.education : []),
+//           {
+//             degree: formData.degree || "",
+//             college: formData.college || "",
+//             field: formData.field || "",
+//             batch: formData.batch || "",
+//             type: formData.type || "",
+//           },
+//         ];
+//         break;
+
+//       case "skills":
+//         if (formData.skill?.trim()) {
+//           updatedProfile.skills = [
+//             ...(profile.skills || []),
+//             formData.skill.trim(),
+//           ];
+//         }
+//         break;
+
+//       case "experience":
+//         if (formData.company || formData.position) {
+//           updatedProfile.experience = [...(profile.experience || []), formData];
+//         }
+//         break;
+
+//       case "certificate":
+//         if (formData.name) {
+//           updatedProfile.certificate = [
+//             ...(profile.certificate || []),
+//             formData,
+//           ];
+//         }
+//         break;
+
+//       case "language":
+//         if (formData.language) {
+//           updatedProfile.language = [...(profile.language || []), formData];
+//         }
+//         break;
+
+//       case "resume":
+//         if (formData.resume) {
+//           updatedProfile.resume = formData.resume.name;
+//         }
+//         break;
+//     }
+
+//     // ================= CLEAN EDUCATION =================
+
+//     const cleanEducation = Array.isArray(updatedProfile.education)
+//       ? updatedProfile.education.map((e) => ({
+//           degree: e.degree || "",
+//           college: e.college || "",
+//           field: e.field || "",
+//           batch: e.batch || "",
+//           type: e.type || "",
+//         }))
+//       : [];
+
+//     // ================= FINAL PAYLOAD =================
+
+//     const payload = {
+//       basic: updatedProfile.basic || {},
+//       userInfo: updatedProfile.userInfo || {},
+
+//       education: cleanEducation,
+
+//       skills: updatedProfile.skills || [],
+//       experience: updatedProfile.experience || [],
+//       certificate: updatedProfile.certificate || [],
+//       language: updatedProfile.language || [],
+
+//       resume: updatedProfile.resume || "",
+//     };
+
+//     console.log("✅ Final Payload:", payload);
+
+//     setProfile(updatedProfile);
+
+//     // ================= SEND =================
+
+//     try {
+//       const token = localStorage.getItem("token");
+
+//       const res = await fetch(
+//         "http://localhost:5000/api/auth/update-jobseeker-profile",
+//         {
+//           method: "PUT",
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${token}`,
+//           },
+//           body: JSON.stringify(payload),
+//         },
+//       );
+
+//       const data = await res.json();
+
+//       console.log("📥 Backend Response:", data);
+
+//       if (data.success) {
+//         alert("✅ Profile Saved!");
+//         close();
+//       } else {
+//         alert("❌ " + data.message);
+//       }
+//     } catch (err) {
+//       console.error("❌ Save Error:", err);
+//       alert("❌ Error: " + err.message);
+//     }
+//   };
+
+//   // Basic Modal
+//   if (type === "basic") {
+//     return (
+//       <Modal close={close} title="Edit Basic Details">
+//         <form onSubmit={handleSubmit} className="space-y-4">
+//           <input
+//             placeholder="Email"
+//             value={formData.email || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, email: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+
+//           <input
+//             placeholder="Mobile"
+//             value={formData.mobile || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, mobile: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+
+//           <input
+//             type="date"
+//             value={formData.dob || ""}
+//             onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+//             className="w-full border p-2 rounded"
+//           />
+
+//           <select
+//             value={formData.gender || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, gender: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//           >
+//             <option value="">Select Gender</option>
+//             <option value="Male">Male</option>
+//             <option value="Female">Female</option>
+//             <option value="Other">Other</option>
+//             <option value="Prefer not to say">Prefer not to say</option>
+//           </select>
+
+//           <Buttons close={close} />
+//         </form>
+//       </Modal>
+//     );
+//   }
+
+//   // User Info Modal
+//   if (type === "userInfo") {
+//     return (
+//       <Modal close={close} title="Edit Profile Information">
+//         <form onSubmit={handleSubmit} className="space-y-4">
+//           <div className="flex items-center gap-4">
+//             <div className="relative">
+//               <img
+//                 src={imagePreview}
+//                 className="w-20 h-20 rounded-full border-2 border-blue-100 object-cover"
+//                 alt="Profile"
+//               />
+//               <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-1 rounded-full cursor-pointer hover:bg-blue-700">
+//                 <input
+//                   type="file"
+//                   accept="image/*"
+//                   onChange={handleImageUpload}
+//                   className="hidden"
+//                 />
+//                 <svg
+//                   className="w-4 h-4"
+//                   fill="none"
+//                   stroke="currentColor"
+//                   viewBox="0 0 24 24"
+//                 >
+//                   <path
+//                     strokeLinecap="round"
+//                     strokeLinejoin="round"
+//                     strokeWidth={2}
+//                     d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+//                   />
+//                   <path
+//                     strokeLinecap="round"
+//                     strokeLinejoin="round"
+//                     strokeWidth={2}
+//                     d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+//                   />
+//                 </svg>
+//               </label>
+//             </div>
+//             <div>
+//               <p className="text-sm text-gray-500">Click to change photo</p>
+//               <p className="text-xs text-gray-400">JPG, PNG (max 2MB)</p>
+//             </div>
+//           </div>
+
+//           <input
+//             placeholder="Full Name"
+//             value={formData.name || ""}
+//             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+
+//           <input
+//             placeholder="College/University"
+//             value={formData.college || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, college: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//           />
+
+//           <input
+//             placeholder="Location (e.g., New Delhi)"
+//             value={formData.location || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, location: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//           />
+
+//           <Buttons close={close} />
+//         </form>
+//       </Modal>
+//     );
+//   }
+
+//   // Education Modal
+//   if (type === "education") {
+//     return (
+//       <Modal close={close} title="Add Education">
+//         <form onSubmit={handleSubmit} className="space-y-4">
+//           <input
+//             placeholder="Degree (e.g., BCA)"
+//             value={formData.degree || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, degree: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+
+//           <input
+//             placeholder="College/University"
+//             value={formData.college || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, college: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+
+//           <input
+//             placeholder="Field of Study"
+//             value={formData.field || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, field: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//           />
+
+//           <input
+//             placeholder="Batch (e.g., 2021-2024)"
+//             value={formData.batch || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, batch: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//           />
+
+//           <select
+//             value={formData.type || "Graduate"}
+//             onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+//             className="w-full border p-2 rounded"
+//           >
+//             <option value="Graduate">Graduate</option>
+//             <option value="Post Graduate">Post Graduate</option>
+//             <option value="Diploma">Diploma</option>
+//             <option value="Certificate">Certificate</option>
+//           </select>
+
+//           <Buttons close={close} />
+//         </form>
+//       </Modal>
+//     );
+//   }
+
+//   // Skills Modal
+//   if (type === "skills") {
+//     return (
+//       <Modal close={close} title="Add Skill">
+//         <form onSubmit={handleSubmit} className="space-y-4">
+//           <input
+//             placeholder="Enter skill (e.g., React.js)"
+//             value={formData.skill || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, skill: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+
+//           <div className="text-sm text-gray-500">
+//             <p className="font-medium mb-2">Popular skills:</p>
+//             <div className="flex flex-wrap gap-2">
+//               {[
+//                 "React.js",
+//                 "JavaScript",
+//                 "Node.js",
+//                 "MongoDB",
+//                 "TypeScript",
+//                 "Next.js",
+//                 "Tailwind CSS",
+//               ].map((skill) => (
+//                 <button
+//                   type="button"
+//                   key={skill}
+//                   onClick={() => setFormData({ skill })}
+//                   className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm"
+//                 >
+//                   {skill}
+//                 </button>
+//               ))}
+//             </div>
+//           </div>
+
+//           <Buttons close={close} />
+//         </form>
+//       </Modal>
+//     );
+//   }
+
+//   // Language Modal
+//   if (type === "language") {
+//     return (
+//       <Modal close={close} title="Add Language">
+//         <form onSubmit={handleSubmit} className="space-y-4">
+//           <input
+//             placeholder="Language (e.g., English)"
+//             value={formData.language || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, language: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+
+//           <select
+//             value={formData.proficiency || "Basic"}
+//             onChange={(e) =>
+//               setFormData({ ...formData, proficiency: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//           >
+//             <option value="Basic">Basic</option>
+//             <option value="Intermediate">Intermediate</option>
+//             <option value="Fluent">Fluent</option>
+//             <option value="Native">Native</option>
+//           </select>
+
+//           <Buttons close={close} />
+//         </form>
+//       </Modal>
+//     );
+//   }
+
+//   // Experience Modal
+//   if (type === "experience") {
+//     return (
+//       <Modal close={close} title="Add Work Experience">
+//         <form onSubmit={handleSubmit} className="space-y-4">
+//           <input
+//             placeholder="Company Name"
+//             value={formData.company || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, company: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+
+//           <input
+//             placeholder="Position/Role"
+//             value={formData.position || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, position: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+
+//           <div className="grid grid-cols-2 gap-4">
+//             <input
+//               type="date"
+//               placeholder="Start Date"
+//               value={formData.startDate || ""}
+//               onChange={(e) =>
+//                 setFormData({ ...formData, startDate: e.target.value })
+//               }
+//               className="w-full border p-2 rounded"
+//             />
+//             <input
+//               type="date"
+//               placeholder="End Date"
+//               value={formData.endDate || ""}
+//               onChange={(e) =>
+//                 setFormData({ ...formData, endDate: e.target.value })
+//               }
+//               className="w-full border p-2 rounded"
+//               disabled={formData.currentlyWorking}
+//             />
+//           </div>
+
+//           <div className="flex items-center gap-2">
+//             <input
+//               type="checkbox"
+//               checked={formData.currentlyWorking || false}
+//               onChange={(e) =>
+//                 setFormData({ ...formData, currentlyWorking: e.target.checked })
+//               }
+//               className="h-4 w-4"
+//               id="currentlyWorking"
+//             />
+//             <label htmlFor="currentlyWorking" className="text-sm text-gray-600">
+//               I currently work here
+//             </label>
+//           </div>
+
+//           <textarea
+//             placeholder="Description of your role and responsibilities"
+//             value={formData.description || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, description: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//             rows={3}
+//           />
+
+//           <Buttons close={close} />
+//         </form>
+//       </Modal>
+//     );
+//   }
+
+//   // Certificate Modal
+//   if (type === "certificate") {
+//     return (
+//       <Modal close={close} title="Add Certification">
+//         <form onSubmit={handleSubmit} className="space-y-4">
+//           <input
+//             placeholder="Certificate Name"
+//             value={formData.name || ""}
+//             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+
+//           <input
+//             placeholder="Issuing Organization"
+//             value={formData.issuer || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, issuer: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//           />
+
+//           <input
+//             type="date"
+//             placeholder="Issue Date"
+//             value={formData.issueDate || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, issueDate: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//           />
+
+//           <input
+//             type="date"
+//             placeholder="Expiry Date (if any)"
+//             value={formData.expiryDate || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, expiryDate: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//           />
+
+//           <input
+//             placeholder="Credential ID (optional)"
+//             value={formData.credentialId || ""}
+//             onChange={(e) =>
+//               setFormData({ ...formData, credentialId: e.target.value })
+//             }
+//             className="w-full border p-2 rounded"
+//           />
+
+//           <input
+//             placeholder="Credential URL (optional)"
+//             value={formData.url || ""}
+//             onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+//             className="w-full border p-2 rounded"
+//           />
+
+//           <Buttons close={close} />
+//         </form>
+//       </Modal>
+//     );
+//   }
+
+//   // Resume Modal
+//   if (type === "resume") {
+//     return (
+//       <Modal close={close} title="Upload Resume">
+//         <form onSubmit={handleSubmit} className="space-y-4">
+//           <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+//             <input
+//               type="file"
+//               accept=".pdf,.doc,.docx"
+//               onChange={(e) => setFormData({ resume: e.target.files[0] })}
+//               className="hidden"
+//               id="resume-upload"
+//             />
+//             <label htmlFor="resume-upload" className="cursor-pointer">
+//               <div className="text-gray-600">
+//                 <svg
+//                   className="mx-auto h-12 w-12 text-gray-400"
+//                   fill="none"
+//                   viewBox="0 0 24 24"
+//                   stroke="currentColor"
+//                 >
+//                   <path
+//                     strokeLinecap="round"
+//                     strokeLinejoin="round"
+//                     strokeWidth={2}
+//                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+//                   />
+//                 </svg>
+//                 <p className="mt-2 font-medium">Click to upload resume</p>
+//                 <p className="text-sm text-gray-500 mt-1">
+//                   PDF, DOC, DOCX (max. 5MB)
+//                 </p>
+//               </div>
+//             </label>
+//           </div>
+
+//           {formData.resume && (
+//             <div className="p-3 bg-green-50 border border-green-200 rounded">
+//               <p className="text-green-700 font-medium">
+//                 Selected: {formData.resume.name}
+//               </p>
+//             </div>
+//           )}
+
+//           <Buttons close={close} />
+//         </form>
+//       </Modal>
+//     );
+//   }
+
+//   return null;
+// }
+
+// /* ================= MODAL COMPONENT ================= */
+// function Modal({ children, close, title }) {
+//   return (
+//     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+//       <div
+//         className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+//         onClick={(e) => e.stopPropagation()}
+//       >
+//         <div className="p-6">
+//           <div className="flex justify-between items-center mb-6">
+//             <h3 className="text-xl font-bold text-gray-900">{title}</h3>
+//             <button
+//               onClick={close}
+//               className="text-gray-400 hover:text-gray-500 text-2xl"
+//             >
+//               &times;
+//             </button>
+//           </div>
+//           {children}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// /* ================= BUTTONS COMPONENT ================= */
+// function Buttons({ close }) {
+//   return (
+//     <div className="flex justify-end gap-3 mt-8 pt-6 border-t">
+//       <button
+//         type="button"
+//         onClick={close}
+//         className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+//       >
+//         Cancel
+//       </button>
+//       <button
+//         type="submit"
+//         className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+//       >
+//         Save
+//       </button>
+//     </div>
+//   );
+// }
+
 "use client";
 
 import { useState, useEffect } from "react";
 
 export default function ProfileModal({ type, close, profile, setProfile }) {
-  // Skill suggestions
-  const skillSuggestions = [
-    "React.js",
-    "Next.js",
-    "TypeScript",
-    "JavaScript",
-    "Node.js",
-    "MongoDB",
-    "Express.js",
-    "Tailwind CSS",
-    "Bootstrap",
-    "CSS3",
-    "HTML5",
-    "Git",
-    "GitHub",
-    "REST APIs",
-    "GraphQL",
-    "Redux",
-    "Context API",
-    "Firebase",
-    "AWS",
-    "Docker",
-    "Python",
-    "Java",
-    "C++",
-    "PHP",
-    "MySQL",
-    "PostgreSQL",
-    "UI/UX Design",
-    "Figma",
-    "Adobe XD",
-    "Agile Methodology",
-    "Scrum",
-    "Jira",
-    "Communication Skills",
-    "Problem Solving",
-    "Team Leadership",
-    "Project Management",
-    "DevOps",
-    "CI/CD",
-    "Testing",
-    "Jest",
-    "Cypress",
-    "Webpack",
-    "Vite",
-  ];
+  const [formData, setFormData] = useState({});
+  const [imagePreview, setImagePreview] = useState(
+    profile.userInfo?.image || "/images/freasher.png",
+  );
 
-  // Certificate suggestions
-  const certificateSuggestions = [
-    "Web Development",
-    "React Developer",
-    "Node.js",
-    "Python",
-    "Data Science",
-    "AWS Certified Developer",
-    "Azure Fundamentals",
-    "Google Cloud Associate",
-    "Cyber Security",
-    "AI ML",
-    "Full Stack Developer",
-    "Frontend Developer",
-    "Backend Developer",
-    "DevOps Engineer",
-    "UI/UX Design",
-    "Digital Marketing",
-    "Project Management Professional",
-    "Salesforce Administrator",
-    "Oracle Certified Professional",
-    "SAP Certified",
-  ];
-
-  // Initialize form data based on modal type
-  const [formData, setFormData] = useState(() => {
+  /* ================= INIT ================= */
+  useEffect(() => {
+    console.log("🔥 Modal Type:", type);
     switch (type) {
       case "basic":
-        return { ...profile.basic };
+        setFormData(profile.basic || {});
+        break;
+
       case "userInfo":
-        return { ...profile.userInfo };
+        setFormData(profile.userInfo || {});
+        setImagePreview(profile.userInfo?.image || "/images/freasher.png");
+        break;
+
       case "education":
-        return {
+        setFormData({
           degree: "",
           college: "",
           field: "",
           batch: "",
           type: "Graduate",
-        };
+        });
+        break;
+
       case "skills":
-        return { skill: "", suggestions: [] };
+        setFormData({ skill: "" });
+        break;
+
       case "language":
-        return { language: "", proficiency: "Basic" };
+        setFormData({ language: "", proficiency: "Basic" });
+        break;
+
       case "experience":
-        return { experience: "" };
+        setFormData({
+          company: "",
+          position: "",
+          startDate: "",
+          endDate: "",
+          currentlyWorking: false,
+          description: "",
+        });
+        break;
+
       case "certificate":
-        return { certificate: "", suggestions: [] };
+        setFormData({
+          name: "",
+          issuer: "",
+          issueDate: "",
+          expiryDate: "",
+          credentialId: "",
+          url: "",
+        });
+        break;
+
       case "resume":
-        return { resume: "" };
+        setFormData({ resume: null });
+        break;
+
       default:
-        return {};
+        setFormData({});
     }
-  });
+  }, [type, profile]);
 
-  // Filter suggestions based on input
-  const [filteredSkillSuggestions, setFilteredSkillSuggestions] = useState([]);
-  const [filteredCertSuggestions, setFilteredCertSuggestions] = useState([]);
-  const [showSkillSuggestions, setShowSkillSuggestions] = useState(false);
-  const [showCertSuggestions, setShowCertSuggestions] = useState(false);
-  const [imagePreview, setImagePreview] = useState(
-    profile.userInfo.image || "/images/freasher.png",
-  );
-
-  // Handle image file upload
+  /* ================= IMAGE UPLOAD ================= */
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      // Check if file is an image
-      if (!file.type.startsWith("image/")) {
-        alert("Please upload an image file (JPEG, PNG, etc.)");
-        return;
-      }
+    if (!file) return;
 
-      // Create a preview URL
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const imageUrl = reader.result;
-        setImagePreview(imageUrl);
-        setFormData((prev) => ({
-          ...prev,
-          image: imageUrl,
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+      setFormData((p) => ({ ...p, image: reader.result }));
+    };
+    reader.readAsDataURL(file);
   };
 
-  // Handle form input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // Filter suggestions based on input
-    if (type === "skills" && name === "skill") {
-      if (value.trim() === "") {
-        setFilteredSkillSuggestions(skillSuggestions.slice(0, 10));
-      } else {
-        const filtered = skillSuggestions
-          .filter((skill) => skill.toLowerCase().includes(value.toLowerCase()))
-          .slice(0, 10);
-        setFilteredSkillSuggestions(filtered);
-      }
-      setShowSkillSuggestions(true);
-    }
-
-    if (type === "certificate" && name === "certificate") {
-      if (value.trim() === "") {
-        setFilteredCertSuggestions(certificateSuggestions.slice(0, 10));
-      } else {
-        const filtered = certificateSuggestions
-          .filter((cert) => cert.toLowerCase().includes(value.toLowerCase()))
-          .slice(0, 10);
-        setFilteredCertSuggestions(filtered);
-      }
-      setShowCertSuggestions(true);
-    }
-  };
-
-  // Handle suggestion click
-  const handleSuggestionClick = (value, field) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-
-    if (type === "skills") {
-      setShowSkillSuggestions(false);
-    } else if (type === "certificate") {
-      setShowCertSuggestions(false);
-    }
-  };
-
-  // Initialize suggestions on mount
-  useEffect(() => {
-    if (type === "skills") {
-      setFilteredSkillSuggestions(skillSuggestions.slice(0, 10));
-    } else if (type === "certificate") {
-      setFilteredCertSuggestions(certificateSuggestions.slice(0, 10));
-    }
-  }, [type]);
-
-  // Update image preview when profile changes
-  useEffect(() => {
-    if (type === "userInfo" && profile.userInfo.image) {
-      setImagePreview(profile.userInfo.image);
-    }
-  }, [profile.userInfo.image, type]);
-
-  // Handle form submission
-  const handleSubmit = (e) => {
+  /* ================= SUBMIT - FIXED VERSION ================= */
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let updatedProfile = { ...profile };
+
+    // ================= UPDATE LOCAL DATA =================
     switch (type) {
       case "basic":
-        setProfile((prev) => ({
-          ...prev,
-          basic: { ...formData },
-        }));
+        updatedProfile.basic = formData;
         break;
 
       case "userInfo":
-        setProfile((prev) => ({
-          ...prev,
-          userInfo: {
-            ...formData,
-            image: imagePreview,
-          },
-        }));
+        updatedProfile.userInfo = {
+          ...formData,
+          image: imagePreview,
+        };
         break;
 
       case "education":
-        setProfile((prev) => ({
-          ...prev,
-          education: [...prev.education, { ...formData }],
-        }));
+        const newEducation = {
+          degree: String(formData.degree || ""),
+          college: String(formData.college || ""),
+          field: String(formData.field || ""),
+          batch: String(formData.batch || ""),
+          type: String(formData.type || ""),
+        };
+
+        updatedProfile.education = [
+          ...(Array.isArray(profile.education) ? profile.education : []),
+          newEducation,
+        ];
         break;
 
       case "skills":
-        if (formData.skill.trim()) {
-          // Check if skill already exists
-          if (!profile.skills.includes(formData.skill.trim())) {
-            setProfile((prev) => ({
-              ...prev,
-              skills: [...prev.skills, formData.skill.trim()],
-            }));
-          }
-        }
-        break;
-
-      case "language":
-        if (formData.language.trim()) {
-          // Check if language already exists
-          const languageExists = profile.language.some(
-            (lang) =>
-              lang.language.toLowerCase() === formData.language.toLowerCase(),
-          );
-          if (!languageExists) {
-            setProfile((prev) => ({
-              ...prev,
-              language: [...prev.language, { ...formData }],
-            }));
-          }
+        if (formData.skill?.trim()) {
+          updatedProfile.skills = [
+            ...(profile.skills || []),
+            formData.skill.trim(),
+          ];
         }
         break;
 
       case "experience":
-        if (formData.experience.trim()) {
-          setProfile((prev) => ({
-            ...prev,
-            experience: [...prev.experience, formData.experience.trim()],
-          }));
+        if (formData.company || formData.position) {
+          updatedProfile.experience = [
+            ...(profile.experience || []),
+            {
+              company: String(formData.company || ""),
+              position: String(formData.position || ""),
+              startDate: formData.startDate || "",
+              endDate: formData.endDate || "",
+              currentlyWorking: Boolean(formData.currentlyWorking || false),
+              description: String(formData.description || ""),
+            },
+          ];
         }
         break;
 
       case "certificate":
-        if (formData.certificate.trim()) {
-          // Check if certificate already exists
-          if (!profile.certificate.includes(formData.certificate.trim())) {
-            setProfile((prev) => ({
-              ...prev,
-              certificate: [...prev.certificate, formData.certificate.trim()],
-            }));
-          }
+        if (formData.name) {
+          updatedProfile.certificate = [
+            ...(profile.certificate || []),
+            {
+              name: String(formData.name || ""),
+              issuer: String(formData.issuer || ""),
+              issueDate: formData.issueDate || "",
+              expiryDate: formData.expiryDate || "",
+              credentialId: String(formData.credentialId || ""),
+              url: String(formData.url || ""),
+            },
+          ];
+        }
+        break;
+
+      case "language":
+        if (formData.language) {
+          updatedProfile.language = [
+            ...(profile.language || []),
+            {
+              language: String(formData.language || ""),
+              proficiency: String(formData.proficiency || "Basic"),
+            },
+          ];
         }
         break;
 
       case "resume":
         if (formData.resume) {
-          // Handle file upload - in a real app, you'd upload to a server
-          // For now, just store the filename
-          const fileName = formData.resume.name || "resume.pdf";
-          setProfile((prev) => ({
-            ...prev,
-            resume: fileName,
-          }));
+          updatedProfile.resume = formData.resume.name;
         }
-        break;
-
-      default:
         break;
     }
 
-    close();
+    // ================= CLEAN EDUCATION (NO NEED NOW) =================
+    // Removed the extra cleaning since we're already cleaning above
+
+    // ================= FINAL PAYLOAD =================
+    const payload = {
+      basic: updatedProfile.basic || {},
+      userInfo: updatedProfile.userInfo || {},
+
+      // ✅ DIRECT ARRAY - NO STRINGIFICATION
+      education: Array.isArray(updatedProfile.education)
+        ? updatedProfile.education.map((edu) => ({
+            degree: String(edu.degree || ""),
+            college: String(edu.college || ""),
+            field: String(edu.field || ""),
+            batch: String(edu.batch || ""),
+            type: String(edu.type || ""),
+          }))
+        : [],
+
+      // ✅ OTHER ARRAYS
+      skills: Array.isArray(updatedProfile.skills)
+        ? updatedProfile.skills.map((skill) => String(skill || ""))
+        : [],
+
+      experience: Array.isArray(updatedProfile.experience)
+        ? updatedProfile.experience.map((exp) => ({
+            company: String(exp.company || ""),
+            position: String(exp.position || ""),
+            startDate: exp.startDate || "",
+            endDate: exp.endDate || "",
+            currentlyWorking: Boolean(exp.currentlyWorking || false),
+            description: String(exp.description || ""),
+          }))
+        : [],
+
+      certificate: Array.isArray(updatedProfile.certificate)
+        ? updatedProfile.certificate.map((cert) => ({
+            name: String(cert.name || ""),
+            issuer: String(cert.issuer || ""),
+            issueDate: cert.issueDate || "",
+            expiryDate: cert.expiryDate || "",
+            credentialId: String(cert.credentialId || ""),
+            url: String(cert.url || ""),
+          }))
+        : [],
+
+      language: Array.isArray(updatedProfile.language)
+        ? updatedProfile.language.map((lang) => ({
+            language: String(lang.language || ""),
+            proficiency: String(lang.proficiency || "Basic"),
+          }))
+        : [],
+
+      resume: String(updatedProfile.resume || ""),
+    };
+
+    console.log("✅ Final Payload (Modal):", payload);
+
+    // ================= UPDATE FRONTEND STATE =================
+    setProfile(updatedProfile);
+
+    // ================= SEND TO BACKEND =================
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(
+        "http://localhost:5000/api/auth/update-jobseeker-profile",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      const data = await res.json();
+
+      console.log("📥 Backend Response:", data);
+
+      if (data.success) {
+        alert("✅ Profile Saved!");
+        close();
+      } else {
+        alert("❌ " + data.message);
+      }
+    } catch (err) {
+      console.error("❌ Save Error:", err);
+      alert("❌ Error: " + err.message);
+    }
   };
 
-  // Render different forms based on modal type
-  const renderForm = () => {
-    switch (type) {
-      case "basic":
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Mobile
-              </label>
-              <input
-                type="tel"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Date of Birth
-              </label>
-              <input
-                type="date"
-                name="dob"
-                value={formData.dob}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Gender
-              </label>
-              <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-                <option value="Prefer not to say">Prefer not to say</option>
-              </select>
-            </div>
-          </div>
-        );
+  // Basic Modal
+  if (type === "basic") {
+    return (
+      <Modal close={close} title="Edit Basic Details">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            placeholder="Email"
+            value={formData.email || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+            required
+          />
 
-      case "userInfo":
-        return (
-          <div className="space-y-4">
-            {/* Profile Image Upload */}
-            <div className="flex flex-col items-center">
-              <div className="relative mb-4">
-                <img
-                  src={imagePreview}
-                  alt="Profile Preview"
-                  className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
-                />
-                <label
-                  htmlFor="profile-image-upload"
-                  className="absolute bottom-2 right-2 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition-colors"
-                  title="Change photo"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </label>
+          <input
+            placeholder="Mobile"
+            value={formData.mobile || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, mobile: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+            required
+          />
+
+          <input
+            type="date"
+            value={formData.dob || ""}
+            onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+            className="w-full border p-2 rounded"
+          />
+
+          <select
+            value={formData.gender || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, gender: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+            <option value="Prefer not to say">Prefer not to say</option>
+          </select>
+
+          <Buttons close={close} />
+        </form>
+      </Modal>
+    );
+  }
+
+  // User Info Modal
+  if (type === "userInfo") {
+    return (
+      <Modal close={close} title="Edit Profile Information">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <img
+                src={imagePreview}
+                className="w-20 h-20 rounded-full border-2 border-blue-100 object-cover"
+                alt="Profile"
+              />
+              <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-1 rounded-full cursor-pointer hover:bg-blue-700">
                 <input
                   type="file"
-                  id="profile-image-upload"
                   accept="image/*"
                   onChange={handleImageUpload}
                   className="hidden"
                 />
-              </div>
-              <p className="text-sm text-gray-500">
-                Click camera icon to upload photo
-              </p>
-            </div>
-
-            {/* Other fields */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Full Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                College/University
-              </label>
-              <input
-                type="text"
-                name="college"
-                value={formData.college}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Location
-              </label>
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
-            </div>
-          </div>
-        );
-
-      case "education":
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Degree/Course
-              </label>
-              <input
-                type="text"
-                name="degree"
-                value={formData.degree}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300  text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="e.g., BCA, B.Tech, MCA"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                College/University
-              </label>
-              <input
-                type="text"
-                name="college"
-                value={formData.college}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="e.g., JNVU Jodhpur"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Field of Study
-              </label>
-              <input
-                type="text"
-                name="field"
-                value={formData.field}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="e.g., Computer Science"
-                required
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Batch
-                </label>
-                <input
-                  type="text"
-                  name="batch"
-                  value={formData.batch}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="e.g., 2021 - 2024"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Type
-                </label>
-                <select
-                  name="type"
-                  value={formData.type}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <option value="Graduate">Graduate</option>
-                  <option value="Post Graduate">Post Graduate</option>
-                  <option value="Diploma">Diploma</option>
-                  <option value="Certificate">Certificate</option>
-                  <option value="School">School</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        );
-
-      case "skills":
-        return (
-          <div className="space-y-4">
-            <div className="relative">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Add Skill
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
               </label>
-              <input
-                type="text"
-                name="skill"
-                value={formData.skill}
-                onChange={handleChange}
-                onFocus={() => setShowSkillSuggestions(true)}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="e.g., React, Node.js, MongoDB"
-                required
-              />
-
-              {/* Suggestions Dropdown */}
-              {showSkillSuggestions && filteredSkillSuggestions.length > 0 && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
-                  <div className="p-2 border-b border-gray-100">
-                    <p className="text-xs font-medium text-gray-500">
-                      Suggestions
-                    </p>
-                  </div>
-                  {filteredSkillSuggestions.map((skill, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => handleSuggestionClick(skill, "skill")}
-                      className="w-full text-left px-3 py-2 hover:bg-gray-50 text-sm text-gray-700"
-                    >
-                      {skill}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              <p className="text-xs text-gray-500 mt-1">
-                Type to see suggestions or add custom skill
-              </p>
-            </div>
-
-            {/* Already added skills */}
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <div className="flex justify-between items-center mb-2">
-                <p className="text-sm font-medium text-gray-700">
-                  Current Skills ({profile.skills.length})
-                </p>
-                <span className="text-xs text-gray-500">Click ✕ to remove</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {profile.skills.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded flex items-center gap-1"
-                  >
-                    {skill}
-                  </span>
-                ))}
-                {profile.skills.length === 0 && (
-                  <p className="text-sm text-gray-500 italic">
-                    No skills added yet
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-
-      case "language":
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Language
-              </label>
-              <input
-                type="text"
-                name="language"
-                value={formData.language}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="e.g., English, Hindi, Spanish"
-                required
-              />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Proficiency Level
-              </label>
-              <select
-                name="proficiency"
-                value={formData.proficiency}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="Basic">Basic</option>
-                <option value="Conversational">Conversational</option>
-                <option value="Fluent">Fluent</option>
-                <option value="Native">Native</option>
-              </select>
-            </div>
-
-            {/* Already added languages */}
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <p className="text-sm font-medium text-gray-700 mb-2">
-                Current Languages
-              </p>
-              <div className="space-y-2">
-                {profile.language.map((lang, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center"
-                  >
-                    <span className="text-sm text-gray-700">
-                      {lang.language}
-                    </span>
-                    <span className="text-xs px-2 py-1 bg-blue-100 text-blue-600 rounded">
-                      {lang.proficiency}
-                    </span>
-                  </div>
-                ))}
-              </div>
+              <p className="text-sm text-gray-500">Click to change photo</p>
+              <p className="text-xs text-gray-400">JPG, PNG (max 2MB)</p>
             </div>
           </div>
-        );
 
-      case "experience":
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Work Experience
-              </label>
-              <textarea
-                name="experience"
-                value={formData.experience}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                rows="4"
-                placeholder="Describe your work experience, role, responsibilities, etc."
-                required
-              />
-            </div>
+          <input
+            placeholder="Full Name"
+            value={formData.name || ""}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            className="w-full border p-2 rounded"
+            required
+          />
 
-            {/* Already added experiences */}
-            {profile.experience.length > 0 && (
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-sm font-medium text-gray-700 mb-2">
-                  Current Experiences
-                </p>
-                <div className="space-y-2">
-                  {profile.experience.map((exp, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-center"
-                    >
-                      <p className="text-sm text-gray-700">{exp}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        );
+          <input
+            placeholder="College/University"
+            value={formData.college || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, college: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+          />
 
-      case "certificate":
-        return (
-          <div className="space-y-4">
-            <div className="relative">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Certification Name
-              </label>
-              <input
-                type="text"
-                name="certificate"
-                value={formData.certificate}
-                onChange={handleChange}
-                onFocus={() => setShowCertSuggestions(true)}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="e.g., AWS Certified Developer, Google Analytics Certified"
-                required
-              />
+          <input
+            placeholder="Location (e.g., New Delhi)"
+            value={formData.location || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, location: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+          />
 
-              {/* Suggestions Dropdown */}
-              {showCertSuggestions && filteredCertSuggestions.length > 0 && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
-                  <div className="p-2 border-b border-gray-100">
-                    <p className="text-xs font-medium text-gray-500">
-                      Suggestions
-                    </p>
-                  </div>
-                  {filteredCertSuggestions.map((cert, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => handleSuggestionClick(cert, "certificate")}
-                      className="w-full text-left px-3 py-2 hover:bg-gray-50 text-sm text-gray-700"
-                    >
-                      {cert}
-                    </button>
-                  ))}
-                </div>
-              )}
+          <Buttons close={close} />
+        </form>
+      </Modal>
+    );
+  }
 
-              <p className="text-xs text-gray-500 mt-1">
-                Type to see suggestions or add custom certification
-              </p>
-            </div>
+  // Education Modal
+  if (type === "education") {
+    return (
+      <Modal close={close} title="Add Education">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            placeholder="Degree (e.g., BCA)"
+            value={formData.degree || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, degree: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+            required
+          />
 
-            {/* Already added certificates */}
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <p className="text-sm font-medium text-gray-700 mb-2">
-                Current Certifications
-              </p>
-              <div className="space-y-2">
-                {profile.certificate.map((cert, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center"
-                  >
-                    <p className="text-sm text-gray-700">{cert}</p>
-                  </div>
-                ))}
-                {profile.certificate.length === 0 && (
-                  <p className="text-sm text-gray-500 italic">
-                    No certifications added yet
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        );
+          <input
+            placeholder="College/University"
+            value={formData.college || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, college: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+            required
+          />
 
-      case "resume":
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Upload Resume (PDF)
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                <input
-                  type="file"
-                  name="resume"
-                  onChange={(e) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      resume: e.target.files[0],
-                    }));
-                  }}
-                  accept=".pdf"
-                  className="hidden"
-                  id="resume-upload"
-                />
-                <label
-                  htmlFor="resume-upload"
-                  className="cursor-pointer inline-block"
+          <input
+            placeholder="Field of Study"
+            value={formData.field || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, field: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+          />
+
+          <input
+            placeholder="Batch (e.g., 2021-2024)"
+            value={formData.batch || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, batch: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+          />
+
+          <select
+            value={formData.type || "Graduate"}
+            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+            className="w-full border p-2 rounded"
+          >
+            <option value="Graduate">Graduate</option>
+            <option value="Post Graduate">Post Graduate</option>
+            <option value="Diploma">Diploma</option>
+            <option value="Certificate">Certificate</option>
+          </select>
+
+          <Buttons close={close} />
+        </form>
+      </Modal>
+    );
+  }
+
+  // Skills Modal
+  if (type === "skills") {
+    return (
+      <Modal close={close} title="Add Skill">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            placeholder="Enter skill (e.g., React.js)"
+            value={formData.skill || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, skill: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+            required
+          />
+
+          <div className="text-sm text-gray-500">
+            <p className="font-medium mb-2">Popular skills:</p>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "React.js",
+                "JavaScript",
+                "Node.js",
+                "MongoDB",
+                "TypeScript",
+                "Next.js",
+                "Tailwind CSS",
+              ].map((skill) => (
+                <button
+                  type="button"
+                  key={skill}
+                  onClick={() => setFormData({ skill })}
+                  className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm"
                 >
-                  <div className="text-gray-600">
-                    <svg
-                      className="mx-auto h-12 w-12 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                      />
-                    </svg>
-                    <p className="mt-2">Click to upload resume</p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      PDF files only (max. 5MB)
-                    </p>
-                  </div>
-                </label>
-                {formData.resume && (
-                  <p className="mt-3 text-sm text-green-600">
-                    Selected: {formData.resume.name}
-                  </p>
-                )}
-              </div>
+                  {skill}
+                </button>
+              ))}
             </div>
-            {profile.resume && (
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <p className="text-sm font-medium text-gray-700">
-                  Current Resume: {profile.resume}
+          </div>
+
+          <Buttons close={close} />
+        </form>
+      </Modal>
+    );
+  }
+
+  // Language Modal
+  if (type === "language") {
+    return (
+      <Modal close={close} title="Add Language">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            placeholder="Language (e.g., English)"
+            value={formData.language || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, language: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+            required
+          />
+
+          <select
+            value={formData.proficiency || "Basic"}
+            onChange={(e) =>
+              setFormData({ ...formData, proficiency: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+          >
+            <option value="Basic">Basic</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Fluent">Fluent</option>
+            <option value="Native">Native</option>
+          </select>
+
+          <Buttons close={close} />
+        </form>
+      </Modal>
+    );
+  }
+
+  // Experience Modal
+  if (type === "experience") {
+    return (
+      <Modal close={close} title="Add Work Experience">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            placeholder="Company Name"
+            value={formData.company || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, company: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+            required
+          />
+
+          <input
+            placeholder="Position/Role"
+            value={formData.position || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, position: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+            required
+          />
+
+          <div className="grid grid-cols-2 gap-4">
+            <input
+              type="date"
+              placeholder="Start Date"
+              value={formData.startDate || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, startDate: e.target.value })
+              }
+              className="w-full border p-2 rounded"
+            />
+            <input
+              type="date"
+              placeholder="End Date"
+              value={formData.endDate || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, endDate: e.target.value })
+              }
+              className="w-full border p-2 rounded"
+              disabled={formData.currentlyWorking}
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={formData.currentlyWorking || false}
+              onChange={(e) =>
+                setFormData({ ...formData, currentlyWorking: e.target.checked })
+              }
+              className="h-4 w-4"
+              id="currentlyWorking"
+            />
+            <label htmlFor="currentlyWorking" className="text-sm text-gray-600">
+              I currently work here
+            </label>
+          </div>
+
+          <textarea
+            placeholder="Description of your role and responsibilities"
+            value={formData.description || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+            rows={3}
+          />
+
+          <Buttons close={close} />
+        </form>
+      </Modal>
+    );
+  }
+
+  // Certificate Modal
+  if (type === "certificate") {
+    return (
+      <Modal close={close} title="Add Certification">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            placeholder="Certificate Name"
+            value={formData.name || ""}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            className="w-full border p-2 rounded"
+            required
+          />
+
+          <input
+            placeholder="Issuing Organization"
+            value={formData.issuer || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, issuer: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+          />
+
+          <input
+            type="date"
+            placeholder="Issue Date"
+            value={formData.issueDate || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, issueDate: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+          />
+
+          <input
+            type="date"
+            placeholder="Expiry Date (if any)"
+            value={formData.expiryDate || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, expiryDate: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+          />
+
+          <input
+            placeholder="Credential ID (optional)"
+            value={formData.credentialId || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, credentialId: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+          />
+
+          <input
+            placeholder="Credential URL (optional)"
+            value={formData.url || ""}
+            onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+            className="w-full border p-2 rounded"
+          />
+
+          <Buttons close={close} />
+        </form>
+      </Modal>
+    );
+  }
+
+  // Resume Modal
+  if (type === "resume") {
+    return (
+      <Modal close={close} title="Upload Resume">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx"
+              onChange={(e) => setFormData({ resume: e.target.files[0] })}
+              className="hidden"
+              id="resume-upload"
+            />
+            <label htmlFor="resume-upload" className="cursor-pointer">
+              <div className="text-gray-600">
+                <svg
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
+                </svg>
+                <p className="mt-2 font-medium">Click to upload resume</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  PDF, DOC, DOCX (max. 5MB)
                 </p>
               </div>
-            )}
+            </label>
           </div>
-        );
 
-      default:
-        return null;
-    }
-  };
+          {formData.resume && (
+            <div className="p-3 bg-green-50 border border-green-200 rounded">
+              <p className="text-green-700 font-medium">
+                Selected: {formData.resume.name}
+              </p>
+            </div>
+          )}
 
-  // Get modal title based on type
-  const getModalTitle = () => {
-    const titles = {
-      basic: "Edit Basic Details",
-      userInfo: "Edit Profile Information",
-      education: "Add Education",
-      skills: "Add Skills",
-      language: "Add Language",
-      experience: "Add Work Experience",
-      certificate: "Add Certification",
-      resume: "Upload Resume",
-    };
-    return titles[type] || "Edit";
-  };
+          <Buttons close={close} />
+        </form>
+      </Modal>
+    );
+  }
 
-  // Close suggestions when clicking outside
-  const handleClickOutside = (e) => {
-    if (!e.target.closest(".relative")) {
-      setShowSkillSuggestions(false);
-      setShowCertSuggestions(false);
-    }
-  };
+  return null;
+}
 
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
-
+/* ================= MODAL COMPONENT ================= */
+function Modal({ children, close, title }) {
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-      onClick={handleClickOutside}
-    >
-      <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div
+        className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="p-6">
-          {/* Modal Header */}
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-bold text-gray-900">
-              {getModalTitle()}
-            </h3>
+            <h3 className="text-xl font-bold text-gray-900">{title}</h3>
             <button
               onClick={close}
               className="text-gray-400 hover:text-gray-500 text-2xl"
@@ -880,32 +1481,30 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
               &times;
             </button>
           </div>
-
-          {/* Modal Form */}
-          <form onSubmit={handleSubmit}>
-            {renderForm()}
-
-            {/* Modal Actions */}
-            <div className="flex justify-end gap-3 mt-8 pt-6 border-t">
-              <button
-                type="button"
-                onClick={close}
-                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-              >
-                {type === "basic" || type === "userInfo"
-                  ? "Save Changes"
-                  : "Add"}
-              </button>
-            </div>
-          </form>
+          {children}
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ================= BUTTONS COMPONENT ================= */
+function Buttons({ close }) {
+  return (
+    <div className="flex justify-end gap-3 mt-8 pt-6 border-t">
+      <button
+        type="button"
+        onClick={close}
+        className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+      >
+        Save
+      </button>
     </div>
   );
 }

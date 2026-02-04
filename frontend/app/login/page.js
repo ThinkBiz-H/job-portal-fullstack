@@ -1,106 +1,107 @@
 "use client";
 
 import { useState } from "react";
-import { auth } from "../../services/firebase";
-
-import {
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-} from "firebase/auth";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
-  const [confirmResult, setConfirmResult] = useState(null);
+  const [step, setStep] = useState("phone"); // phone | otp
+  const [userType, setUserType] = useState("jobseeker");
+  const [loading, setLoading] = useState(false);
 
-  // ✅ Setup Recaptcha (MISSING PART - VERY IMPORTANT)
-  const setupRecaptcha = () => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        {
-          size: "normal", // visible for testing
-          callback: () => {
-            console.log("Recaptcha Verified");
-          },
-          "expired-callback": () => {
-            alert("Recaptcha Expired, Reload Page");
-          },
-        }
-      );
-    }
-  };
+  const router = useRouter();
+  const API = "http://localhost:5000/api";
 
-  // ✅ Send OTP
+  /* ================= SEND OTP ================= */
   const sendOtp = async (e) => {
     e.preventDefault();
 
     if (phone.length !== 10) {
-      alert("Enter valid mobile number");
+      alert("Enter valid 10 digit number");
       return;
     }
 
-    setupRecaptcha();
-
-    const appVerifier = window.recaptchaVerifier;
-    const fullPhone = "+91" + phone;
-
     try {
-      const result = await signInWithPhoneNumber(
-        auth,
-        fullPhone,
-        appVerifier
-      );
+      setLoading(true);
 
-      setConfirmResult(result);
+      await axios.post(`${API}/auth/send-otp`, {
+        phone,
+        userType,
+      });
 
       alert("OTP Sent ✅");
-
+      setStep("otp");
     } catch (err) {
-      console.error("OTP Error:", err);
-      alert(err.message); // Show real error
+      alert(err.response?.data?.message || "OTP failed");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ✅ Verify OTP
+  /* ================= VERIFY OTP ================= */
   const verifyOtp = async (e) => {
     e.preventDefault();
 
-    if (!otp || otp.length !== 6) {
+    if (otp.length !== 6) {
       alert("Invalid OTP");
       return;
     }
 
     try {
-      await confirmResult.confirm(otp);
+      setLoading(true);
+
+      const res = await axios.post(`${API}/auth/verify-otp`, {
+        phone,
+        otp,
+        userType,
+      });
+
+      // Save Token
+      localStorage.setItem("token", res.data.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.data));
 
       alert("Login Success 🎉");
 
-      window.location.href = "/profile";
-
+      // Redirect by role
+      if (userType === "employer") {
+        router.push("/employer/dashboard");
+      } else {
+        router.push("/profile");
+      }
     } catch (err) {
-      console.error("Verify Error:", err);
-      alert(err.message);
+      alert(err.response?.data?.message || "OTP invalid");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-
       <form
-        onSubmit={confirmResult ? verifyOtp : sendOtp}
+        onSubmit={step === "phone" ? sendOtp : verifyOtp}
         className="bg-white p-8 rounded shadow w-full max-w-md"
       >
+        <h2 className="text-2xl font-bold mb-6 text-center">Login with OTP</h2>
 
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          Login with Mobile
-        </h2>
+        {/* USER TYPE */}
+        {step === "phone" && (
+          <select
+            className="w-full border p-3 mb-4 rounded"
+            value={userType}
+            onChange={(e) => setUserType(e.target.value)}
+          >
+            <option value="jobseeker">Candidate</option>
+            <option value="employer">Employer</option>
+          </select>
+        )}
 
-        {!confirmResult && (
+        {/* PHONE */}
+        {step === "phone" && (
           <input
             type="tel"
-            placeholder="Enter Mobile"
+            placeholder="Enter Mobile Number"
             className="w-full border p-3 mb-4 rounded"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
@@ -109,7 +110,8 @@ export default function Login() {
           />
         )}
 
-        {confirmResult && (
+        {/* OTP */}
+        {step === "otp" && (
           <input
             type="text"
             placeholder="Enter OTP"
@@ -122,17 +124,17 @@ export default function Login() {
         )}
 
         <button
+          disabled={loading}
           type="submit"
           className="w-full bg-blue-600 text-white py-3 rounded"
         >
-          {confirmResult ? "Verify OTP" : "Send OTP"}
+          {loading
+            ? "Please wait..."
+            : step === "phone"
+              ? "Send OTP"
+              : "Verify OTP"}
         </button>
-
-        {/* ✅ Recaptcha Container */}
-        <div id="recaptcha-container"></div>
-
       </form>
-
     </div>
   );
 }
