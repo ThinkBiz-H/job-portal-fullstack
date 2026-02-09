@@ -108,13 +108,24 @@ const userSchema = new mongoose.Schema(
       ],
     },
 
-    /* ===== EMPLOYER ===== */
     employerProfile: {
       companyName: String,
       tagline: String,
       description: String,
       website: String,
       industry: String,
+      companyType: String,
+
+      // ✅ ADD THESE TWO
+      logo: {
+        type: String,
+        default: "",
+      },
+
+      coverPhoto: {
+        type: String,
+        default: "",
+      },
 
       companySize: {
         type: String,
@@ -131,7 +142,25 @@ const userSchema = new mongoose.Schema(
       facebook: String,
       instagram: String,
 
+      mission: String,
+      vision: String,
+      values: [String],
+
+      specialties: [String],
+      benefits: [String],
+
+      teamSize: String,
+      avgEmployeeTenure: String,
+      workCulture: String,
+
       isVerified: { type: Boolean, default: false },
+      verificationLevel: { type: String, default: "basic" },
+      documentsVerified: [String],
+
+      totalJobsPosted: { type: Number, default: 0 },
+      totalHires: { type: Number, default: 0 },
+      avgResponseTime: { type: String, default: "0 days" },
+      candidateSatisfaction: { type: String, default: "0/5" },
     },
 
     /* ===== OTP ===== */

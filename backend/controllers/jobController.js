@@ -144,6 +144,56 @@ exports.deleteJob = async (req, res) => {
 };
 
 /* ================= APPLY FOR JOB ================= */
+// exports.applyForJob = async (req, res) => {
+//   try {
+//     if (req.user.userType !== "jobseeker") {
+//       return res.status(403).json({
+//         success: false,
+//         message: "Only jobseekers can apply",
+//       });
+//     }
+
+//     const job = await Job.findById(req.params.id);
+
+//     if (!job) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Job not found",
+//       });
+//     }
+
+//     const already = await Application.findOne({
+//       job: req.params.id,
+//       applicant: req.user.id,
+//     });
+
+//     if (already) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Already applied",
+//       });
+//     }
+
+//     const application = await Application.create({
+//       job: req.params.id,
+//       applicant: req.user.id,
+//       employer: job.postedBy,
+//       coverLetter: req.body.coverLetter,
+//       resume: req.body.resume,
+//     });
+
+//     job.totalApplications += 1;
+//     await job.save();
+
+//     res.status(201).json({
+//       success: true,
+//       data: application,
+//     });
+//   } catch (err) {
+//     res.status(500).json({ success: false, message: err.message });
+//   }
+// };
+/* ================= APPLY FOR JOB ================= */
 exports.applyForJob = async (req, res) => {
   try {
     if (req.user.userType !== "jobseeker") {
@@ -162,6 +212,7 @@ exports.applyForJob = async (req, res) => {
       });
     }
 
+    // ✅ Check already applied
     const already = await Application.findOne({
       job: req.params.id,
       applicant: req.user.id,
@@ -170,10 +221,11 @@ exports.applyForJob = async (req, res) => {
     if (already) {
       return res.status(400).json({
         success: false,
-        message: "Already applied",
+        message: "You have already applied for this job",
       });
     }
 
+    // ✅ Create application
     const application = await Application.create({
       job: req.params.id,
       applicant: req.user.id,
@@ -182,15 +234,23 @@ exports.applyForJob = async (req, res) => {
       resume: req.body.resume,
     });
 
-    job.totalApplications += 1;
+    // ✅ Safe count update
+    job.totalApplications = (job.totalApplications || 0) + 1;
     await job.save();
 
+    // ✅ Send count to frontend
     res.status(201).json({
       success: true,
+      message: "Applied successfully",
+      totalApplications: job.totalApplications,
       data: application,
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 };
 

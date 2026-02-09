@@ -3,14 +3,15 @@ const express = require("express");
 const {
   getMyApplications,
   getMyApplicants,
-  getSingleApplicant, // 👈 ADD
+  getSingleApplicant,
+  updateApplicationStatus, // ✅ ADD
 } = require("../controllers/applicationController");
 
 const { protect, authorize } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Employer: All applicants
+// ================= EMPLOYER: ALL APPLICANTS =================
 router.get(
   "/my-applicants",
   protect,
@@ -18,10 +19,18 @@ router.get(
   getMyApplicants,
 );
 
-// Jobseeker: My applications
+// ================= JOBSEEKER: MY APPLICATIONS =================
 router.get("/me", protect, getMyApplications);
 
-// 👇 Single Applicant Detail (IMPORTANT)
+// ================= SINGLE APPLICANT DETAIL =================
 router.get("/:id", protect, authorize("employer", "admin"), getSingleApplicant);
+
+// ================= UPDATE STATUS =================
+router.put(
+  "/:id/status",
+  protect,
+  authorize("employer", "admin"),
+  updateApplicationStatus,
+);
 
 module.exports = router;

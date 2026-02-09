@@ -1,4 +1,3 @@
-
 const express = require("express");
 const router = express.Router();
 
@@ -9,6 +8,7 @@ const {
   verifyOTP,
   getMe,
   updateJobseekerProfile,
+  updateEmployerProfile,
 } = require("../controllers/authController");
 
 const { protect } = require("../middleware/authMiddleware");
@@ -22,5 +22,6 @@ router.post("/verify-otp", verifyOTP);
 // PROFILE
 router.get("/me", protect, getMe);
 router.put("/update-jobseeker-profile", protect, updateJobseekerProfile);
+router.put("/updateprofile", protect, updateEmployerProfile);
 
 module.exports = router;
