@@ -1,442 +1,8 @@
-// "use client";
-
-// import { useState, useEffect } from "react";
-// import Link from "next/link";
-// import {
-//   Briefcase,
-//   Users,
-//   FileText,
-//   PlusCircle,
-//   TrendingUp,
-//   Clock,
-//   CheckCircle,
-//   Eye,
-//   Calendar,
-//   Building,
-//   MapPin,
-//   ChevronRight,
-//   BarChart3,
-//   Sparkles,
-// } from "lucide-react";
-
-// export default function EmployerDashboard() {
-//   const [activeTab, setActiveTab] = useState("overview");
-//   const [loading, setLoading] = useState(true);
-
-//   // Dummy Data (baad me backend se aayega)
-//   const stats = {
-//     totalJobs: 12,
-//     activeJobs: 8,
-//     applications: 245,
-//     interviews: 24,
-//     pendingReviews: 8,
-//     conversionRate: "68%",
-//   };
-
-//   const recentJobs = [
-//     {
-//       id: 1,
-//       title: "Senior Frontend Developer",
-//       location: "Remote",
-//       applicants: 45,
-//       date: "2024-01-15",
-//       status: "active",
-//       views: 120,
-//     },
-//     {
-//       id: 2,
-//       title: "Full Stack Engineer",
-//       location: "Bangalore",
-//       applicants: 32,
-//       date: "2024-01-10",
-//       status: "active",
-//       views: 89,
-//     },
-//     {
-//       id: 3,
-//       title: "DevOps Engineer",
-//       location: "Mumbai",
-//       applicants: 18,
-//       date: "2024-01-05",
-//       status: "closed",
-//       views: 65,
-//     },
-//   ];
-
-//   const recentActivities = [
-//     {
-//       id: 1,
-//       text: "New application received for Senior Developer",
-//       time: "2 hours ago",
-//       type: "application",
-//     },
-//     {
-//       id: 2,
-//       text: "Job 'UI/UX Designer' published successfully",
-//       time: "1 day ago",
-//       type: "job",
-//     },
-//     {
-//       id: 3,
-//       text: "Interview scheduled with Rahul Sharma",
-//       time: "2 days ago",
-//       type: "interview",
-//     },
-//     {
-//       id: 4,
-//       text: "Job 'Backend Engineer' closed",
-//       time: "3 days ago",
-//       type: "job",
-//     },
-//   ];
-
-//   const quickStats = [
-//     {
-//       icon: <Briefcase size={20} />,
-//       label: "Active Jobs",
-//       value: stats.activeJobs,
-//       change: "+2 this week",
-//       color: "bg-blue-500",
-//     },
-//     {
-//       icon: <Users size={20} />,
-//       label: "Total Applicants",
-//       value: stats.applications,
-//       change: "+24 today",
-//       color: "bg-green-500",
-//     },
-//     {
-//       icon: <FileText size={20} />,
-//       label: "Pending Reviews",
-//       value: stats.pendingReviews,
-//       change: "Need attention",
-//       color: "bg-amber-500",
-//     },
-//     {
-//       icon: <TrendingUp size={20} />,
-//       label: "Conversion Rate",
-//       value: stats.conversionRate,
-//       change: "+5% from last month",
-//       color: "bg-purple-500",
-//     },
-//   ];
-
-//   useEffect(() => {
-//     // Simulate API call
-//     setTimeout(() => setLoading(false), 1000);
-//   }, []);
-
-//   if (loading) {
-//     return (
-//       <section className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen p-6 flex items-center justify-center">
-//         <div className="text-center">
-//           <div className="w-16 h-16 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-//           <p className="mt-4 text-gray-600">Loading your dashboard...</p>
-//         </div>
-//       </section>
-//     );
-//   }
-
-//   return (
-//     <section className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen p-4 md:p-6">
-//       <div className="max-w-7xl mx-auto space-y-6">
-//         {/* HEADER */}
-//         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-//           <div>
-//             <div className="flex items-center gap-3 mb-2">
-//               <div className="p-2 bg-green-100 rounded-lg">
-//                 <Building className="w-6 h-6 text-green-600" />
-//               </div>
-//               <div>
-//                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-//                   Welcome back, <span className="text-green-600">TechCorp</span>
-//                 </h1>
-//                 <p className="text-gray-600 text-sm md:text-base">
-//                   Here's what's happening with your jobs today
-//                 </p>
-//               </div>
-//             </div>
-//             <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
-//               <Calendar size={16} />
-//               <span>
-//                 {new Date().toLocaleDateString("en-IN", {
-//                   weekday: "long",
-//                   year: "numeric",
-//                   month: "long",
-//                   day: "numeric",
-//                 })}
-//               </span>
-//             </div>
-//           </div>
-
-//           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-//             <Link
-//               href="/employer/post-job"
-//               className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-5 py-3 rounded-xl font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 group"
-//             >
-//               <PlusCircle size={20} />
-//               <span>Post New Job</span>
-//               <Sparkles
-//                 size={16}
-//                 className="opacity-0 group-hover:opacity-100 transition-opacity"
-//               />
-//             </Link>
-//           </div>
-//         </div>
-
-//         {/* QUICK STATS GRID */}
-//         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-//           {quickStats.map((stat, index) => (
-//             <div
-//               key={index}
-//               className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300"
-//             >
-//               <div className="flex items-center justify-between mb-4">
-//                 <div
-//                   className={`p-2 rounded-lg ${stat.color.replace("bg-", "bg-")} bg-opacity-10`}
-//                 >
-//                   <div className={stat.color.replace("bg-", "text-")}>
-//                     {stat.icon}
-//                   </div>
-//                 </div>
-//                 <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-100 text-gray-600">
-//                   {stat.change}
-//                 </span>
-//               </div>
-//               <h3 className="text-2xl font-bold text-gray-900">{stat.value}</h3>
-//               <p className="text-sm text-gray-600 mt-1">{stat.label}</p>
-//               <div
-//                 className={`h-1 w-full ${stat.color} mt-3 rounded-full opacity-20`}
-//               ></div>
-//             </div>
-//           ))}
-//         </div>
-
-//         {/* MAIN CONTENT */}
-//         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-//           {/* LEFT COLUMN - Recent Jobs & Quick Actions */}
-//           <div className="lg:col-span-2 space-y-6">
-//             {/* Recent Jobs */}
-//             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-//               <div className="p-5 border-b border-gray-100 flex justify-between items-center">
-//                 <div>
-//                   <h2 className="text-xl font-bold text-gray-900">
-//                     Recent Job Posts
-//                   </h2>
-//                   <p className="text-sm text-gray-500">
-//                     Your recently published jobs
-//                   </p>
-//                 </div>
-//                 <Link
-//                   href="/employer/my-jobs"
-//                   className="text-green-600 text-sm font-medium flex items-center gap-1 hover:gap-2 transition-all"
-//                 >
-//                   View all <ChevronRight size={16} />
-//                 </Link>
-//               </div>
-
-//               <div className="divide-y divide-gray-100">
-//                 {recentJobs.map((job) => (
-//                   <div
-//                     key={job.id}
-//                     className="p-5 hover:bg-gray-50 transition-colors"
-//                   >
-//                     <div className="flex justify-between items-start">
-//                       <div>
-//                         <div className="flex items-center gap-3">
-//                           <h3 className="font-semibold text-gray-900">
-//                             {job.title}
-//                           </h3>
-//                           <span
-//                             className={`text-xs px-2 py-1 rounded-full ${job.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}`}
-//                           >
-//                             {job.status === "active" ? "Active" : "Closed"}
-//                           </span>
-//                         </div>
-//                         <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
-//                           <span className="flex items-center gap-1">
-//                             <MapPin size={14} />
-//                             {job.location}
-//                           </span>
-//                           <span className="flex items-center gap-1">
-//                             <Users size={14} />
-//                             {job.applicants} applicants
-//                           </span>
-//                           <span className="flex items-center gap-1">
-//                             <Eye size={14} />
-//                             {job.views} views
-//                           </span>
-//                         </div>
-//                       </div>
-//                       <div className="text-right">
-//                         <div className="text-xs text-gray-500">Posted on</div>
-//                         <div className="text-sm font-medium">
-//                           {new Date(job.date).toLocaleDateString("en-IN")}
-//                         </div>
-//                       </div>
-//                     </div>
-//                   </div>
-//                 ))}
-//               </div>
-//             </div>
-
-//             {/* Quick Actions */}
-//             <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-5 border border-green-100">
-//               <h2 className="text-lg font-bold text-gray-900 mb-4">
-//                 Quick Actions
-//               </h2>
-//               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-//                 <Link
-//                   href="/employer/applicants"
-//                   className="bg-white p-4 rounded-xl border border-gray-200 hover:border-green-300 hover:shadow-md transition-all flex items-center justify-between group"
-//                 >
-//                   <div className="flex items-center gap-3">
-//                     <div className="p-2 bg-green-100 rounded-lg">
-//                       <Users className="w-5 h-5 text-green-600" />
-//                     </div>
-//                     <div>
-//                       <h3 className="font-medium text-gray-900">
-//                         Review Applicants
-//                       </h3>
-//                       <p className="text-xs text-gray-500">
-//                         Manage job applications
-//                       </p>
-//                     </div>
-//                   </div>
-//                   <ChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
-//                 </Link>
-
-//                 <Link
-//                   href="/employer/analytics"
-//                   className="bg-white p-4 rounded-xl border border-gray-200 hover:border-green-300 hover:shadow-md transition-all flex items-center justify-between group"
-//                 >
-//                   <div className="flex items-center gap-3">
-//                     <div className="p-2 bg-blue-100 rounded-lg">
-//                       <BarChart3 className="w-5 h-5 text-blue-600" />
-//                     </div>
-//                     <div>
-//                       <h3 className="font-medium text-gray-900">
-//                         View Analytics
-//                       </h3>
-//                       <p className="text-xs text-gray-500">
-//                         Performance insights
-//                       </p>
-//                     </div>
-//                   </div>
-//                   <ChevronRight className="text-gray-400 group-hover:text-blue-600 transition-colors" />
-//                 </Link>
-//               </div>
-//             </div>
-//           </div>
-
-//           {/* RIGHT COLUMN - Recent Activity */}
-//           <div className="space-y-6">
-//             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-//               <div className="p-5 border-b border-gray-100">
-//                 <h2 className="text-xl font-bold text-gray-900">
-//                   Recent Activity
-//                 </h2>
-//                 <p className="text-sm text-gray-500">
-//                   Latest updates on your account
-//                 </p>
-//               </div>
-
-//               <div className="p-5 space-y-4">
-//                 {recentActivities.map((activity) => (
-//                   <div
-//                     key={activity.id}
-//                     className="flex gap-3 pb-4 border-b border-gray-100 last:border-0 last:pb-0"
-//                   >
-//                     <div
-//                       className={`p-2 rounded-full ${activity.type === "application" ? "bg-blue-100" : activity.type === "interview" ? "bg-purple-100" : "bg-green-100"}`}
-//                     >
-//                       {activity.type === "application" ? (
-//                         <Users className="w-4 h-4 text-blue-600" />
-//                       ) : activity.type === "interview" ? (
-//                         <Clock className="w-4 h-4 text-purple-600" />
-//                       ) : (
-//                         <CheckCircle className="w-4 h-4 text-green-600" />
-//                       )}
-//                     </div>
-//                     <div className="flex-1">
-//                       <p className="text-sm text-gray-800">{activity.text}</p>
-//                       <p className="text-xs text-gray-500 mt-1">
-//                         {activity.time}
-//                       </p>
-//                     </div>
-//                   </div>
-//                 ))}
-//               </div>
-
-//               <div className="p-5 bg-gray-50">
-//                 <div className="text-center">
-//                   <div className="text-sm text-gray-600 mb-2">Need help?</div>
-//                   <Link
-//                     href="/employer/support"
-//                     className="inline-flex items-center gap-2 text-green-600 font-medium text-sm hover:underline"
-//                   >
-//                     Contact Support
-//                     <ChevronRight size={16} />
-//                   </Link>
-//                 </div>
-//               </div>
-//             </div>
-
-//             {/* Profile Completion */}
-//             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-//               <h2 className="font-bold text-gray-900 mb-4">
-//                 Profile Completion
-//               </h2>
-//               <div className="space-y-4">
-//                 <div>
-//                   <div className="flex justify-between text-sm mb-1">
-//                     <span className="text-gray-600">Company Profile</span>
-//                     <span className="font-medium">80%</span>
-//                   </div>
-//                   <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-//                     <div className="h-full bg-green-600 rounded-full w-4/5"></div>
-//                   </div>
-//                 </div>
-
-//                 <div>
-//                   <div className="flex justify-between text-sm mb-1">
-//                     <span className="text-gray-600">Verification</span>
-//                     <span className="font-medium">100%</span>
-//                   </div>
-//                   <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-//                     <div className="h-full bg-green-600 rounded-full"></div>
-//                   </div>
-//                 </div>
-
-//                 <Link
-//                   href="/employer/profile"
-//                   className="inline-flex items-center justify-center w-full py-2.5 bg-green-50 text-green-700 rounded-lg font-medium text-sm hover:bg-green-100 transition-colors mt-4"
-//                 >
-//                   Complete Profile
-//                 </Link>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* FOOTER NOTE */}
-//         <div className="text-center text-sm text-gray-500 pt-4">
-//           <p>
-//             Last updated: Today at{" "}
-//             {new Date().toLocaleTimeString("en-IN", {
-//               hour: "2-digit",
-//               minute: "2-digit",
-//             })}
-//           </p>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
 "use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Briefcase,
   Users,
@@ -477,125 +43,25 @@ import {
 } from "lucide-react";
 
 export default function EmployerDashboard() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState("month");
   const [activeView, setActiveView] = useState("overview");
+  const [companyName, setCompanyName] = useState("TechCorp Solutions");
+
+  const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
   // Demo data - baad me backend se aayega
-  const stats = {
-    totalJobs: 24,
-    activeJobs: 18,
-    applications: 532,
-    interviews: 47,
-    pendingReviews: 12,
-    conversionRate: "72%",
-    totalViews: 2890,
-    avgResponseTime: "2.4 days",
-  };
-
-  const recentJobs = [
-    {
-      id: 1,
-      title: "Senior Frontend Developer (React)",
-      company: "TechCorp",
-      location: "Remote",
-      applicants: 56,
-      date: "2024-01-15",
-      status: "active",
-      views: 345,
-      salary: "₹12-18 LPA",
-      type: "Full-time",
-      urgent: true,
-    },
-    {
-      id: 2,
-      title: "Full Stack Engineer",
-      company: "TechCorp",
-      location: "Bangalore",
-      applicants: 42,
-      date: "2024-01-10",
-      status: "active",
-      views: 289,
-      salary: "₹15-22 LPA",
-      type: "Full-time",
-      urgent: false,
-    },
-    {
-      id: 3,
-      title: "DevOps Engineer",
-      company: "TechCorp",
-      location: "Mumbai",
-      applicants: 28,
-      date: "2024-01-05",
-      status: "closed",
-      views: 198,
-      salary: "₹10-16 LPA",
-      type: "Full-time",
-      urgent: false,
-    },
-    {
-      id: 4,
-      title: "Product Manager",
-      company: "TechCorp",
-      location: "Delhi",
-      applicants: 34,
-      date: "2024-01-03",
-      status: "active",
-      views: 256,
-      salary: "₹18-25 LPA",
-      type: "Full-time",
-      urgent: true,
-    },
-  ];
-
-  const recentActivities = [
-    {
-      id: 1,
-      text: "New application received for Senior Developer position",
-      time: "2 hours ago",
-      type: "application",
-      user: "Rahul Sharma",
-      read: false,
-    },
-    {
-      id: 2,
-      text: "Job 'UI/UX Designer' published successfully",
-      time: "1 day ago",
-      type: "job",
-      user: "System",
-      read: true,
-    },
-    {
-      id: 3,
-      text: "Interview scheduled with Priya Patel for Frontend role",
-      time: "2 days ago",
-      type: "interview",
-      user: "HR Team",
-      read: true,
-    },
-    {
-      id: 4,
-      text: "Job 'Backend Engineer' closed automatically",
-      time: "3 days ago",
-      type: "job",
-      user: "System",
-      read: true,
-    },
-    {
-      id: 5,
-      text: "Profile verification completed successfully",
-      time: "1 week ago",
-      type: "verification",
-      user: "Admin",
-      read: true,
-    },
-  ];
+  const [stats, setStats] = useState(null);
+  const [recentJobs, setRecentJobs] = useState([]);
+  const [recentActivities, setRecentActivities] = useState([]);
 
   const quickStats = [
     {
       icon: <Briefcase size={22} />,
       label: "Active Jobs",
-      value: stats.activeJobs,
+      value: stats?.activeJobs || 0,
       change: "+3 this month",
       changeType: "positive",
       color: "from-blue-500 to-blue-600",
@@ -605,7 +71,7 @@ export default function EmployerDashboard() {
     {
       icon: <Users size={22} />,
       label: "Total Applicants",
-      value: stats.applications,
+      value: stats?.applications || 0,
       change: "+42 this week",
       changeType: "positive",
       color: "from-green-500 to-emerald-600",
@@ -615,7 +81,7 @@ export default function EmployerDashboard() {
     {
       icon: <FileText size={22} />,
       label: "Pending Reviews",
-      value: stats.pendingReviews,
+      value: stats?.pendingReviews || 0,
       change: "Requires attention",
       changeType: "warning",
       color: "from-amber-500 to-orange-600",
@@ -625,7 +91,7 @@ export default function EmployerDashboard() {
     {
       icon: <TrendingUp size={22} />,
       label: "Conversion Rate",
-      value: stats.conversionRate,
+      value: stats?.conversionRate || "0%",
       change: "+8% from last month",
       changeType: "positive",
       color: "from-purple-500 to-violet-600",
@@ -647,8 +113,67 @@ export default function EmployerDashboard() {
   ];
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => setLoading(false), 1200);
+    const fetchDashboard = async () => {
+      try {
+        const token =
+          localStorage.getItem("token") || sessionStorage.getItem("token");
+
+        if (!token) {
+          router.push("/login");
+          return;
+        }
+
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        // 🔥 All APIs together
+        const [meRes, statsRes, jobsRes, actRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/auth/me`, { headers }),
+          fetch(`${API_BASE_URL}/employer/stats`, { headers }),
+          fetch(`${API_BASE_URL}/employer/jobs?limit=5`, {
+            headers,
+          }),
+          fetch(`${API_BASE_URL}/employer/activities?limit=5`, {
+            headers,
+          }),
+        ]);
+
+        const meData = await meRes.json();
+        const statsData = await statsRes.json();
+        const jobsData = await jobsRes.json();
+        const actData = await actRes.json();
+
+        /* Company Name */
+        if (meData.success) {
+          const profile =
+            meData.data?.profile || meData.data?.employerProfile || {};
+
+          setCompanyName(profile.companyName || meData.data?.name || "Company");
+        }
+
+        /* Stats */
+        if (statsData.success) {
+          setStats(statsData.data);
+        }
+
+        /* Jobs */
+        if (jobsData.success) {
+          setRecentJobs(jobsData.data.jobs || []);
+        }
+
+        /* Activities */
+        if (actData.success) {
+          setRecentActivities(actData.data.activities || []);
+        }
+      } catch (err) {
+        console.error("Dashboard Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
   }, []);
 
   if (loading) {
@@ -670,45 +195,7 @@ export default function EmployerDashboard() {
 
   return (
     <>
-      <nav className="bg-white px-6 py-4 border-b border-gray-200 text-black text-lg shadow-sm">
-        <div className="max-w-7xl mx-auto flex gap-6 items-center">
-          <a
-            href="/employer/dashboard"
-            className="font-medium hover:text-green-600 transition"
-          >
-            Dashboard
-          </a>
-
-          <a
-            href="/employer/post-job"
-            className="font-medium hover:text-green-600 transition"
-          >
-            Post Job
-          </a>
-
-          <a
-            href="/employer/my-jobs"
-            className="font-medium hover:text-green-600 transition"
-          >
-            My Jobs
-          </a>
-
-          <a
-            href="/employer/applicants"
-            className="font-medium hover:text-green-600 transition"
-          >
-            Applicants
-          </a>
-
-          <a
-            href="/employer/profile"
-            className="font-medium hover:text-green-600 transition"
-          >
-            Profile
-          </a>
-        </div>
-      </nav>
-
+      
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         {/* Main Content */}
         <div className="p-4 md:p-6 lg:p-8">
@@ -732,9 +219,7 @@ export default function EmployerDashboard() {
                     <div>
                       <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
                         Welcome back,{" "}
-                        <span className="text-green-600">
-                          TechCorp Solutions
-                        </span>
+                        <span className="text-green-600">{companyName}</span>
                       </h1>
                       <p className="text-gray-600 mt-1">
                         Here's your recruitment overview for{" "}
@@ -908,7 +393,7 @@ export default function EmployerDashboard() {
                       <tbody>
                         {recentJobs.map((job) => (
                           <tr
-                            key={job.id}
+                            key={job._id}
                             className="border-b border-gray-50 hover:bg-gray-50 transition-colors"
                           >
                             <td className="p-4">
@@ -929,7 +414,10 @@ export default function EmployerDashboard() {
                                     {job.location}
                                   </span>
                                   <span>•</span>
-                                  <span>{job.salary}</span>
+                                  <span>
+                                    ₹{job.salary?.min || 0} -{" "}
+                                    {job.salary?.max || 0} LPA
+                                  </span>
                                 </div>
                               </div>
                             </td>
@@ -1037,7 +525,7 @@ export default function EmployerDashboard() {
                   <div className="p-4 space-y-4 max-h-[400px] overflow-y-auto">
                     {recentActivities.map((activity) => (
                       <div
-                        key={activity.id}
+                        key={activity._id}
                         className={`p-3 rounded-lg transition ${!activity.read ? "bg-blue-50 border border-blue-100" : "hover:bg-gray-50"}`}
                       >
                         <div className="flex gap-3">

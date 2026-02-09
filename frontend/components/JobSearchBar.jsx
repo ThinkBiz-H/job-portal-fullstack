@@ -181,18 +181,50 @@ import { useRouter } from "next/navigation";
 
 /* DATA */
 const JOBS = [
-  "Frontend Developer","Backend Developer","Full Stack Developer",
-  "Web Developer","App Developer","UI UX Designer","Graphic Designer",
-  "Digital Marketer","Data Analyst","Software Engineer",
-  "Sales Executive","HR Manager","Delivery Boy","Office Assistant",
+  "Frontend Developer",
+  "Backend Developer",
+  "Full Stack Developer",
+  "Web Developer",
+  "App Developer",
+  "UI UX Designer",
+  "Graphic Designer",
+  "Digital Marketer",
+  "Data Analyst",
+  "Software Engineer",
+  "Sales Executive",
+  "HR Manager",
+  "Delivery Boy",
+  "Office Assistant",
 ];
 
 const CITIES = [
-  "Delhi","Mumbai","Bangalore","Pune","Chennai","Hyderabad",
-  "Jaipur","Indore","Bhopal","Lucknow","Noida","Gurgaon",
-  "Faridabad","Ghaziabad","Kolkata","Patna","Ranchi",
-  "Ahmedabad","Surat","Vadodara","Nagpur","Nashik",
-  "Thane","Navi Mumbai","Chandigarh","Ludhiana","Amritsar",
+  "Delhi",
+  "Mumbai",
+  "Bangalore",
+  "Pune",
+  "Chennai",
+  "Hyderabad",
+  "Jaipur",
+  "Indore",
+  "Bhopal",
+  "Lucknow",
+  "Noida",
+  "Gurgaon",
+  "Faridabad",
+  "Ghaziabad",
+  "Kolkata",
+  "Patna",
+  "Ranchi",
+  "Ahmedabad",
+  "Surat",
+  "Vadodara",
+  "Nagpur",
+  "Nashik",
+  "Thane",
+  "Navi Mumbai",
+  "Chandigarh",
+  "Ludhiana",
+  "Amritsar",
 ];
 
 export default function JobSearchBar() {
@@ -204,11 +236,11 @@ export default function JobSearchBar() {
   const [showCity, setShowCity] = useState(false);
 
   const jobResults = JOBS.filter((j) =>
-    j.toLowerCase().includes(job.toLowerCase())
+    j.toLowerCase().includes(job.toLowerCase()),
   );
 
   const cityResults = CITIES.filter((c) =>
-    c.toLowerCase().includes(city.toLowerCase())
+    c.toLowerCase().includes(city.toLowerCase()),
   );
 
   const handleSearch = () => {
@@ -217,7 +249,7 @@ export default function JobSearchBar() {
     if (job) params.set("job", job);
     if (exp) params.set("exp", exp);
     if (city) params.set("city", city);
-    
+
     // JobsPage पर redirect करें with parameters
     router.push(`/jobs?${params.toString()}`);
   };

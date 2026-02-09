@@ -144,16 +144,72 @@
 //     }
 //   };
 
-//   // 🔥 SAVE PROFILE TO BACKEND
+//   // 🔥 SAVE PROFILE TO BACKEND - FIXED VERSION
 //   const saveProfileToBackend = async () => {
 //     try {
 //       const token = localStorage.getItem("token");
 
-//       console.log("💾 Saving profile to backend:", profile);
+//       // ✅ CLEAN DATA BEFORE SENDING
+//       const cleanedData = {
+//         basic: profile.basic,
+//         userInfo: profile.userInfo,
+
+//         // ✅ EDUCATION को proper array format में भेजो
+//         education: Array.isArray(profile.education)
+//           ? profile.education.map((edu) => ({
+//               degree: String(edu.degree || ""),
+//               college: String(edu.college || ""),
+//               field: String(edu.field || ""),
+//               batch: String(edu.batch || ""),
+//               type: String(edu.type || ""),
+//             }))
+//           : [],
+
+//         // ✅ SKILLS को proper format में
+//         skills: Array.isArray(profile.skills)
+//           ? profile.skills.map((skill) => String(skill || ""))
+//           : [],
+
+//         // ✅ EXPERIENCE को proper format में
+//         experience: Array.isArray(profile.experience)
+//           ? profile.experience.map((exp) => ({
+//               company: String(exp.company || ""),
+//               position: String(exp.position || ""),
+//               startDate: exp.startDate || "",
+//               endDate: exp.endDate || "",
+//               currentlyWorking: Boolean(exp.currentlyWorking || false),
+//               description: String(exp.description || ""),
+//             }))
+//           : [],
+
+//         // ✅ CERTIFICATE को proper format में
+//         certificate: Array.isArray(profile.certificate)
+//           ? profile.certificate.map((cert) => ({
+//               name: String(cert.name || ""),
+//               issuer: String(cert.issuer || ""),
+//               issueDate: cert.issueDate || "",
+//               expiryDate: cert.expiryDate || "",
+//               credentialId: String(cert.credentialId || ""),
+//               url: String(cert.url || ""),
+//             }))
+//           : [],
+
+//         // ✅ LANGUAGE को proper format में
+//         language: Array.isArray(profile.language)
+//           ? profile.language.map((lang) => ({
+//               language: String(lang.language || ""),
+//               proficiency: String(lang.proficiency || "Basic"),
+//             }))
+//           : [],
+
+//         resume: String(profile.resume || ""),
+//       };
+
+//       console.log("💾 Saving CLEANED data to backend:", cleanedData);
 
 //       const res = await axios.put(
 //         `${API}/auth/update-jobseeker-profile`,
-//         profile,
+//         cleanedData,
 //         {
 //           headers: {
 //             Authorization: `Bearer ${token}`,
@@ -612,9 +668,16 @@ export default function ProfilePage() {
 
   const [modal, setModal] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [appliedJobs, setAppliedJobs] = useState([]);
 
+  const formatDate = (value) => {
+    if (!value) return "";
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? "" : d.toLocaleDateString("en-GB");
+  };
   useEffect(() => {
     fetchProfile();
+    fetchAppliedJobs(); // 🔥 ADD
   }, []);
 
   const fetchProfile = async () => {
@@ -637,7 +700,6 @@ export default function ProfilePage() {
 
       const user = res.data.data;
 
-      // Map backend → frontend format
       const mappedProfile = {
         basic: {
           email: user.email || "",
@@ -668,8 +730,28 @@ export default function ProfilePage() {
       router.push("/login");
     }
   };
+  const fetchAppliedJobs = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-  // 🔥 DELETE FUNCTIONS
+      if (!token) return;
+
+      const res = await axios.get(`${API}/applications/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("📥 Applied Jobs:", res.data);
+
+      if (res.data.success) {
+        setAppliedJobs(res.data.data);
+      }
+    } catch (err) {
+      console.log("❌ Fetch Applied Jobs Error:", err);
+    }
+  };
+
   const deleteExperience = (index) => {
     setProfile((prev) => ({
       ...prev,
@@ -712,7 +794,6 @@ export default function ProfilePage() {
     }));
   };
 
-  // 🔥 RESUME DOWNLOAD HANDLER
   const handleDownloadResume = () => {
     if (profile.resume) {
       const link = document.createElement("a");
@@ -724,17 +805,14 @@ export default function ProfilePage() {
     }
   };
 
-  // 🔥 SAVE PROFILE TO BACKEND - FIXED VERSION
   const saveProfileToBackend = async () => {
     try {
       const token = localStorage.getItem("token");
 
-      // ✅ CLEAN DATA BEFORE SENDING
       const cleanedData = {
         basic: profile.basic,
         userInfo: profile.userInfo,
 
-        // ✅ EDUCATION को proper array format में भेजो
         education: Array.isArray(profile.education)
           ? profile.education.map((edu) => ({
               degree: String(edu.degree || ""),
@@ -745,12 +823,10 @@ export default function ProfilePage() {
             }))
           : [],
 
-        // ✅ SKILLS को proper format में
         skills: Array.isArray(profile.skills)
           ? profile.skills.map((skill) => String(skill || ""))
           : [],
 
-        // ✅ EXPERIENCE को proper format में
         experience: Array.isArray(profile.experience)
           ? profile.experience.map((exp) => ({
               company: String(exp.company || ""),
@@ -762,7 +838,6 @@ export default function ProfilePage() {
             }))
           : [],
 
-        // ✅ CERTIFICATE को proper format में
         certificate: Array.isArray(profile.certificate)
           ? profile.certificate.map((cert) => ({
               name: String(cert.name || ""),
@@ -774,7 +849,6 @@ export default function ProfilePage() {
             }))
           : [],
 
-        // ✅ LANGUAGE को proper format में
         language: Array.isArray(profile.language)
           ? profile.language.map((lang) => ({
               language: String(lang.language || ""),
@@ -827,7 +901,6 @@ export default function ProfilePage() {
   return (
     <section className="bg-gray-50 min-h-screen py-8">
       <div className="max-w-6xl mx-auto px-4">
-        {/* SAVE BUTTON */}
         <div className="flex justify-end mb-6">
           <button
             onClick={saveProfileToBackend}
@@ -838,9 +911,7 @@ export default function ProfilePage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* LEFT COLUMN - PROFILE SUMMARY */}
           <div className="space-y-6">
-            {/* PROFILE CARD */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center gap-4">
@@ -869,7 +940,6 @@ export default function ProfilePage() {
                 </button>
               </div>
 
-              {/* BASIC DETAILS */}
               <div className="space-y-3 pt-4 border-t">
                 {[
                   { label: "Email", value: profile.basic.email },
@@ -896,7 +966,6 @@ export default function ProfilePage() {
               </button>
             </div>
 
-            {/* LANGUAGES KNOWN */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
               <div className="flex justify-between items-center mb-4">
                 <h4 className="font-semibold text-black">Languages known</h4>
@@ -936,11 +1005,88 @@ export default function ProfilePage() {
                 )}
               </div>
             </div>
+            {/* ================= APPLIED JOBS ================= */}
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h4 className="font-bold text-gray-900 text-lg">
+                    Jobs Applied
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    Jobs you have applied for
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {appliedJobs.length > 0 ? (
+                  <>
+                    {/* SHOW ONLY FIRST 3 JOBS */}
+                    {appliedJobs.slice(0, 3).map((app, index) => (
+                      <div
+                        key={index}
+                        className="p-4 border border-gray-100 rounded-lg hover:bg-gray-50"
+                      >
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h5 className="font-semibold text-gray-900">
+                              {app.job?.title || "Job Title"}
+                            </h5>
+
+                            <p className="text-sm text-gray-600 mt-1">
+                              {app.job?.companyName || "Company"} •{" "}
+                              {app.job?.location || "Location"}
+                            </p>
+
+                            <p className="text-xs text-gray-500 mt-1">
+                              Applied on:{" "}
+                              {new Date(app.appliedAt).toLocaleDateString()}
+                            </p>
+                          </div>
+
+                          {/* STATUS */}
+                          <span
+                            className={`text-xs px-3 py-1 rounded-full capitalize font-medium
+                ${
+                  app.status === "accepted"
+                    ? "bg-green-100 text-green-700"
+                    : app.status === "rejected"
+                      ? "bg-red-100 text-red-700"
+                      : app.status === "shortlisted"
+                        ? "bg-purple-100 text-purple-700"
+                        : "bg-yellow-100 text-yellow-700"
+                }`}
+                          >
+                            {app.status || "pending"}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* VIEW ALL BUTTON */}
+                    {appliedJobs.length > 3 && (
+                      <div className="text-center mt-4">
+                        <button
+                          onClick={() => router.push("/my-applications")}
+                          className="px-5 py-2 text-sm font-medium text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition"
+                        >
+                          View All Applications →
+                        </button>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500">
+                      You have not applied to any jobs yet
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
-          {/* RIGHT COLUMN - MAIN CONTENT */}
           <div className="lg:col-span-2 space-y-6">
-            {/* EDUCATION */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
               <div className="flex justify-between items-center mb-6">
                 <div>
@@ -998,7 +1144,6 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* SKILLS */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
               <div className="flex justify-between items-center mb-6">
                 <div>
@@ -1039,7 +1184,6 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* WORK EXPERIENCE */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
               <div className="flex justify-between items-center mb-6">
                 <div>
@@ -1063,18 +1207,33 @@ export default function ProfilePage() {
                   profile.experience.map((exp, index) => (
                     <div
                       key={index}
-                      className="flex justify-between items-center py-3 border-b border-gray-100 last:border-b-0"
+                      className="flex justify-between items-start py-3 border-b border-gray-100 last:border-b-0"
                     >
                       <div>
-                        <p className="text-sm font-medium text-gray-700">
-                          {exp.position} at {exp.company}
+                        <p className="text-base font-semibold text-gray-800">
+                          {exp.position || "Role"} at {exp.company || "Company"}
                         </p>
+
+                        {(exp.startDate ||
+                          exp.endDate ||
+                          exp.currentlyWorking) && (
+                          <p className="text-base text-gray-700 mt-1">
+                            {formatDate(exp.startDate)}{" "}
+                            {exp.currentlyWorking
+                              ? " - Present"
+                              : exp.endDate
+                                ? ` - ${formatDate(exp.endDate)}`
+                                : ""}
+                          </p>
+                        )}
+
                         {exp.description && (
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-base text-gray-500 mt-1">
                             {exp.description}
                           </p>
                         )}
                       </div>
+
                       <button
                         onClick={() => deleteExperience(index)}
                         className="text-gray-400 hover:text-red-500"
@@ -1096,7 +1255,6 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* CERTIFICATIONS */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
               <div className="flex justify-between items-center mb-6">
                 <div>
@@ -1120,11 +1278,48 @@ export default function ProfilePage() {
                   profile.certificate.map((cert, index) => (
                     <div
                       key={index}
-                      className="flex justify-between items-center py-3 border-b border-gray-100 last:border-b-0"
+                      className="flex justify-between items-start py-3 border-b border-gray-100 last:border-b-0"
                     >
-                      <p className="text-sm font-medium text-gray-700">
-                        {cert.name || cert}
-                      </p>
+                      <div>
+                        <p className="text-base font-semibold text-gray-800">
+                          {cert?.name || cert}
+                        </p>
+
+                        {cert?.issuer && (
+                          <p className="text-base text-gray-700 mt-1">
+                            Issuer: {cert.issuer}
+                          </p>
+                        )}
+
+                        {(cert?.issueDate || cert?.expiryDate) && (
+                          <p className="text-base text-gray-700">
+                            {cert.issueDate
+                              ? `Issued: ${formatDate(cert.issueDate)}`
+                              : ""}
+                            {cert.expiryDate
+                              ? ` | Expiry: ${formatDate(cert.expiryDate)}`
+                              : ""}
+                          </p>
+                        )}
+
+                        {cert?.credentialId && (
+                          <p className="text-base text-gray-700">
+                            Credential ID: {cert.credentialId}
+                          </p>
+                        )}
+
+                        {cert?.url && (
+                          <a
+                            href={cert.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-base text-blue-600 hover:underline"
+                          >
+                            View Credential
+                          </a>
+                        )}
+                      </div>
+
                       <button
                         onClick={() => deleteCertificate(index)}
                         className="text-gray-400 hover:text-red-500"
@@ -1141,7 +1336,6 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* RESUME */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
               <div className="flex justify-between items-center mb-6">
                 <div>
@@ -1201,7 +1395,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* MODAL */}
       {modal && (
         <ProfileModal
           type={modal}

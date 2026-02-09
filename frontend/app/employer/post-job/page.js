@@ -1,984 +1,6 @@
-// // "use client";
-
-// // import { useState } from "react";
-// // import { useRouter } from "next/navigation";
-
-// // export default function PostJobPage() {
-// //   const router = useRouter();
-
-// //   const [form, setForm] = useState({
-// //     title: "",
-// //     company: "",
-// //     location: "",
-// //     salary: "",
-// //     type: "Full time",
-// //     mode: "Work from office",
-// //     exp: "",
-// //     description: "",
-// //   });
-
-// //   const handleChange = (e) => {
-// //     setForm({
-// //       ...form,
-// //       [e.target.name]: e.target.value,
-// //     });
-// //   };
-
-// //   const handleSubmit = (e) => {
-// //     e.preventDefault();
-
-// //     // 🔥 Abhi demo alert (baad me API lagegi)
-// //     alert("✅ Job Posted Successfully!");
-
-// //     console.log("JOB DATA:", form);
-
-// //     // Redirect to dashboard
-// //     router.push("/employer/dashboard");
-// //   };
-
-// //   return (
-// //     <section className="bg-gray-100 min-h-screen p-6 text-black">
-// //       <div className="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow">
-// //         {/* HEADER */}
-// //         <h1 className="text-2xl font-bold mb-2">Post New Job</h1>
-// //         <p className="text-gray-500 text-sm mb-6">
-// //           Fill details to publish a job
-// //         </p>
-
-// //         {/* FORM */}
-// //         <form onSubmit={handleSubmit} className="space-y-4">
-// //           {/* JOB TITLE */}
-// //           <Input
-// //             label="Job Title"
-// //             name="title"
-// //             value={form.title}
-// //             onChange={handleChange}
-// //             placeholder="Frontend Developer"
-// //           />
-
-// //           {/* COMPANY */}
-// //           <Input
-// //             label="Company Name"
-// //             name="company"
-// //             value={form.company}
-// //             onChange={handleChange}
-// //             placeholder="Infosys Pvt Ltd"
-// //           />
-
-// //           {/* LOCATION */}
-// //           <Input
-// //             label="Location"
-// //             name="location"
-// //             value={form.location}
-// //             onChange={handleChange}
-// //             placeholder="Delhi / Noida"
-// //           />
-
-// //           {/* SALARY */}
-// //           <Input
-// //             label="Salary (per month)"
-// //             name="salary"
-// //             value={form.salary}
-// //             onChange={handleChange}
-// //             placeholder="25000"
-// //             type="number"
-// //           />
-
-// //           {/* EXPERIENCE */}
-// //           <Input
-// //             label="Experience Required"
-// //             name="exp"
-// //             value={form.exp}
-// //             onChange={handleChange}
-// //             placeholder="2 Years"
-// //           />
-
-// //           {/* WORK TYPE */}
-// //           <Select
-// //             label="Job Type"
-// //             name="type"
-// //             value={form.type}
-// //             onChange={handleChange}
-// //             options={["Full time", "Part time", "Internship"]}
-// //           />
-
-// //           {/* WORK MODE */}
-// //           <Select
-// //             label="Work Mode"
-// //             name="mode"
-// //             value={form.mode}
-// //             onChange={handleChange}
-// //             options={["Work from office", "Work from home", "Work from field"]}
-// //           />
-
-// //           {/* DESCRIPTION */}
-// //           <div>
-// //             <p className="text-sm mb-1">Job Description</p>
-
-// //             <textarea
-// //               name="description"
-// //               value={form.description}
-// //               onChange={handleChange}
-// //               rows="4"
-// //               placeholder="Write job details..."
-// //               className="w-full border rounded px-3 py-2 outline-none"
-// //             />
-// //           </div>
-
-// //           {/* BUTTONS */}
-// //           <div className="flex gap-3 pt-4">
-// //             <button
-// //               type="submit"
-// //               className="bg-green-600 text-white px-6 py-2 rounded-lg"
-// //             >
-// //               Publish Job
-// //             </button>
-
-// //             <button
-// //               type="button"
-// //               onClick={() => router.back()}
-// //               className="border px-6 py-2 rounded-lg"
-// //             >
-// //               Cancel
-// //             </button>
-// //           </div>
-// //         </form>
-// //       </div>
-// //     </section>
-// //   );
-// // }
-
-// // /* ================= SMALL COMPONENTS ================= */
-
-// // function Input({ label, ...props }) {
-// //   return (
-// //     <div>
-// //       <p className="text-sm mb-1">{label}</p>
-
-// //       <input
-// //         {...props}
-// //         required
-// //         className="w-full border rounded px-3 py-2 outline-none"
-// //       />
-// //     </div>
-// //   );
-// // }
-
-// // function Select({ label, options, ...props }) {
-// //   return (
-// //     <div>
-// //       <p className="text-sm mb-1">{label}</p>
-
-// //       <select
-// //         {...props}
-// //         className="w-full border rounded px-3 py-2 outline-none"
-// //       >
-// //         {options.map((item) => (
-// //           <option key={item}>{item}</option>
-// //         ))}
-// //       </select>
-// //     </div>
-// //   );
-// // }
-// "use client";
-
-// import { useState } from "react";
-// import { useRouter } from "next/navigation";
-// import {
-//   ArrowLeft,
-//   Briefcase,
-//   Building,
-//   MapPin,
-//   DollarSign,
-//   Clock,
-//   FileText,
-//   Globe,
-//   TrendingUp,
-//   Sparkles,
-//   Upload,
-//   AlertCircle,
-//   CheckCircle2,
-// } from "lucide-react";
-
-// export default function PostJobPage() {
-//   const router = useRouter();
-
-//   // Form state - Abhi hardcoded, baad me backend se company details fetch honge
-//   const [form, setForm] = useState({
-//     title: "",
-//     company: "TechCorp Pvt Ltd", // Baad me user profile se auto fill hoga
-//     location: "",
-//     salaryMin: "",
-//     salaryMax: "",
-//     type: "Full-time",
-//     workMode: "Hybrid",
-//     experienceMin: "",
-//     experienceMax: "",
-//     description: "",
-//     skills: "",
-//     benefits: "",
-//     deadline: "",
-//     vacancies: "1",
-//   });
-
-//   const [loading, setLoading] = useState(false);
-//   const [activeStep, setActiveStep] = useState(1);
-//   const [errors, setErrors] = useState({});
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setForm((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//     // Clear error when user starts typing
-//     if (errors[name]) {
-//       setErrors((prev) => ({ ...prev, [name]: "" }));
-//     }
-//   };
-
-//   const addSkill = (skill) => {
-//     const skillsArray = form.skills.split(",").filter((s) => s.trim());
-//     if (skill && !skillsArray.includes(skill.trim())) {
-//       setForm((prev) => ({
-//         ...prev,
-//         skills: [...skillsArray, skill.trim()].join(", "),
-//       }));
-//     }
-//   };
-
-//   const removeSkill = (skillToRemove) => {
-//     const skillsArray = form.skills.split(",").filter((s) => s.trim());
-//     setForm((prev) => ({
-//       ...prev,
-//       skills: skillsArray.filter((skill) => skill !== skillToRemove).join(", "),
-//     }));
-//   };
-
-//   const validateStep1 = () => {
-//     const newErrors = {};
-//     if (!form.title.trim()) newErrors.title = "Job title is required";
-//     if (!form.location.trim()) newErrors.location = "Location is required";
-//     if (!form.description.trim())
-//       newErrors.description = "Job description is required";
-
-//     setErrors(newErrors);
-//     return Object.keys(newErrors).length === 0;
-//   };
-
-//   const nextStep = () => {
-//     if (activeStep === 1 && !validateStep1()) return;
-//     setActiveStep((prev) => Math.min(prev + 1, 3));
-//   };
-
-//   const prevStep = () => {
-//     setActiveStep((prev) => Math.max(prev - 1, 1));
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-
-//     // 🔥 Yaha pe baad me API call hoga
-//     // try {
-//     //   const response = await fetch('/api/employer/jobs', {
-//     //     method: 'POST',
-//     //     headers: { 'Content-Type': 'application/json' },
-//     //     body: JSON.stringify(form)
-//     //   });
-//     //
-//     //   if (response.ok) {
-//     //     router.push('/employer/dashboard');
-//     //   }
-//     // } catch (error) {
-//     //   console.error('Error posting job:', error);
-//     // } finally {
-//     //   setLoading(false);
-//     // }
-
-//     // 🔥 For now, demo simulation
-//     setTimeout(() => {
-//       setLoading(false);
-//       alert("🎉 Job Posted Successfully!");
-//       router.push("/employer/dashboard");
-//     }, 1500);
-//   };
-
-//   const jobTypes = [
-//     { value: "Full-time", label: "Full Time", icon: <Clock size={16} /> },
-//     { value: "Part-time", label: "Part Time", icon: <Clock size={16} /> },
-//     { value: "Contract", label: "Contract", icon: <FileText size={16} /> },
-//     {
-//       value: "Internship",
-//       label: "Internship",
-//       icon: <TrendingUp size={16} />,
-//     },
-//     { value: "Remote", label: "Remote", icon: <Globe size={16} /> },
-//   ];
-
-//   const workModes = [
-//     { value: "On-site", label: "On-site" },
-//     { value: "Hybrid", label: "Hybrid" },
-//     { value: "Remote", label: "Remote" },
-//   ];
-
-//   const experienceOptions = [
-//     "Fresher",
-//     "0-1 Years",
-//     "1-2 Years",
-//     "2-5 Years",
-//     "5-8 Years",
-//     "8+ Years",
-//     "10+ Years",
-//   ];
-
-//   const salaryRanges = [
-//     "₹0-3 LPA",
-//     "₹3-6 LPA",
-//     "₹6-10 LPA",
-//     "₹10-15 LPA",
-//     "₹15-25 LPA",
-//     "₹25-50 LPA",
-//     "₹50+ LPA",
-//   ];
-
-//   return (
-//     <section className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-4 md:p-6">
-//       <div className="max-w-4xl mx-auto">
-//         {/* HEADER */}
-//         <div className="mb-8">
-//           <button
-//             onClick={() => router.back()}
-//             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 group"
-//           >
-//             <ArrowLeft
-//               size={20}
-//               className="group-hover:-translate-x-1 transition-transform"
-//             />
-//             <span>Back to Dashboard</span>
-//           </button>
-
-//           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-//             <div>
-//               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center gap-2">
-//                 <Sparkles className="text-yellow-500" size={24} />
-//                 Post a New Job Opening
-//               </h1>
-//               <p className="text-gray-600 mt-1">
-//                 Fill in the details below to attract the best talent
-//               </p>
-//             </div>
-
-//             <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-gray-200 shadow-sm">
-//               <div
-//                 className={`w-8 h-8 rounded-full flex items-center justify-center ${activeStep >= 1 ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"}`}
-//               >
-//                 1
-//               </div>
-//               <div className="h-1 w-8 bg-gray-200"></div>
-//               <div
-//                 className={`w-8 h-8 rounded-full flex items-center justify-center ${activeStep >= 2 ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"}`}
-//               >
-//                 2
-//               </div>
-//               <div className="h-1 w-8 bg-gray-200"></div>
-//               <div
-//                 className={`w-8 h-8 rounded-full flex items-center justify-center ${activeStep >= 3 ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"}`}
-//               >
-//                 3
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* FORM */}
-//         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-//           <form onSubmit={handleSubmit} className="p-6 md:p-8">
-//             {/* STEP 1: Basic Information */}
-//             {activeStep === 1 && (
-//               <div className="space-y-6 animate-fadeIn">
-//                 <div className="flex items-center gap-3 mb-6">
-//                   <div className="p-2 bg-blue-100 rounded-lg">
-//                     <Briefcase className="w-6 h-6 text-blue-600" />
-//                   </div>
-//                   <h2 className="text-xl font-bold text-gray-900">
-//                     Basic Job Information
-//                   </h2>
-//                 </div>
-
-//                 {/* Job Title */}
-//                 <div>
-//                   <label className="block text-sm font-medium text-gray-700 mb-2">
-//                     Job Title *
-//                   </label>
-//                   <div className="relative">
-//                     <Briefcase
-//                       className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-//                       size={20}
-//                     />
-//                     <input
-//                       type="text"
-//                       name="title"
-//                       value={form.title}
-//                       onChange={handleChange}
-//                       placeholder="e.g., Senior Frontend Developer"
-//                       className={`w-full pl-10 pr-4 py-3 border ${errors.title ? "border-red-500" : "border-gray-300"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition`}
-//                     />
-//                   </div>
-//                   {errors.title && (
-//                     <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
-//                       <AlertCircle size={14} />
-//                       {errors.title}
-//                     </p>
-//                   )}
-//                 </div>
-
-//                 {/* Company & Location */}
-//                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Company *
-//                     </label>
-//                     <div className="relative">
-//                       <Building
-//                         className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-//                         size={20}
-//                       />
-//                       <input
-//                         type="text"
-//                         name="company"
-//                         value={form.company}
-//                         onChange={handleChange}
-//                         className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-gray-50 cursor-not-allowed"
-//                         readOnly
-//                       />
-//                     </div>
-//                     <p className="text-xs text-gray-500 mt-1">
-//                       Auto-filled from your profile
-//                     </p>
-//                   </div>
-
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Location *
-//                     </label>
-//                     <div className="relative">
-//                       <MapPin
-//                         className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-//                         size={20}
-//                       />
-//                       <input
-//                         type="text"
-//                         name="location"
-//                         value={form.location}
-//                         onChange={handleChange}
-//                         placeholder="e.g., Bangalore, Karnataka"
-//                         className={`w-full pl-10 pr-4 py-3 border ${errors.location ? "border-red-500" : "border-gray-300"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition`}
-//                       />
-//                     </div>
-//                     {errors.location && (
-//                       <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
-//                         <AlertCircle size={14} />
-//                         {errors.location}
-//                       </p>
-//                     )}
-//                   </div>
-//                 </div>
-
-//                 {/* Job Type & Work Mode */}
-//                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Job Type
-//                     </label>
-//                     <div className="grid grid-cols-2 gap-2">
-//                       {jobTypes.map((type) => (
-//                         <button
-//                           key={type.value}
-//                           type="button"
-//                           onClick={() =>
-//                             setForm((prev) => ({ ...prev, type: type.value }))
-//                           }
-//                           className={`p-3 rounded-lg border ${form.type === type.value ? "border-blue-500 bg-blue-50 text-blue-600" : "border-gray-200 hover:border-gray-300"} transition flex items-center justify-center gap-2`}
-//                         >
-//                           {type.icon}
-//                           <span>{type.label}</span>
-//                         </button>
-//                       ))}
-//                     </div>
-//                   </div>
-
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Work Mode
-//                     </label>
-//                     <div className="flex gap-2">
-//                       {workModes.map((mode) => (
-//                         <button
-//                           key={mode.value}
-//                           type="button"
-//                           onClick={() =>
-//                             setForm((prev) => ({
-//                               ...prev,
-//                               workMode: mode.value,
-//                             }))
-//                           }
-//                           className={`flex-1 py-3 rounded-lg border ${form.workMode === mode.value ? "border-green-500 bg-green-50 text-green-600" : "border-gray-200 hover:border-gray-300"} transition`}
-//                         >
-//                           {mode.label}
-//                         </button>
-//                       ))}
-//                     </div>
-//                   </div>
-//                 </div>
-
-//                 {/* Job Description */}
-//                 <div>
-//                   <label className="block text-sm font-medium text-gray-700 mb-2">
-//                     Job Description *
-//                   </label>
-//                   <div
-//                     className={`border ${errors.description ? "border-red-500" : "border-gray-300"} rounded-xl overflow-hidden`}
-//                   >
-//                     <textarea
-//                       name="description"
-//                       value={form.description}
-//                       onChange={handleChange}
-//                       rows={6}
-//                       placeholder="Describe the job responsibilities, requirements, and expectations..."
-//                       className="w-full p-4 outline-none resize-none"
-//                     />
-//                     <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 text-xs text-gray-500">
-//                       <div className="flex justify-between">
-//                         <span>Markdown supported</span>
-//                         <span>{form.description.length}/5000 characters</span>
-//                       </div>
-//                     </div>
-//                   </div>
-//                   {errors.description && (
-//                     <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
-//                       <AlertCircle size={14} />
-//                       {errors.description}
-//                     </p>
-//                   )}
-//                 </div>
-//               </div>
-//             )}
-
-//             {/* STEP 2: Requirements & Compensation */}
-//             {activeStep === 2 && (
-//               <div className="space-y-6 animate-fadeIn">
-//                 <div className="flex items-center gap-3 mb-6">
-//                   <div className="p-2 bg-purple-100 rounded-lg">
-//                     <TrendingUp className="w-6 h-6 text-purple-600" />
-//                   </div>
-//                   <h2 className="text-xl font-bold text-gray-900">
-//                     Requirements & Compensation
-//                   </h2>
-//                 </div>
-
-//                 {/* Experience */}
-//                 <div>
-//                   <label className="block text-sm font-medium text-gray-700 mb-2">
-//                     Experience Required
-//                   </label>
-//                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-//                     {experienceOptions.map((exp) => (
-//                       <button
-//                         key={exp}
-//                         type="button"
-//                         onClick={() => {
-//                           if (exp === "Fresher") {
-//                             setForm((prev) => ({
-//                               ...prev,
-//                               experienceMin: "0",
-//                               experienceMax: "0",
-//                             }));
-//                           } else {
-//                             const [min, max] = exp
-//                               .split("-")[0]
-//                               .split("+")[0]
-//                               .split("-")[0];
-//                             setForm((prev) => ({
-//                               ...prev,
-//                               experienceMin: min.trim(),
-//                               experienceMax: max ? max.trim() : "15",
-//                             }));
-//                           }
-//                         }}
-//                         className={`p-3 rounded-lg border ${form.experienceMin && exp.includes(form.experienceMin) ? "border-purple-500 bg-purple-50 text-purple-600" : "border-gray-200 hover:border-gray-300"} transition`}
-//                       >
-//                         {exp}
-//                       </button>
-//                     ))}
-//                   </div>
-//                 </div>
-
-//                 {/* Skills */}
-//                 <div>
-//                   <label className="block text-sm font-medium text-gray-700 mb-2">
-//                     Required Skills
-//                   </label>
-//                   <div className="flex gap-2 mb-3">
-//                     <input
-//                       type="text"
-//                       placeholder="Add a skill (e.g., React, Node.js)"
-//                       className="flex-1 px-4 py-2 border border-gray-300 rounded-lg"
-//                       onKeyDown={(e) => {
-//                         if (e.key === "Enter") {
-//                           e.preventDefault();
-//                           addSkill(e.target.value);
-//                           e.target.value = "";
-//                         }
-//                       }}
-//                     />
-//                     <button
-//                       type="button"
-//                       onClick={(e) => {
-//                         const input = e.target.previousElementSibling;
-//                         addSkill(input.value);
-//                         input.value = "";
-//                       }}
-//                       className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
-//                     >
-//                       Add
-//                     </button>
-//                   </div>
-//                   {form.skills && (
-//                     <div className="flex flex-wrap gap-2">
-//                       {form.skills
-//                         .split(",")
-//                         .filter((s) => s.trim())
-//                         .map((skill, index) => (
-//                           <div
-//                             key={index}
-//                             className="flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full"
-//                           >
-//                             <span>{skill.trim()}</span>
-//                             <button
-//                               type="button"
-//                               onClick={() => removeSkill(skill.trim())}
-//                               className="text-blue-900 hover:text-blue-700"
-//                             >
-//                               ×
-//                             </button>
-//                           </div>
-//                         ))}
-//                     </div>
-//                   )}
-//                 </div>
-
-//                 {/* Salary Range */}
-//                 <div>
-//                   <label className="block text-sm font-medium text-gray-700 mb-2">
-//                     Salary Range (Annual)
-//                   </label>
-//                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-//                     {salaryRanges.map((range) => (
-//                       <button
-//                         key={range}
-//                         type="button"
-//                         onClick={() =>
-//                           setForm((prev) => ({ ...prev, salaryMin: range }))
-//                         }
-//                         className={`p-3 rounded-lg border ${form.salaryMin === range ? "border-green-500 bg-green-50 text-green-600" : "border-gray-200 hover:border-gray-300"} transition flex items-center gap-1`}
-//                       >
-//                         <DollarSign size={16} />
-//                         {range}
-//                       </button>
-//                     ))}
-//                   </div>
-//                   <div className="mt-4 grid grid-cols-2 gap-4">
-//                     <div>
-//                       <label className="block text-sm text-gray-600 mb-1">
-//                         Minimum (₹)
-//                       </label>
-//                       <input
-//                         type="number"
-//                         name="salaryMin"
-//                         value={form.salaryMin}
-//                         onChange={handleChange}
-//                         placeholder="300000"
-//                         className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-//                       />
-//                     </div>
-//                     <div>
-//                       <label className="block text-sm text-gray-600 mb-1">
-//                         Maximum (₹)
-//                       </label>
-//                       <input
-//                         type="number"
-//                         name="salaryMax"
-//                         value={form.salaryMax}
-//                         onChange={handleChange}
-//                         placeholder="600000"
-//                         className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-//                       />
-//                     </div>
-//                   </div>
-//                 </div>
-
-//                 {/* Additional Details */}
-//                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Number of Vacancies
-//                     </label>
-//                     <select
-//                       name="vacancies"
-//                       value={form.vacancies}
-//                       onChange={handleChange}
-//                       className="w-full px-4 py-3 border border-gray-300 rounded-xl"
-//                     >
-//                       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "10+"].map((num) => (
-//                         <option key={num} value={num}>
-//                           {num} position{num > 1 ? "s" : ""}
-//                         </option>
-//                       ))}
-//                     </select>
-//                   </div>
-
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Application Deadline
-//                     </label>
-//                     <input
-//                       type="date"
-//                       name="deadline"
-//                       value={form.deadline}
-//                       onChange={handleChange}
-//                       className="w-full px-4 py-3 border border-gray-300 rounded-xl"
-//                       min={new Date().toISOString().split("T")[0]}
-//                     />
-//                   </div>
-//                 </div>
-//               </div>
-//             )}
-
-//             {/* STEP 3: Preview & Submit */}
-//             {activeStep === 3 && (
-//               <div className="space-y-6 animate-fadeIn">
-//                 <div className="flex items-center gap-3 mb-6">
-//                   <div className="p-2 bg-green-100 rounded-lg">
-//                     <CheckCircle2 className="w-6 h-6 text-green-600" />
-//                   </div>
-//                   <h2 className="text-xl font-bold text-gray-900">
-//                     Preview & Publish
-//                   </h2>
-//                 </div>
-
-//                 {/* Job Preview Card */}
-//                 <div className="border border-gray-200 rounded-2xl p-6 bg-gradient-to-r from-gray-50 to-white">
-//                   <div className="flex justify-between items-start mb-4">
-//                     <div>
-//                       <h3 className="text-xl font-bold text-gray-900">
-//                         {form.title || "Job Title"}
-//                       </h3>
-//                       <p className="text-gray-600">{form.company}</p>
-//                     </div>
-//                     <div className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-//                       {form.type}
-//                     </div>
-//                   </div>
-
-//                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-//                     <div className="flex items-center gap-2 text-gray-600">
-//                       <MapPin size={18} />
-//                       <span>{form.location || "Location"}</span>
-//                     </div>
-//                     <div className="flex items-center gap-2 text-gray-600">
-//                       <Clock size={18} />
-//                       <span>{form.workMode}</span>
-//                     </div>
-//                     <div className="flex items-center gap-2 text-gray-600">
-//                       <TrendingUp size={18} />
-//                       <span>
-//                         {form.experienceMin
-//                           ? `${form.experienceMin}-${form.experienceMax} Years`
-//                           : "Experience"}
-//                       </span>
-//                     </div>
-//                     <div className="flex items-center gap-2 text-gray-600">
-//                       <DollarSign size={18} />
-//                       <span>
-//                         {form.salaryMin
-//                           ? `₹${form.salaryMin} - ₹${form.salaryMax}`
-//                           : "Salary"}
-//                       </span>
-//                     </div>
-//                   </div>
-
-//                   <div className="mb-6">
-//                     <h4 className="font-medium text-gray-900 mb-2">
-//                       Job Description
-//                     </h4>
-//                     <p className="text-gray-600 whitespace-pre-line">
-//                       {form.description || "No description provided"}
-//                     </p>
-//                   </div>
-
-//                   {form.skills && (
-//                     <div>
-//                       <h4 className="font-medium text-gray-900 mb-2">
-//                         Required Skills
-//                       </h4>
-//                       <div className="flex flex-wrap gap-2">
-//                         {form.skills
-//                           .split(",")
-//                           .filter((s) => s.trim())
-//                           .map((skill, index) => (
-//                             <span
-//                               key={index}
-//                               className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
-//                             >
-//                               {skill.trim()}
-//                             </span>
-//                           ))}
-//                       </div>
-//                     </div>
-//                   )}
-
-//                   <div className="mt-6 pt-6 border-t border-gray-200">
-//                     <div className="text-sm text-gray-500">
-//                       <p>
-//                         ⏰ Applications close:{" "}
-//                         {form.deadline || "No deadline set"}
-//                       </p>
-//                       <p>
-//                         👥 Vacancies: {form.vacancies} position
-//                         {form.vacancies > 1 ? "s" : ""}
-//                       </p>
-//                     </div>
-//                   </div>
-//                 </div>
-
-//                 {/* Publish Options */}
-//                 <div className="border border-gray-200 rounded-xl p-4">
-//                   <h4 className="font-medium text-gray-900 mb-3">
-//                     Publishing Options
-//                   </h4>
-//                   <div className="space-y-3">
-//                     <label className="flex items-center gap-3 cursor-pointer">
-//                       <input
-//                         type="radio"
-//                         name="publishOption"
-//                         defaultChecked
-//                         className="text-green-600"
-//                       />
-//                       <span className="flex-1">
-//                         <span className="font-medium">Publish Now</span>
-//                         <p className="text-sm text-gray-500">
-//                           Job will be visible to candidates immediately
-//                         </p>
-//                       </span>
-//                     </label>
-//                     <label className="flex items-center gap-3 cursor-pointer">
-//                       <input
-//                         type="radio"
-//                         name="publishOption"
-//                         className="text-green-600"
-//                       />
-//                       <span className="flex-1">
-//                         <span className="font-medium">Save as Draft</span>
-//                         <p className="text-sm text-gray-500">
-//                           Job will be saved but not published
-//                         </p>
-//                       </span>
-//                     </label>
-//                   </div>
-//                 </div>
-//               </div>
-//             )}
-
-//             {/* NAVIGATION BUTTONS */}
-//             <div className="flex justify-between pt-8 border-t border-gray-200 mt-8">
-//               <div>
-//                 {activeStep > 1 && (
-//                   <button
-//                     type="button"
-//                     onClick={prevStep}
-//                     className="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
-//                   >
-//                     Previous
-//                   </button>
-//                 )}
-//               </div>
-
-//               <div className="flex gap-3">
-//                 {activeStep < 3 ? (
-//                   <button
-//                     type="button"
-//                     onClick={nextStep}
-//                     className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition flex items-center gap-2"
-//                   >
-//                     Continue to Next Step
-//                     <ArrowLeft className="rotate-180" size={18} />
-//                   </button>
-//                 ) : (
-//                   <button
-//                     type="submit"
-//                     disabled={loading}
-//                     className="px-8 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl font-medium transition flex items-center gap-2 disabled:opacity-50"
-//                   >
-//                     {loading ? (
-//                       <>
-//                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-//                         Publishing...
-//                       </>
-//                     ) : (
-//                       <>
-//                         <Sparkles size={18} />
-//                         Publish Job Opening
-//                       </>
-//                     )}
-//                   </button>
-//                 )}
-//               </div>
-//             </div>
-//           </form>
-//         </div>
-
-//         {/* HELPER TEXT */}
-//         <div className="mt-6 p-4 bg-blue-50 border border-blue-100 rounded-xl">
-//           <div className="flex items-start gap-3">
-//             <AlertCircle className="text-blue-600 mt-0.5" size={20} />
-//             <div>
-//               <h4 className="font-medium text-blue-900 mb-1">
-//                 Pro Tips for Better Results
-//               </h4>
-//               <ul className="text-sm text-blue-700 space-y-1">
-//                 <li>• Be specific in your job title and description</li>
-//                 <li>• Include salary range to attract more candidates</li>
-//                 <li>• Add relevant skills for better matching</li>
-//                 <li>• Set a realistic application deadline</li>
-//               </ul>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Custom Animation */}
-//       <style jsx>{`
-//         @keyframes fadeIn {
-//           from {
-//             opacity: 0;
-//             transform: translateY(10px);
-//           }
-//           to {
-//             opacity: 1;
-//             transform: translateY(0);
-//           }
-//         }
-//         .animate-fadeIn {
-//           animation: fadeIn 0.3s ease-out;
-//         }
-//       `}</style>
-//     </section>
-//   );
-// }
 "use client";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -1036,11 +58,42 @@ export default function PostJobPage() {
   const [loading, setLoading] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
   const [previewMode, setPreviewMode] = useState(false);
+  useEffect(() => {
+    const fetchCompany = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        if (!token) return;
+
+        const res = await fetch("http://localhost:5000/api/auth/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          const companyName =
+            data.data?.employerProfile?.companyName || data.data?.name || "";
+
+          setForm((prev) => ({
+            ...prev,
+            company: companyName,
+          }));
+        }
+      } catch (err) {
+        console.log("Company Fetch Error:", err);
+      }
+    };
+
+    fetchCompany();
+  }, []);
 
   // Form state
   const [form, setForm] = useState({
     title: "",
-    company: "TechCorp Solutions Pvt. Ltd.",
+    company: "",
     location: "",
     salaryMin: "",
     salaryMax: "",
@@ -1057,8 +110,6 @@ export default function PostJobPage() {
     newSkill: "",
     vacancies: "1",
 
-
-    
     deadline: "",
     category: "Engineering",
     tags: ["Remote Friendly", "Flexible Hours"],
@@ -1181,6 +232,77 @@ export default function PostJobPage() {
     }
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+
+  //   try {
+  //     const token = localStorage.getItem("token");
+
+  //     if (!token) {
+  //       alert("Please login first");
+  //       router.push("/login");
+  //       return;
+  //     }
+
+  //     const API = "http://localhost:5000/api";
+
+  //     // Backend format me data bhejo
+  //     const jobData = {
+  //       title: form.title,
+  //       company: form.company,
+  //       location: form.location,
+
+  //       salary: {
+  //         min: Number(form.salaryMin),
+  //         max: Number(form.salaryMax),
+  //       },
+
+  //       jobType: form.type,
+  //       workMode: form.workMode,
+
+  //       experience: {
+  //         min: Number(form.experienceMin),
+  //         max: Number(form.experienceMax),
+  //       },
+
+  //       description: form.description,
+  //       responsibilities: form.responsibilities,
+  //       requirements: form.requirements,
+  //       benefits: form.benefits,
+
+  //       skills: form.skills,
+
+  //       vacancies: Number(form.vacancies),
+  //       deadline: form.deadline,
+
+  //       category: form.category,
+
+  //       applyLink: form.applyLink,
+  //       contactEmail: form.contactEmail,
+  //       contactPhone: form.contactPhone,
+
+  //       isUrgent: form.isUrgent,
+  //       isFeatured: form.isFeatured,
+  //     };
+
+  //     await axios.post(`${API}/jobs`, jobData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+
+  //     alert("🎉 Job Posted Successfully!");
+
+  //     router.push("/jobs"); // public jobs page
+  //   } catch (err) {
+  //     console.log("POST JOB ERROR:", err.response?.data || err);
+
+  //     alert(err.response?.data?.message || "Job post failed");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -1197,6 +319,58 @@ export default function PostJobPage() {
       const API = "http://localhost:5000/api";
 
       // Backend format me data bhejo
+      // const jobData = {
+      //   title: form.title,
+      //   company: form.company,
+      //   location: form.location,
+
+      //   salary: {
+      //     min: Number(form.salaryMin),
+      //     max: Number(form.salaryMax),
+      //     currency: "INR",
+      //   },
+
+      //   jobType: form.type,
+      //   workMode: form.workMode,
+
+      //   experience: {
+      //     min: Number(form.experienceMin),
+      //     max: Number(form.experienceMax),
+      //   },
+
+      //   description: form.description,
+
+      //   // ये arrays में convert करो
+      //   responsibilities: form.responsibilities
+      //     ? form.responsibilities.split("\n").filter((line) => line.trim())
+      //     : [],
+      //   requirements: form.requirements
+      //     ? form.requirements.split("\n").filter((line) => line.trim())
+      //     : [],
+      //   benefits: form.benefits
+      //     ? form.benefits.split("\n").filter((line) => line.trim())
+      //     : [],
+
+      //   // skillsRequired field use करो (MongoDB में यही field है)
+      //   skillsRequired: form.skills,
+
+      //   vacancies: Number(form.vacancies),
+      //   deadline: form.deadline,
+
+      //   category: form.category,
+
+      //   applyLink: form.applyLink,
+      //   contactEmail: form.contactEmail,
+      //   contactPhone: form.contactPhone,
+
+      //   isUrgent: form.isUrgent,
+      //   isFeatured: form.isFeatured,
+
+      //   // Default values
+      //   isActive: true,
+      //   totalViews: 0,
+      //   totalApplications: 0,
+      // };
       const jobData = {
         title: form.title,
         company: form.company,
@@ -1216,43 +390,54 @@ export default function PostJobPage() {
         },
 
         description: form.description,
-        responsibilities: form.responsibilities,
-        requirements: form.requirements,
-        benefits: form.benefits,
 
-        skills: form.skills,
+        // ये arrays में convert करो
+        responsibilities: form.responsibilities
+          ? form.responsibilities.split("\n").filter((line) => line.trim())
+          : [],
+        requirements: form.requirements
+          ? form.requirements.split("\n").filter((line) => line.trim())
+          : [],
+        benefits: form.benefits
+          ? form.benefits.split("\n").filter((line) => line.trim())
+          : [],
+
+        // 🔴 IMPORTANT: `skillsRequired` field use करो
+        skillsRequired: form.skills, // यही field MongoDB में है
 
         vacancies: Number(form.vacancies),
         deadline: form.deadline,
-
         category: form.category,
-
         applyLink: form.applyLink,
         contactEmail: form.contactEmail,
         contactPhone: form.contactPhone,
-
         isUrgent: form.isUrgent,
         isFeatured: form.isFeatured,
       };
+      console.log("Sending job data:", jobData); // Debug log
 
-      await axios.post(`${API}/jobs`, jobData, {
+      const response = await axios.post(`${API}/jobs`, jobData, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
 
-      alert("🎉 Job Posted Successfully!");
+      console.log("Response:", response.data); // Debug log
 
-      router.push("/jobs"); // public jobs page
+      if (response.data.success) {
+        alert("🎉 Job Posted Successfully!");
+        router.push("/jobs"); // public jobs page
+      } else {
+        alert(response.data.message || "Job post failed");
+      }
     } catch (err) {
       console.log("POST JOB ERROR:", err.response?.data || err);
-
       alert(err.response?.data?.message || "Job post failed");
     } finally {
       setLoading(false);
     }
   };
-
   const nextStep = () => {
     if (activeStep < 3) setActiveStep(activeStep + 1);
   };

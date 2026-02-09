@@ -575,6 +575,102 @@ export default function ApplicantDetailPage() {
 
         {/* STATUS */}
         <div>
+          {/* SKILLS */}
+          {/* DATE OF BIRTH */}
+          {app.applicant?.dateOfBirth && (
+            <div>
+              <p className="font-semibold mb-2">Date of Birth</p>
+              <p className="text-gray-700">
+                🎂{" "}
+                {new Date(app.applicant.dateOfBirth).toLocaleDateString(
+                  "en-IN",
+                )}
+              </p>
+            </div>
+          )}
+
+          {/* LANGUAGES */}
+          {app.applicant?.jobseekerProfile?.languages?.length > 0 && (
+            <div>
+              <p className="font-semibold mb-2">Languages</p>
+
+              <div className="space-y-1">
+                {app.applicant.jobseekerProfile.languages.map((lang, i) => (
+                  <p key={i} className="text-gray-700">
+                    🌐 {lang.language} — {lang.proficiency}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* EXPERIENCE */}
+          {app.applicant?.jobseekerProfile?.experience?.length > 0 && (
+            <div>
+              <p className="font-semibold mb-2">Experience</p>
+
+              {app.applicant.jobseekerProfile.experience.map((exp, i) => (
+                <div key={i} className="border p-3 rounded mb-2">
+                  <p className="font-medium">{exp.position}</p>
+                  <p className="text-sm text-gray-600">{exp.company}</p>
+
+                  <p className="text-xs text-gray-500">
+                    {new Date(exp.startDate).toLocaleDateString()} -{" "}
+                    {exp.currentlyWorking
+                      ? "Present"
+                      : new Date(exp.endDate).toLocaleDateString()}
+                  </p>
+
+                  <p className="text-sm mt-1">{exp.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* CERTIFICATIONS */}
+          {app.applicant?.jobseekerProfile?.certifications?.length > 0 && (
+            <div>
+              <p className="font-semibold mb-2">Certifications</p>
+
+              {app.applicant.jobseekerProfile.certifications.map((cert, i) => (
+                <div key={i} className="border p-3 rounded mb-2">
+                  <p className="font-medium">{cert.name}</p>
+
+                  <p className="text-sm text-gray-600">{cert.issuer}</p>
+
+                  <p className="text-xs text-gray-500">
+                    Issued: {new Date(cert.issueDate).toLocaleDateString()}
+                  </p>
+
+                  {cert.url && (
+                    <a
+                      href={cert.url}
+                      target="_blank"
+                      className="text-blue-600 text-sm underline"
+                    >
+                      View Certificate
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* RESUME */}
+          {app.applicant?.resume && (
+            <div>
+              <p className="font-semibold mb-2">Resume</p>
+
+              <a
+                href={`http://localhost:5000/uploads/resumes/${app.applicant.resume}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                📄 View / Download Resume
+              </a>
+            </div>
+          )}
           <p>
             <b>Status:</b> {app.status}
           </p>
@@ -602,4 +698,3 @@ export default function ApplicantDetailPage() {
     </div>
   );
 }
-  
