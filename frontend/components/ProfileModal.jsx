@@ -1,7 +1,8 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
 export default function ProfileModal({ type, close, profile, setProfile }) {
   const [formData, setFormData] = useState({});
@@ -243,17 +244,25 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(
-        "http://localhost:5000/api/auth/update-jobseeker-profile",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
+      // const res = await fetch(
+      //   "http://localhost:5000/api/auth/update-jobseeker-profile",
+      //   {
+      //     method: "PUT",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //     body: JSON.stringify(payload),
+      //   },
+      // );
+      const res = await fetch(`${API_BASE_URL}/auth/update-jobseeker-profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify(payload),
+      });
 
       const data = await res.json();
 
