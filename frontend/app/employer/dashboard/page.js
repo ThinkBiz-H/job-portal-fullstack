@@ -1,5 +1,5 @@
 "use client";
-
+import EmployerHeader from "@/components/EmployerHeader";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -195,7 +195,7 @@ export default function EmployerDashboard() {
 
   return (
     <>
-      
+      <EmployerHeader />
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         {/* Main Content */}
         <div className="p-4 md:p-6 lg:p-8">

@@ -551,7 +551,7 @@ export default function PostJobPage() {
             <div className="text-sm text-gray-600">Posted just now</div>
             <div className="text-sm text-gray-600">By {form.company}</div>
           </div>
-          <button className="px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition">
+          <button className="px-6 py-3 bg-[#0F2A44] text-white rounded-lg font-medium hover:bg-orange-400 transition">
             Apply Now
           </button>
         </div>
@@ -565,20 +565,20 @@ export default function PostJobPage() {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
+            <div className="flex items-center text-xl font-bold">
               <Link
                 href="/employer/dashboard"
-                className="flex items-center gap-2 text-gray-700 hover:text-gray-900"
+                className="flex items-center  gap-2 text-gray-700 hover:text-gray-900"
               >
                 <ArrowLeft size={20} />
-                <span>Back to Dashboard</span>
+                <span className="text-base">Back to Dashboard</span>
               </Link>
             </div>
 
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setPreviewMode(!previewMode)}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-[#0F2A44] hover:bg-orange-400 transition"
               >
                 {previewMode ? <EyeOff size={18} /> : <Eye size={18} />}
                 {previewMode ? "Edit Mode" : "Preview Mode"}
@@ -589,7 +589,7 @@ export default function PostJobPage() {
                   {[1, 2, 3].map((step) => (
                     <div key={step} className="flex items-center">
                       <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center ${activeStep >= step ? "bg-green-100 text-green-600 border-2 border-green-600" : "bg-gray-100 text-gray-400"}`}
+                        className={`w-8 h-8 rounded-full flex items-center justify-center ${activeStep >= step ? "bg-green-100 text-[#0F2A44] border-2 border-orange-400" : "bg-gray-100 text-gray-400"}`}
                       >
                         {step}
                       </div>
@@ -641,7 +641,7 @@ export default function PostJobPage() {
 
                 {/* Job Title */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-medium text-gray-700 mb-2">
                     Job Title *
                   </label>
                   <div className="relative">
@@ -655,7 +655,7 @@ export default function PostJobPage() {
                       value={form.title}
                       onChange={handleChange}
                       placeholder="e.g., Senior Frontend Developer (React)"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                      className="w-full pl-10 pr-4 py-3 border text-black focus:ring-[#0F2A44] border-gray-300 rounded-xl focus:ring-2  focus:border-transparent outline-none transition"
                       required
                     />
                   </div>
@@ -664,7 +664,7 @@ export default function PostJobPage() {
                 {/* Company & Location */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-base font-medium text-gray-700 mb-2">
                       Company *
                     </label>
                     <div className="relative">
@@ -677,14 +677,14 @@ export default function PostJobPage() {
                         name="company"
                         value={form.company}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-gray-50 cursor-not-allowed"
+                        className="w-full pl-10 pr-4 py-3 border text-black border-gray-300 rounded-xl bg-gray-50 cursor-not-allowed"
                         readOnly
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-base font-medium text-gray-700 mb-2">
                       Location *
                     </label>
                     <div className="relative">
@@ -698,7 +698,7 @@ export default function PostJobPage() {
                         value={form.location}
                         onChange={handleChange}
                         placeholder="e.g., Bangalore, Karnataka (Remote/On-site)"
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                        className="w-full pl-10 pr-4 py-3 border text-black border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none transition"
                         required
                       />
                     </div>
@@ -708,7 +708,7 @@ export default function PostJobPage() {
                 {/* Job Type & Work Mode */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-base font-medium text-gray-700 mb-2">
                       Job Type *
                     </label>
                     <div className="grid grid-cols-2 gap-2">
@@ -719,7 +719,7 @@ export default function PostJobPage() {
                           onClick={() =>
                             setForm((prev) => ({ ...prev, type: type.value }))
                           }
-                          className={`p-3 rounded-lg border flex items-center justify-center gap-2 transition ${form.type === type.value ? "border-blue-500 bg-blue-50 text-blue-600" : "border-gray-200 hover:border-gray-300"}`}
+                          className={`p-3 rounded-lg border flex items-center justify-center gap-2 transition ${form.type === type.value ? "border-[#0F2A44] bg-blue-50 text-black" : "border-gray-200 hover:border-gray-300"}`}
                         >
                           {type.icon}
                           <span>{type.label}</span>
@@ -729,7 +729,7 @@ export default function PostJobPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-base font-medium text-gray-700 mb-2">
                       Work Mode *
                     </label>
                     <div className="flex gap-2">
@@ -743,7 +743,7 @@ export default function PostJobPage() {
                               workMode: mode.value,
                             }))
                           }
-                          className={`flex-1 py-3 rounded-lg border flex items-center justify-center gap-2 transition ${form.workMode === mode.value ? "border-green-500 bg-green-50 text-green-600" : "border-gray-200 hover:border-gray-300"}`}
+                          className={`flex-1 py-3 rounded-lg border flex items-center justify-center gap-2 transition ${form.workMode === mode.value ? "border-[#0F2A44] bg-blue-50 text-black" : "border-gray-200 hover:border-gray-300"}`}
                         >
                           {mode.icon}
                           <span>{mode.label}</span>
@@ -755,7 +755,7 @@ export default function PostJobPage() {
 
                 {/* Salary Range */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-medium text-gray-700 mb-2">
                     Salary Range (Annual)
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -770,7 +770,7 @@ export default function PostJobPage() {
                             salaryMax: range.max,
                           }))
                         }
-                        className={`p-3 rounded-lg border flex items-center gap-1 justify-center transition ${form.salaryMin === range.min ? "border-green-500 bg-green-50 text-green-600" : "border-gray-200 hover:border-gray-300"}`}
+                        className={`p-3 rounded-lg border flex items-center gap-1 justify-center transition ${form.salaryMin === range.min ? "border-[#0F2A44] bg-blue-50 text-black" : "border-gray-200 hover:border-gray-300"}`}
                       >
                         <DollarSign size={16} />
                         {range.label}
@@ -779,7 +779,7 @@ export default function PostJobPage() {
                   </div>
                   <div className="mt-4 grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm text-gray-600 mb-1">
+                      <label className="block text-base text-gray-600 mb-1">
                         Minimum (LPA)
                       </label>
                       <input
@@ -788,11 +788,11 @@ export default function PostJobPage() {
                         value={form.salaryMin}
                         onChange={handleChange}
                         placeholder="8"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                        className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-gray-600 mb-1">
+                      <label className="block text-base text-gray-600 mb-1">
                         Maximum (LPA)
                       </label>
                       <input
@@ -801,7 +801,7 @@ export default function PostJobPage() {
                         value={form.salaryMax}
                         onChange={handleChange}
                         placeholder="15"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                        className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg"
                       />
                     </div>
                   </div>
@@ -810,14 +810,14 @@ export default function PostJobPage() {
                 {/* Experience & Vacancies */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-base font-medium text-gray-700 mb-2">
                       Experience Required
                     </label>
                     <select
                       name="experienceMin"
                       value={form.experienceMin}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                      className="w-full px-4 py-3 text-black border border-[#0F2A44] rounded-xl"
                     >
                       <option value="">Select minimum experience</option>
                       {[...Array(21)].map((_, i) => (
@@ -829,14 +829,14 @@ export default function PostJobPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-base font-medium text-gray-700 mb-2">
                       Number of Vacancies
                     </label>
                     <select
                       name="vacancies"
                       value={form.vacancies}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                      className="w-full px-4 py-3 border text-black border-[#0F2A44] rounded-xl"
                     >
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30, 50].map(
                         (num) => (
@@ -865,7 +865,7 @@ export default function PostJobPage() {
 
                 {/* Job Description */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base  font-medium text-gray-700 mb-2">
                     Job Description *
                   </label>
                   <textarea
@@ -874,10 +874,10 @@ export default function PostJobPage() {
                     onChange={handleChange}
                     rows={6}
                     placeholder="Describe the job responsibilities, what you're looking for in a candidate, and what makes this role exciting..."
-                    className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
+                    className="w-full p-4 text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none resize-none"
                     required
                   />
-                  <div className="mt-2 text-sm text-gray-500">
+                  <div className="mt-2 text-sm text-gray-900">
                     Tip: Include key responsibilities, team information, and
                     growth opportunities.
                   </div>
@@ -885,7 +885,7 @@ export default function PostJobPage() {
 
                 {/* Key Responsibilities */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base  font-medium text-gray-700 mb-2">
                     Key Responsibilities
                   </label>
                   <textarea
@@ -894,13 +894,13 @@ export default function PostJobPage() {
                     onChange={handleChange}
                     rows={4}
                     placeholder="List the main responsibilities and tasks for this role (one per line)..."
-                    className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
+                    className="w-full p-4 text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none resize-none"
                   />
                 </div>
 
                 {/* Requirements */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-medium text-gray-700 mb-2">
                     Requirements & Qualifications
                   </label>
                   <textarea
@@ -909,13 +909,13 @@ export default function PostJobPage() {
                     onChange={handleChange}
                     rows={4}
                     placeholder="List the required skills, education, and experience (one per line)..."
-                    className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
+                    className="w-full p-4  text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none resize-none"
                   />
                 </div>
 
                 {/* Skills */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-medium text-gray-700 mb-2">
                     Required Skills
                   </label>
                   <div className="flex gap-2 mb-3">
@@ -929,7 +929,7 @@ export default function PostJobPage() {
                         }))
                       }
                       placeholder="Add a skill (e.g., React, Node.js)"
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg"
+                      className="flex-1 px-4 py-2  text-black border border-[#0F2A44] rounded-lg"
                       onKeyDown={(e) =>
                         e.key === "Enter" && (e.preventDefault(), addSkill())
                       }
@@ -937,7 +937,7 @@ export default function PostJobPage() {
                     <button
                       type="button"
                       onClick={addSkill}
-                      className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition flex items-center gap-1"
+                      className="px-4 py-2 bg-[#0F2A44]    rounded-lg transition flex items-center gap-1"
                     >
                       <Plus size={18} />
                       Add
@@ -946,7 +946,7 @@ export default function PostJobPage() {
 
                   {/* Popular Skills */}
                   <div className="mb-3">
-                    <div className="text-sm text-gray-600 mb-2">
+                    <div className="text-base font-bold text-gray-600 mb-2">
                       Popular Skills:
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -955,7 +955,7 @@ export default function PostJobPage() {
                           key={skill}
                           type="button"
                           onClick={() => addPopularSkill(skill)}
-                          className={`px-3 py-1 rounded-full text-sm ${form.skills.includes(skill) ? "bg-green-100 text-green-700 border border-green-300" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+                          className={`px-3 py-1 rounded-full text-base text-black ${form.skills.includes(skill) ? "bg-blue-50 text-orange-400 border border-[#0F2A44]" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
                         >
                           {skill}
                         </button>
@@ -973,7 +973,7 @@ export default function PostJobPage() {
                         {form.skills.map((skill, index) => (
                           <div
                             key={index}
-                            className="flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1.5 rounded-lg"
+                            className="flex items-center gap-1 bg-blue-50 text-[#0F2A44] px-3 py-1.5 rounded-lg"
                           >
                             <span>{skill}</span>
                             <button
@@ -996,8 +996,8 @@ export default function PostJobPage() {
             {activeStep === 3 && (
               <div className="p-6 space-y-6">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <CheckCircle2 className="w-6 h-6 text-green-600" />
+                  <div className="p-2 bg-blue-50 rounded-lg">
+                    <CheckCircle2 className="w-6 h-6 text-orange-400" />
                   </div>
                   <h2 className="text-xl font-bold text-gray-900">
                     Additional Information
@@ -1006,7 +1006,7 @@ export default function PostJobPage() {
 
                 {/* Benefits & Perks */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base  font-medium text-gray-700 mb-2">
                     Benefits & Perks
                   </label>
                   <textarea
@@ -1015,13 +1015,13 @@ export default function PostJobPage() {
                     onChange={handleChange}
                     rows={4}
                     placeholder="List the benefits and perks (e.g., Health insurance, Flexible hours, Learning budget, etc.)"
-                    className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
+                    className="w-full p-4  text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none resize-none"
                   />
                 </div>
 
                 {/* Job Category */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base  font-medium text-gray-700 mb-2">
                     Job Category
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -1035,7 +1035,7 @@ export default function PostJobPage() {
                             category: category.value,
                           }))
                         }
-                        className={`p-3 rounded-lg border flex flex-col items-center justify-center gap-2 transition ${form.category === category.value ? "border-purple-500 bg-purple-50 text-purple-600" : "border-gray-200 hover:border-gray-300"}`}
+                        className={`p-3 rounded-lg border flex flex-col items-center justify-center gap-2 transition ${form.category === category.value ? "border-[#0F2A44] bg-purple-50 text-orange-400" : "border-gray-200 hover:border-gray-300"}`}
                       >
                         {category.icon}
                         <span className="text-sm">{category.label}</span>
@@ -1047,7 +1047,7 @@ export default function PostJobPage() {
                 {/* Additional Options */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-base  font-medium text-gray-700 mb-2">
                       Application Deadline
                     </label>
                     <input
@@ -1055,13 +1055,13 @@ export default function PostJobPage() {
                       name="deadline"
                       value={form.deadline}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                      className="w-full px-4 py-3 text-black border border-gray-300 rounded-xl"
                       min={new Date().toISOString().split("T")[0]}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-base font-medium text-gray-700 mb-2">
                       Application Link/Email
                     </label>
                     <input
@@ -1070,14 +1070,14 @@ export default function PostJobPage() {
                       value={form.applyLink}
                       onChange={handleChange}
                       placeholder="https://apply.example.com OR email@example.com"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                      className="w-full px-4 text-black py-3 border border-[#0F2A44] rounded-xl"
                     />
                   </div>
                 </div>
 
                 {/* Flags */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
+                  <label className="flex items-center gap-3 p-4 border border-[#0F2A44] rounded-xl cursor-pointer hover:bg-gray-200">
                     <input
                       type="checkbox"
                       name="isUrgent"
@@ -1096,7 +1096,7 @@ export default function PostJobPage() {
                     <Zap className="ml-auto text-yellow-500" size={20} />
                   </label>
 
-                  <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
+                  <label className="flex items-center gap-3 p-4 border border-[#0F2A44] rounded-xl cursor-pointer hover:bg-gray-200">
                     <input
                       type="checkbox"
                       name="isFeatured"
@@ -1118,7 +1118,7 @@ export default function PostJobPage() {
 
                 {/* Contact Information */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-medium text-gray-700 mb-2">
                     Contact Information
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1132,7 +1132,7 @@ export default function PostJobPage() {
                         name="contactEmail"
                         value={form.contactEmail}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg"
+                        className="w-full pl-10 pr-4 py-2.5 text-black border border-gray-300 rounded-lg"
                       />
                     </div>
                     <div className="relative">
@@ -1146,7 +1146,7 @@ export default function PostJobPage() {
                         value={form.contactPhone}
                         onChange={handleChange}
                         placeholder="Contact phone number"
-                        className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg"
+                        className="w-full pl-10 pr-4 py-2.5 text-black border border-gray-300 rounded-lg"
                       />
                     </div>
                   </div>
@@ -1162,7 +1162,7 @@ export default function PostJobPage() {
                     <button
                       type="button"
                       onClick={prevStep}
-                      className="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-100 transition flex items-center gap-2"
+                      className="px-6 py-3 bg-[#0F2A44] border  border-gray-300 rounded-xl transition flex items-center gap-2"
                     >
                       <ArrowLeft size={18} />
                       Previous Step
@@ -1175,7 +1175,7 @@ export default function PostJobPage() {
                     <button
                       type="button"
                       onClick={nextStep}
-                      className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition flex items-center gap-2"
+                      className="px-6 py-3 bg-[#0F2A44] hover:bg-orange- text-white rounded-xl font-medium transition flex items-center gap-2"
                     >
                       Continue to Next Step
                       <ArrowLeft className="rotate-180" size={18} />
@@ -1185,14 +1185,14 @@ export default function PostJobPage() {
                       <button
                         type="button"
                         onClick={() => setPreviewMode(true)}
-                        className="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-100 transition"
+                        className="px-6 py-3 border border-[#0F2A44] bg-[#0F2A44] rounded-xl hover:bg-gray-100 transition"
                       >
                         Preview
                       </button>
                       <button
                         type="submit"
                         disabled={loading}
-                        className="px-8 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl font-medium transition flex items-center gap-2 disabled:opacity-50"
+                        className="px-8 py-3 bg-[#0F2A44] text-white rounded-xl font-medium transition flex items-center gap-2 disabled:opacity-50"
                       >
                         {loading ? (
                           <>

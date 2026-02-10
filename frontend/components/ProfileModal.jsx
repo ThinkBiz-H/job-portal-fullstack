@@ -1010,7 +1010,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, email: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border  text-black p-2 rounded"
             required
           />
 
@@ -1020,7 +1020,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, mobile: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
             required
           />
 
@@ -1028,7 +1028,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             type="date"
             value={formData.dob || ""}
             onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           />
 
           <select
@@ -1036,7 +1036,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, gender: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           >
             <option value="">Select Gender</option>
             <option value="Male">Male</option>
@@ -1101,7 +1101,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             placeholder="Full Name"
             value={formData.name || ""}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
             required
           />
 
@@ -1111,7 +1111,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, college: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           />
 
           <input
@@ -1120,7 +1120,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, location: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           />
 
           <Buttons close={close} />
@@ -1140,7 +1140,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, degree: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
             required
           />
 
@@ -1150,7 +1150,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, college: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
             required
           />
 
@@ -1160,7 +1160,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, field: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           />
 
           <input
@@ -1169,13 +1169,13 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, batch: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           />
 
           <select
             value={formData.type || "Graduate"}
             onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           >
             <option value="Graduate">Graduate</option>
             <option value="Post Graduate">Post Graduate</option>
@@ -1200,7 +1200,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, skill: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
             required
           />
 
@@ -1220,7 +1220,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
                   type="button"
                   key={skill}
                   onClick={() => setFormData({ skill })}
-                  className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm"
+                  className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-black"
                 >
                   {skill}
                 </button>
@@ -1245,7 +1245,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, language: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
             required
           />
 
@@ -1254,7 +1254,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, proficiency: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           >
             <option value="Basic">Basic</option>
             <option value="Intermediate">Intermediate</option>
@@ -1279,7 +1279,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, company: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
             required
           />
 
@@ -1289,7 +1289,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, position: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
             required
           />
 
@@ -1301,7 +1301,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
               onChange={(e) =>
                 setFormData({ ...formData, startDate: e.target.value })
               }
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded text-black"
             />
             <input
               type="date"
@@ -1310,7 +1310,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
               onChange={(e) =>
                 setFormData({ ...formData, endDate: e.target.value })
               }
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded text-black"
               disabled={formData.currentlyWorking}
             />
           </div>
@@ -1336,7 +1336,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
             rows={3}
           />
 
@@ -1355,7 +1355,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             placeholder="Certificate Name"
             value={formData.name || ""}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
             required
           />
 
@@ -1365,7 +1365,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, issuer: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           />
 
           <input
@@ -1375,7 +1375,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, issueDate: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           />
 
           <input
@@ -1385,7 +1385,7 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, expiryDate: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           />
 
           <input
@@ -1394,14 +1394,14 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
             onChange={(e) =>
               setFormData({ ...formData, credentialId: e.target.value })
             }
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           />
 
           <input
             placeholder="Credential URL (optional)"
             value={formData.url || ""}
             onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded text-black"
           />
 
           <Buttons close={close} />

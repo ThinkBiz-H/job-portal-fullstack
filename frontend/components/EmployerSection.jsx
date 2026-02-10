@@ -170,7 +170,7 @@ export default function EmployerSection() {
 
                 {/* Floating Badges */}
                 <div className="absolute -top-4 -left-4 z-10">
-                  <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full text-white text-sm font-bold shadow-xl">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-[#0F2A44] rounded-full text-orange-400 text-sm font-bold shadow-xl">
                     <TrendingUp className="w-4 h-4" />
                     FAST HIRING
                   </div>
@@ -204,19 +204,19 @@ export default function EmployerSection() {
             <div className="w-full lg:w-1/2 text-center lg:text-left">
               <div
                 className="inline-flex items-center gap-3 mb-6 px-5 py-2.5 
-                bg-gradient-to-r from-green-100 to-emerald-100 
+                bg-[#0F2A44]
                 rounded-full border border-green-200"
               >
-                <Building2 className="w-5 h-5 text-green-700" />
-                <span className="text-sm font-bold text-green-800 uppercase tracking-widest">
+                <Building2 className="w-5 h-5 text-orange-400" />
+                <span className="text-sm font-bold text-orange-400 uppercase tracking-widest">
                   APNA FOR EMPLOYERS
                 </span>
-                <Briefcase className="w-5 h-5 text-green-700" />
+                <Briefcase className="w-5 h-5 text-orange-400" />
               </div>
 
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                 Ready to Hire <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600">
+                <span className="text-transparent bg-clip-text bg-orange-400">
                   Top Talent?
                 </span>
               </h2>
@@ -230,20 +230,20 @@ export default function EmployerSection() {
               {/* Benefits List */}
               <div className="space-y-4 mb-10">
                 <div className="flex items-center gap-3">
-                  <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />
-                  <span className="text-gray-700 font-medium">
+                  <CheckCircle className="w-6 h-6 text-[#0F2A44] flex-shrink-0" />
+                  <span className="text-orange-400 font-medium">
                     AI-powered candidate matching
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />
-                  <span className="text-gray-700 font-medium">
+                  <CheckCircle className="w-6 h-6 text-[#0F2A44] flex-shrink-0" />
+                  <span className="text-orange-400 font-medium">
                     Verified profiles with skill validation
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />
-                  <span className="text-gray-700 font-medium">
+                  <CheckCircle className="w-6 h-6 text-[#0F2A44] flex-shrink-0" />
+                  <span className="text-orange-400 font-medium">
                     Zero commission, direct hiring
                   </span>
                 </div>
@@ -252,9 +252,9 @@ export default function EmployerSection() {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  href="/employer/post-job"
+                  href="/employer/login"
                   className="group relative inline-flex items-center justify-center gap-3
-                    bg-gradient-to-r from-green-600 to-emerald-600
+                    bg-[#0F2A44]
                     text-white font-bold text-lg
                     px-8 py-4 rounded-xl
                     hover:shadow-2xl hover:shadow-green-200 hover:scale-105
@@ -269,7 +269,7 @@ export default function EmployerSection() {
                 </Link>
 
                 <Link
-                  href="/employer/learn-more"
+                  href=""
                   className="group inline-flex items-center justify-center gap-3
                     bg-white border-2 border-gray-300
                     text-gray-800 font-semibold text-lg

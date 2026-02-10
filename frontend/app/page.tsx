@@ -18,11 +18,11 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
             {/* LEFT CONTENT */}
             <div>
-              <p className="text-orange-400 text-4xl font-semibold mb-3">
+              <p className="text-orange-500 text-4xl font-semibold mb-3">
                 INDIA&apos;S #1 JOB PLATFORM
               </p>
 
-              <h1 className="text-4xl md:text-6xl text-black font-bold leading-tight mb-4">
+              <h1 className="text-4xl md:text-6xl text-[#0F2A44] font-bold leading-tight mb-4">
                 Your job search ends here
               </h1>
 
@@ -34,7 +34,7 @@ export default function Home() {
               <JobSearchBar />
 
               {/* SUPPORT */}
-              <p className="font-semibold mt-8 text-black text-xl">
+              <p className="font-semibold mt-8 text-[#0F2A44] text-xl">
                 Proud to Support
               </p>
 

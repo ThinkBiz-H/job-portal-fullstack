@@ -586,6 +586,15 @@ export default function LoginModal({
   const [timer, setTimer] = useState(30);
   const [userType, setUserType] = useState(type);
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (isOpen) {
+      setUserType(type); // 🔥 Candidate / Employer sync
+      setStep(1);
+      setMobile("");
+      setOtp(["", "", "", "", "", ""]);
+      setTimer(30);
+    }
+  }, [type, isOpen]);
 
   const inputRefs = useRef([]);
   const router = useRouter();

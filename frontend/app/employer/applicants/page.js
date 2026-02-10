@@ -294,8 +294,8 @@ export default function ApplicantsPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-emerald-100 rounded-lg">
-                  <Users className="text-emerald-600" size={24} />
+                <div className="p-2 bg-emerald-50 rounded-lg">
+                  <Users className="text-orange-400" size={24} />
                 </div>
                 <div>
                   <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
@@ -311,13 +311,13 @@ export default function ApplicantsPage() {
             <div className="flex gap-3">
               <button
                 onClick={fetchApplicants}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-[#0F2A44] border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-[#0F2A44] transition-colors"
               >
                 <RefreshCw size={18} />
                 <span className="hidden sm:inline">Refresh</span>
               </button>
 
-              <button className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
+              <button className="flex items-center gap-2 px-4 py-2 bg-[#0F2A44] text-white rounded-lg transition-colors">
                 <Download size={18} />
                 <span className="hidden sm:inline">Export CSV</span>
               </button>
@@ -327,32 +327,36 @@ export default function ApplicantsPage() {
           {/* STATS */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
             <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-sm text-gray-500">Total Applicants</p>
+              <p className="text-base font-semibold text-gray-500">
+                Total Applicants
+              </p>
               <p className="text-2xl font-bold text-gray-900 mt-1">
                 {filteredApplicants.length}
               </p>
             </div>
             <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-sm text-gray-500">Pending</p>
-              <p className="text-2xl font-bold text-yellow-600 mt-1">
+              <p className="text-base font-semibold text-gray-500">Pending</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">
                 {applicants.filter((a) => a.status === "pending").length}
               </p>
             </div>
             <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-sm text-gray-500">Reviewed</p>
-              <p className="text-2xl font-bold text-blue-600 mt-1">
+              <p className="text-base font-semibold text-gray-500">Reviewed</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">
                 {applicants.filter((a) => a.status === "reviewed").length}
               </p>
             </div>
             <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-sm text-gray-500">Shortlisted</p>
-              <p className="text-2xl font-bold text-purple-600 mt-1">
+              <p className="text-base font-semibold text-gray-500">
+                Shortlisted
+              </p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">
                 {applicants.filter((a) => a.status === "shortlisted").length}
               </p>
             </div>
             <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-sm text-gray-500">Accepted</p>
-              <p className="text-2xl font-bold text-green-600 mt-1">
+              <p className="text-base font-semibold text-gray-500">Accepted</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">
                 {applicants.filter((a) => a.status === "accepted").length}
               </p>
             </div>
@@ -376,7 +380,7 @@ export default function ApplicantsPage() {
                   placeholder="Search by name, email, or job title..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
+                  className="w-full pl-10 pr-4 py-2.5 text-black border rounded-lg focus:ring-2 focus:ring-[#0F2A44] outline-none transition"
                 />
               </div>
             </div>
@@ -393,7 +397,7 @@ export default function ApplicantsPage() {
                 <select
                   value={selectedJob}
                   onChange={(e) => setSelectedJob(e.target.value)}
-                  className="pl-10 pr-8 py-2.5 border rounded-lg appearance-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
+                  className="pl-10 pr-8 py-2.5 text-black border rounded-lg appearance-none focus:ring-2 focus:ring-[#0F2A44] outline-none transition"
                 >
                   <option value="all">All Jobs</option>
 
@@ -413,7 +417,7 @@ export default function ApplicantsPage() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="pl-10 pr-8 py-2.5 border rounded-lg appearance-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
+                  className="pl-10 pr-8 py-2.5 text-black border rounded-lg appearance-none focus:ring-2 focus:ring-[#0F2A44] outline-none transition"
                 >
                   <option value="all">All Status</option>
                   <option value="pending">Pending</option>
@@ -432,7 +436,7 @@ export default function ApplicantsPage() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="pl-10 pr-8 py-2.5 border rounded-lg appearance-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
+                  className="pl-10 pr-8 py-2.5 text-black border rounded-lg appearance-none focus:ring-2 focus:ring-[#0F2A44] outline-none transition"
                 >
                   <option value="newest">Newest First</option>
                   <option value="oldest">Oldest First</option>
@@ -471,15 +475,17 @@ export default function ApplicantsPage() {
                         <User className="text-emerald-600" size={24} />
                       </div>
                       <div>
-                        <h3 className="font-bold text-gray-900">{app.name}</h3>
-                        <p className="text-sm text-gray-500">{app.email}</p>
-                        <p className="text-sm text-gray-500">📞 {app.phone}</p>
+                        <h3 className="font-bold text-xl text-gray-900">
+                          {app.name}
+                        </h3>
+                        <p className="text-base text-gray-700">{app.email}</p>
+                        <p className="text-base text-gray-700">{app.phone}</p>
                       </div>
                     </div>
                     <select
                       value={app.status}
                       onChange={(e) => updateStatus(app.id, e.target.value)}
-                      className="text-xs border rounded-lg px-2 py-1 outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="text-base text-black border rounded-lg px-2 py-1 outline-none focus:ring-2 focus:ring-[#0F2A44]"
                     >
                       <option value="pending">Pending</option>
                       <option value="reviewed">Reviewed</option>
@@ -491,12 +497,16 @@ export default function ApplicantsPage() {
 
                   {/* JOB INFO */}
                   <div className="mt-4 flex items-center gap-4 text-sm">
-                    <div className="flex items-center gap-1 text-gray-600">
+                    <div className="flex items-center gap-1 text-gray-800">
                       <Briefcase size={16} />
-                      <span className="font-medium">Applied for:</span>
-                      <span className="ml-1">{app.appliedFor}</span>
+                      <span className="font-medium text-base">
+                        Applied for:
+                      </span>
+                      <span className="ml-1 text-lg font-bold">
+                        {app.appliedFor}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-1 text-gray-600">
+                    <div className="flex items-center gap-1 text-base text-gray-800">
                       <MapPin size={16} />
                       <span>{app.location}</span>
                     </div>
@@ -504,14 +514,14 @@ export default function ApplicantsPage() {
 
                   {/* SKILLS */}
                   <div className="mt-4">
-                    <p className="text-sm font-medium text-gray-700 mb-2">
+                    <p className="text-lg font-medium text-gray-700 mb-2">
                       Skills
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {app.skills.map((skill, idx) => (
                         <span
                           key={idx}
-                          className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
+                          className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-base"
                         >
                           {skill}
                         </span>
@@ -521,7 +531,7 @@ export default function ApplicantsPage() {
 
                   {/* DATE & ACTIONS */}
                   <div className="mt-6 flex items-center justify-between">
-                    <div className="text-sm text-gray-500">
+                    <div className="text-base text-gray-700">
                       Applied on{" "}
                       {new Date(app.appliedDate).toLocaleDateString("en-US", {
                         year: "numeric",
@@ -531,14 +541,14 @@ export default function ApplicantsPage() {
                     </div>
                     <div className="flex gap-2">
                       <Link href={`/employer/applicants/${app.id}`}>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100 transition-colors">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-[#0F2A44] rounded-lg transition-colors">
                           <Eye size={16} />
                           View Details
                         </button>
                       </Link>
                       <a
                         href={`mailto:${app.email}`}
-                        className="p-2 border rounded-lg hover:bg-gray-50 transition-colors"
+                        className="p-2 border text-black rounded-lg hover:bg-gray-50 transition-colors"
                         title="Send Email"
                       >
                         <Mail size={16} />
@@ -547,7 +557,7 @@ export default function ApplicantsPage() {
                         href={app.resumeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 border rounded-lg hover:bg-gray-50 transition-colors"
+                        className="p-2 border text-black rounded-lg hover:bg-gray-50 transition-colors"
                         title="View Resume"
                       >
                         <FileText size={16} />

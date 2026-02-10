@@ -267,20 +267,20 @@ export default function TopCompaniesSlider() {
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 md:mb-12">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-[#0F2A44] flex items-center justify-center">
                 <Building2 className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-sm text-blue-600 font-semibold uppercase tracking-wider">
+                <p className="text-sm text-[#0F2A44] font-semibold uppercase tracking-wider">
                   Featured Companies
                 </p>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                   Job Openings in{" "}
-                  <span className="text-blue-600">Top Companies</span>
+                  <span className="text-[#0F2A44]">Top Companies</span>
                 </h2>
               </div>
             </div>
-            <p className="text-gray-600 max-w-2xl">
+            <p className="text-orange-400 max-w-2xl">
               Discover opportunities from India's most innovative and
               growth-focused companies
             </p>
@@ -289,7 +289,7 @@ export default function TopCompaniesSlider() {
           <div className="mt-6 md:mt-0 flex items-center gap-4">
             <Link
               href="/companies"
-              className="px-6 py-3 bg-white border border-gray-300 text-gray-800 font-medium rounded-xl hover:bg-gray-50 transition-all duration-300 shadow-sm hover:shadow-md"
+              className="px-6 py-3 bg-[#0F2A44] border border-gray-300 text-white font-medium rounded-xl hover:bg-gray-50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
               View All Companies
             </Link>
@@ -390,7 +390,7 @@ export default function TopCompaniesSlider() {
                 </div>
 
                 {/* Company Name */}
-                <h3 className="font-bold text-gray-900 text-xl mb-3 leading-tight group-hover:text-blue-600 transition-colors duration-300">
+                <h3 className="font-bold text-gray-900 text-xl mb-3 leading-tight group-hover:text-orange-400 transition-colors duration-300">
                   {item.name}
                 </h3>
 
@@ -403,7 +403,7 @@ export default function TopCompaniesSlider() {
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <span className="text-blue-600 font-bold text-sm">
+                      <span className="text-orange-400 font-bold text-sm">
                         💼
                       </span>
                     </div>
@@ -436,7 +436,7 @@ export default function TopCompaniesSlider() {
                 <Link
                   href={`/jobs?company=${item.slug}`}
                   className="mt-auto inline-flex items-center justify-center gap-2
-                    bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold text-lg
+                    bg-[#0F2A44] text-white font-semibold text-lg
                     px-6 py-3 rounded-xl
                     transition-all duration-300
                     hover:shadow-xl hover:shadow-blue-200 hover:scale-[1.02]
@@ -492,7 +492,7 @@ export default function TopCompaniesSlider() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/companies/register"
-                className="px-8 py-3.5 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                className="px-8 py-3.5 bg-[#0F2A44] text-white font-semibold rounded-xl hover:bg-[#0F2A44] hover:text-orange-400 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
               >
                 Register Your Company
               </Link>

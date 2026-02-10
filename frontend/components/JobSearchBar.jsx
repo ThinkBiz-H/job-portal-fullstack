@@ -356,7 +356,7 @@ export default function JobSearchBar() {
       {/* SEARCH BUTTON */}
       <button
         onClick={handleSearch}
-        className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 font-semibold rounded-b-2xl md:rounded-r-2xl md:rounded-bl-none transition"
+        className="bg-[#0F2A44] text-white px-6 py-3 font-semibold rounded-b-2xl md:rounded-r-2xl md:rounded-bl-none transition"
       >
         Search
       </button>

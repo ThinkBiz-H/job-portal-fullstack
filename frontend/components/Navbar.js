@@ -612,10 +612,10 @@
 //   );
 // }
 "use client";
-
+import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import LoginModal from "./LoginModal";
+// import LoginModal from "./LoginModal";
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {
@@ -636,24 +636,20 @@ export default function Navbar() {
   const [mobileCity, setMobileCity] = useState(false);
 
   /* ---------------- LOGIN ---------------- */
-  const [showLogin, setShowLogin] = useState(false);
-  const [loginType, setLoginType] = useState("candidate");
 
   /* ---------------- REFS ---------------- */
   const jobsRef = useRef(null);
   const profileRef = useRef(null);
-
+  const pathname = usePathname();
   /* ================= LOAD USER ================= */
+
   useEffect(() => {
     const loadUser = () => {
       const token = localStorage.getItem("token");
       const savedUser = localStorage.getItem("user");
 
-      console.log("Navbar Load:", token, savedUser);
-
       if (token && savedUser) {
         const parsed = JSON.parse(savedUser);
-
         setUser(parsed.phone || parsed.name || "User");
         setUserType(parsed.userType);
       } else {
@@ -663,17 +659,7 @@ export default function Navbar() {
     };
 
     loadUser();
-
-    const handleStorage = (e) => {
-      if (e.key === "token" || e.key === "user") {
-        loadUser();
-      }
-    };
-
-    window.addEventListener("storage", handleStorage);
-
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
+  }, [pathname]); // 🔥 ROUTE CHANGE = AUTH RELOAD
 
   /* ---------------- OUTSIDE CLICK ---------------- */
   useEffect(() => {
@@ -731,15 +717,16 @@ export default function Navbar() {
 
   /* ---------------- OPEN LOGIN MODAL ---------------- */
   const openCandidateLogin = () => {
-    setLoginType("candidate");
-    setShowLogin(true);
+    router.push("/login"); // ✅ direct login page
   };
 
+  // const openEmployerLogin = () => {
+  //   setLoginType("employer");
+  //   setShowLogin(true); // OTP modal
+  // };
   const openEmployerLogin = () => {
-    setLoginType("employer");
-    setShowLogin(true);
+    router.push("/employer/login");
   };
-
   return (
     <>
       <nav className="bg-white text-black shadow-md px-4 md:px-6 py-3 relative z-40">
@@ -775,7 +762,7 @@ export default function Navbar() {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={openCandidateLogin}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-medium"
+                  className="bg-[#0F2A44] hover:bg-blue-700 text-white px-4 py-2 rounded font-medium"
                 >
                   Candidate Login
                 </button>
@@ -878,7 +865,7 @@ export default function Navbar() {
               <div className="space-y-2 mt-2">
                 <button
                   onClick={openCandidateLogin}
-                  className="w-full bg-blue-600 text-white py-2 rounded"
+                  className="w-full bg-[#0F2A44] text-white py-2 rounded"
                 >
                   Candidate Login
                 </button>
@@ -923,12 +910,12 @@ export default function Navbar() {
       </nav>
 
       {/* ================= LOGIN MODAL ================= */}
-      <LoginModal
+      {/* <LoginModal
         isOpen={showLogin}
         onClose={() => setShowLogin(false)}
         onLogin={handleLoginSuccess}
         type={loginType}
-      />
+      /> */}
     </>
   );
 }

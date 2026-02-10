@@ -1825,10 +1825,10 @@ export default function JobDetailPage() {
                 <div className="flex-1">
                   <div className="flex items-start gap-4 mb-4">
                     <div className="p-3 bg-blue-100 rounded-xl">
-                      <Briefcase className="w-8 h-8 text-blue-600" />
+                      <Briefcase className="w-8 h-8 text-[#0F2A44]" />
                     </div>
                     <div>
-                      <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                      <h1 className="text-3xl font-bold text-orange-400 mb-2">
                         {title}
                       </h1>
                       <div className="flex items-center gap-3 mb-3">
@@ -1848,11 +1848,11 @@ export default function JobDetailPage() {
 
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2">
-                    <span className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full font-medium flex items-center gap-2">
+                    <span className="px-4 py-2 bg-blue-100 text-[#0F2A44] rounded-full font-medium flex items-center gap-2">
                       <Clock size={16} />
                       {jobType}
                     </span>
-                    <span className="px-4 py-2 bg-purple-100 text-purple-700 rounded-full font-medium flex items-center gap-2">
+                    <span className="px-4 py-2 bg-orange-100 text-[#0F2A44] rounded-full font-medium flex items-center gap-2">
                       {workMode === "Remote" ? (
                         <Globe size={16} />
                       ) : workMode === "Hybrid" ? (
@@ -1895,10 +1895,10 @@ export default function JobDetailPage() {
                     disabled={applying || hasApplied}
                     className={`w-full py-3 rounded-lg font-medium transition-all ${
                       hasApplied
-                        ? "bg-green-100 text-green-700 cursor-default"
+                        ? "bg-[#0F2A44] text-orange-400 cursor-default"
                         : applying
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-md"
+                          ? "bg-[#0F2A44] cursor-not-allowed"
+                          : "bg-[#0F2A44] text-white shadow-md"
                     }`}
                   >
                     {hasApplied ? (
@@ -2086,8 +2086,8 @@ export default function JobDetailPage() {
                     hasApplied
                       ? "bg-green-100 text-green-700 cursor-default"
                       : applying
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md"
+                        ? "bg-[#0F2A44] cursor-not-allowed"
+                        : "bg-[#0F2A44] text-white shadow-md"
                   }`}
                 >
                   {hasApplied
@@ -2159,31 +2159,33 @@ export default function JobDetailPage() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center py-2 border-b">
                   <span className="text-gray-600">Job Type</span>
-                  <span className="font-medium">{jobType}</span>
+                  <span className="font-medium  text-black">{jobType}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b">
                   <span className="text-gray-600">Work Mode</span>
-                  <span className="font-medium">{workMode}</span>
+                  <span className="font-medium text-black">{workMode}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b">
                   <span className="text-gray-600">Experience</span>
-                  <span className="font-medium">
+                  <span className="font-medium text-black">
                     {experience.min} - {experience.max} years
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b">
                   <span className="text-gray-600">Salary</span>
-                  <span className="font-medium">
+                  <span className="font-medium text-black">
                     ₹{salary.min} - ₹{salary.max} LPA
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b">
                   <span className="text-gray-600">Category</span>
-                  <span className="font-medium">{category}</span>
+                  <span className="font-medium text-black">{category}</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <span className="text-gray-600">Posted</span>
-                  <span className="font-medium">{getDaysAgo(createdAt)}</span>
+                  <span className="font-medium text-black">
+                    {getDaysAgo(createdAt)}
+                  </span>
                 </div>
               </div>
             </div>

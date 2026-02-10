@@ -4711,7 +4711,7 @@ export default function ProfilePage() {
 
     return (
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-base font-medium text-gray-700 mb-2">
           Company Size
         </label>
         {isEditing ? (
@@ -4725,7 +4725,7 @@ export default function ProfilePage() {
                 console.log("Company Size selected:", e.target.value);
                 handleInputChange("companySize", e.target.value);
               }}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
+              className="w-full pl-10 pr-4 py-2.5 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
             >
               {companySizeOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -4801,14 +4801,14 @@ export default function ProfilePage() {
             <div className="flex gap-2">
               <button
                 onClick={() => setIsEditing(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="px-4 py-2 border border-gray-300 rounded-lg bg-[#0F2A44]"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveProfile}
                 disabled={loading}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                className="px-4 py-2 bg-[#0F2A44] text-white rounded-lg  disabled:opacity-50"
               >
                 {loading ? "Saving..." : "Save Changes"}
               </button>
@@ -4816,7 +4816,7 @@ export default function ProfilePage() {
           ) : (
             <button
               onClick={() => setIsEditing(true)}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
+              className="px-4 py-2 bg-[#0F2A44] text-white rounded-lg  flex items-center gap-2"
             >
               <Edit size={16} />
               Edit Profile
@@ -4826,7 +4826,7 @@ export default function ProfilePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-base font-medium text-gray-700 mb-2">
               Company Name *
             </label>
             {isEditing ? (
@@ -4836,7 +4836,7 @@ export default function ProfilePage() {
                 onChange={(e) =>
                   handleInputChange("companyName", e.target.value)
                 }
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-2.5 text-black border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#0F2A44] focus:border-transparent"
                 placeholder="Enter company name"
               />
             ) : (
@@ -4847,7 +4847,7 @@ export default function ProfilePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-base font-medium text-gray-700 mb-2">
               Tagline
             </label>
             {isEditing ? (
@@ -4855,7 +4855,7 @@ export default function ProfilePage() {
                 type="text"
                 value={formData.tagline || ""}
                 onChange={(e) => handleInputChange("tagline", e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-2.5 text-black border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#0F2A44] focus:border-transparent"
                 placeholder="Describe your company in one line"
               />
             ) : (
@@ -4866,7 +4866,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-base font-medium text-gray-700 mb-2">
               Company Description *
             </label>
             {isEditing ? (
@@ -4876,7 +4876,7 @@ export default function ProfilePage() {
                   handleInputChange("description", e.target.value)
                 }
                 rows={4}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-2.5 text-black border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 focus:border-transparent resize-none"
                 placeholder="Tell candidates about your company culture, mission, and what makes you unique"
               />
             ) : (
@@ -4888,7 +4888,7 @@ export default function ProfilePage() {
 
           {/* Logo and Cover Photo */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-base font-medium text-gray-700 mb-2">
               Logo URL
             </label>
             {isEditing ? (
@@ -4896,7 +4896,7 @@ export default function ProfilePage() {
                 type="text"
                 value={formData.logo || ""}
                 onChange={(e) => handleInputChange("logo", e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-2.5 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="Enter logo URL or upload above"
               />
             ) : (
@@ -4907,7 +4907,7 @@ export default function ProfilePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-base font-medium text-gray-700 mb-2">
               Cover Photo URL
             </label>
             {isEditing ? (
@@ -4917,7 +4917,7 @@ export default function ProfilePage() {
                 onChange={(e) =>
                   handleInputChange("coverPhoto", e.target.value)
                 }
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-2.5  text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="Enter cover photo URL or upload above"
               />
             ) : (
@@ -4939,7 +4939,7 @@ export default function ProfilePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {contactFields.map((field) => (
             <div key={field.value}>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-base font-medium text-gray-700 mb-2">
                 {field.label}
               </label>
               {isEditing ? (
@@ -4953,7 +4953,7 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       handleInputChange(field.value, e.target.value)
                     }
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2.5  text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder={
                       field.placeholder || `Enter ${field.label.toLowerCase()}`
                     }
@@ -4973,7 +4973,7 @@ export default function ProfilePage() {
 
           {/* Team Size */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-base font-medium text-gray-700 mb-2">
               Team Size
             </label>
             {isEditing ? (
@@ -4987,7 +4987,7 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     handleInputChange("teamSize", e.target.value)
                   }
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2.5 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="e.g., 50 employees"
                 />
               </div>
@@ -5001,7 +5001,7 @@ export default function ProfilePage() {
 
           {/* Headquarters */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-base font-medium text-gray-700 mb-2">
               Headquarters
             </label>
             {isEditing ? (
@@ -5015,7 +5015,7 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     handleInputChange("headquarters", e.target.value)
                   }
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2.5 text-black   border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Enter headquarters location"
                 />
               </div>
@@ -5041,7 +5041,7 @@ export default function ProfilePage() {
                 value={newLocation}
                 onChange={(e) => setNewLocation(e.target.value)}
                 placeholder="Add new location"
-                className="px-3 py-2 border border-gray-300 rounded-lg"
+                className="px-3 py-2  text-black border border-gray-300 rounded-lg"
                 onKeyDown={(e) =>
                   e.key === "Enter" &&
                   handleArrayAdd("locations", newLocation, setNewLocation)
@@ -5051,7 +5051,7 @@ export default function ProfilePage() {
                 onClick={() =>
                   handleArrayAdd("locations", newLocation, setNewLocation)
                 }
-                className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                className="px-3 py-2 bg-[#0F2A44] text-white rounded-lg hover:bg-green-700"
               >
                 <Plus size={18} />
               </button>
@@ -5064,14 +5064,14 @@ export default function ProfilePage() {
             companyProfile.locations.map((location, index) => (
               <div
                 key={index}
-                className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg"
+                className="flex items-center gap-2 px-3 py-2 text-black bg-gray-100 rounded-lg"
               >
                 <MapPin size={16} className="text-gray-600" />
                 <span>{location}</span>
                 {isEditing && (
                   <button
                     onClick={() => handleArrayRemove("locations", index)}
-                    className="text-gray-500 hover:text-red-600"
+                    className="text-black hover:text-red-600"
                   >
                     <X size={16} />
                   </button>
@@ -5113,7 +5113,7 @@ export default function ProfilePage() {
             },
           ].map((social) => (
             <div key={social.value}>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-base font-medium text-gray-700 mb-2">
                 {social.label}
               </label>
               {isEditing ? (
@@ -5127,7 +5127,7 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       handleInputChange(social.value, e.target.value)
                     }
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2.5 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder={`https://${social.value.toLowerCase()}.com/company`}
                   />
                 </div>

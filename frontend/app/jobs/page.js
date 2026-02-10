@@ -8749,7 +8749,7 @@ export default function JobsPage() {
               {/* SEARCH BTN */}
               <button
                 onClick={handleSearch}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 rounded-lg transition-all duration-200 font-medium flex items-center gap-2"
+                className="bg-[#0F2A44] hover:bg-orange-400 text-white px-8 rounded-lg transition-all duration-200 font-medium flex items-center gap-2"
               >
                 <Search size={20} />
                 Search
@@ -8762,7 +8762,7 @@ export default function JobsPage() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           {loading ? (
             <div className="text-center py-20">
-              <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <div className="w-16 h-16 border-4 border-[#0F2A44] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
               <p className="text-gray-600">Loading jobs...</p>
             </div>
           ) : (
@@ -8985,7 +8985,7 @@ export default function JobsPage() {
                       </p>
                       <button
                         onClick={clearAllFilters}
-                        className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                        className="px-6 py-3 bg-[#0F2A44] text-white rounded-lg font-medium hover:bg-orange-400 transition-colors"
                       >
                         Clear All Filters
                       </button>
@@ -9029,7 +9029,7 @@ export default function JobsPage() {
               </div>
               <button
                 onClick={handleSearch}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg flex justify-center items-center transition-colors"
+                className="bg-[#0F2A44] hover:bg-[#0F2A44] text-white px-4 py-3 rounded-lg flex justify-center items-center transition-colors"
               >
                 <Search size={20} />
               </button>
@@ -9056,7 +9056,7 @@ export default function JobsPage() {
               <Filter size={18} />
               <span className="font-bold">Filters</span>
               {filterCount > 0 && (
-                <span className="bg-blue-100 text-blue-600 text-xs font-medium px-2 py-1 rounded-full">
+                <span className="bg-blue-100 text-orange-400 text-xs font-medium px-2 py-1 rounded-full">
                   {filterCount} Applied
                 </span>
               )}
@@ -9213,10 +9213,10 @@ function JobCard({ job }) {
 
   return (
     <Link href={`/jobs/${job._id}`}>
-      <div className="bg-white p-6 rounded-xl shadow-sm border hover:border-blue-400 cursor-pointer hover:shadow-md transition-all duration-200 group">
+      <div className="bg-white p-6 rounded-xl shadow-sm border hover:border-[#0F2A44] cursor-pointer hover:shadow-md transition-all duration-200 group">
         <div className="flex justify-between items-start mb-4">
           <div className="flex-1">
-            <h3 className="font-bold text-lg text-gray-800 group-hover:text-blue-600 mb-1">
+            <h3 className="font-bold text-lg text-[#0F2A44]  mb-1">
               {jobTitle}
             </h3>
             <p className="text-gray-600 font-medium mb-2">{company}</p>
@@ -9232,7 +9232,7 @@ function JobCard({ job }) {
             </div>
           </div>
           <div className="text-right">
-            <p className="font-bold text-lg text-green-600">
+            <p className="font-bold text-lg text-orange-400">
               {salaryMin} - {salaryMax} LPA
             </p>
             <p className="text-gray-500 text-sm">per month</p>
@@ -9246,10 +9246,10 @@ function JobCard({ job }) {
 
         {/* TAGS */}
         <div className="flex gap-2 flex-wrap mb-4">
-          <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium uppercase">
+          <span className="bg-blue-50 text-[#0F2A44] px-3 py-1 rounded-full text-sm font-medium uppercase">
             {jobType}
           </span>
-          <span className="bg-purple-50 text-purple-600 px-3 py-1 rounded-full text-sm font-medium uppercase">
+          <span className="bg-purple-50 text-orange-500 px-3 py-1 rounded-full text-sm font-medium uppercase">
             {workMode}
           </span>
           {/* {category && (
@@ -9289,7 +9289,7 @@ function JobCard({ job }) {
               {benefits.slice(0, 3).map((benefit, i) => (
                 <span
                   key={i}
-                  className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm"
+                  className="bg-green-100 text-[#0F2A44] px-3 py-1 rounded-full text-base"
                 >
                   {benefit}
                 </span>
@@ -9316,7 +9316,7 @@ function JobCard({ job }) {
               <span className="text-yellow-600 font-medium">⭐ Featured</span>
             )}
           </div>
-          <button className="text-blue-600 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
+          <button className="text-[#0F2A44] font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
             View Details
             <ChevronRight size={16} />
           </button>

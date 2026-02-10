@@ -190,7 +190,7 @@ export default function Footer() {
     <footer className="bg-gradient-to-b from-gray-50 to-gray-100 border-t border-gray-200 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Newsletter Section */}
-        <div className="mb-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 md:p-10 text-white">
+        <div className="mb-16 bg-[#0F2A44] rounded-2xl p-8 md:p-10 text-white">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div>
               <h3 className="text-2xl md:text-3xl font-bold mb-3">
@@ -219,7 +219,7 @@ export default function Footer() {
               </div>
               <button
                 type="submit"
-                className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-xl hover:bg-gray-100 transition-all duration-300 whitespace-nowrap"
+                className="bg-orange-400 text-[#0F2A44] font-semibold px-6 py-3 rounded-xl hover:bg-gray-100 transition-all duration-300 whitespace-nowrap"
               >
                 Subscribe
               </button>

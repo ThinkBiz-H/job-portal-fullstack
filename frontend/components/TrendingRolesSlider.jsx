@@ -862,16 +862,16 @@ export default function TrendingRolesSlider() {
     <section className="bg-gradient-to-b from-white to-orange-50/20 py-16 md:py-24 overflow-hidden w-full px-4 md:px-8">
       {/* Header */}
       <div className="text-center mb-12 md:mb-16 relative w-full">
-        <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 bg-orange-100 rounded-full">
+        {/* <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 bg-orange-100 rounded-full">
           <Sparkles className="w-5 h-5 text-orange-600" />
           <span className="text-sm font-semibold text-orange-700 uppercase tracking-wider">
             Auto-Scrolling Live
           </span>
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-        </div>
+        </div> */}
 
         <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-          Trending <span className="text-orange-600">Job Roles</span> on Apna
+          Trending <span className="text-orange-400">Job Roles</span> on Apna
         </h2>
 
         <p className="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto">
@@ -901,13 +901,13 @@ export default function TrendingRolesSlider() {
       </div>
 
       {/* Auto Scroll Instructions */}
-      <div className="text-center mb-8 w-full">
+      {/* <div className="text-center mb-8 w-full">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-lg">
           <span className="text-sm text-blue-600 font-medium">
             ✨ Auto-scrolling • Hover to pause • Scroll manually
           </span>
         </div>
-      </div>
+      </div> */}
 
       {/* ===== ROW 1 ===== */}
       <div className="relative mb-8 group w-full">
@@ -1012,7 +1012,7 @@ export default function TrendingRolesSlider() {
         <Link
           href="/jobs"
           className="group inline-flex items-center gap-3
-            bg-gradient-to-r from-orange-500 to-orange-600
+            bg-[#0F2A44]
             text-white font-semibold text-lg
             px-8 py-4 rounded-xl
             hover:shadow-xl hover:shadow-orange-200 hover:scale-105
@@ -1021,10 +1021,6 @@ export default function TrendingRolesSlider() {
           <span>Explore All Trending Roles</span>
           <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-2" />
         </Link>
-
-        <p className="mt-6 text-gray-600">
-          Updated daily with new opportunities from top employers
-        </p>
       </div>
     </section>
   );
@@ -1075,7 +1071,7 @@ function RoleCard({ item, index, isActive, onHover, row, isScrolling }) {
       {/* Trending Badge for High Growth */}
       {parseInt(item.growth) > 40 && (
         <div className="absolute -top-2 -right-2 z-20">
-          <div className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full text-white text-xs font-bold shadow-lg">
+          <div className="flex items-center gap-1 px-3 py-1.5 bg-[#0F2A44] rounded-full text-white text-xs font-bold shadow-lg">
             <TrendingUp className="w-3 h-3" />+{item.growth}
           </div>
         </div>
@@ -1095,7 +1091,7 @@ function RoleCard({ item, index, isActive, onHover, row, isScrolling }) {
 
         {/* Pulse Animation when active */}
         {isActive && (
-          <div className="absolute inset-0 rounded-2xl border-2 border-orange-300 animate-ping opacity-30"></div>
+          <div className="absolute inset-0 rounded-2xl border-2 border-orange-400 animate-ping opacity-30"></div>
         )}
       </div>
 
@@ -1120,7 +1116,7 @@ function RoleCard({ item, index, isActive, onHover, row, isScrolling }) {
             <p className="text-lg font-bold text-gray-900 mb-1">{item.jobs}</p>
             <p className="text-sm text-gray-500 flex items-center gap-1">
               <TrendingUp className="w-3 h-3" />
-              <span className="font-medium text-green-600">
+              <span className="font-medium text-orange-400">
                 +{item.growth} growth
               </span>
             </p>

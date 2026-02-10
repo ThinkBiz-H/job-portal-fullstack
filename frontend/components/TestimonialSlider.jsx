@@ -962,7 +962,7 @@ export default function TestimonialSlider() {
     <section className="w-full min-h-[500px] bg-white overflow-hidden">
       <div className="w-full flex flex-col lg:flex-row">
         {/* LEFT SECTION - ORIGINAL WIDTH CONCEPT */}
-        <div className="w-full lg:w-1/3 bg-gradient-to-br from-green-600 to-emerald-700 text-white p-8 md:p-12 lg:p-16 flex flex-col justify-center relative overflow-hidden">
+        <div className="w-full lg:w-1/3 bg-[#0F2A44] text-white p-8 md:p-12 lg:p-16 flex flex-col justify-center relative overflow-hidden">
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-10">
             <div
@@ -989,7 +989,7 @@ export default function TestimonialSlider() {
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
               Trusted by <br />
-              <span className="text-yellow-300">5 Crore+</span> <br />
+              <span className="text-orange-400">5 Crore+</span> <br />
               Job Seekers
             </h2>
 
@@ -1007,27 +1007,6 @@ export default function TestimonialSlider() {
 
         {/* RIGHT SLIDER SECTION */}
         <div className="w-full lg:w-2/3 bg-gradient-to-br from-gray-50 to-white py-12 px-4 md:px-8 lg:px-12 relative">
-          {/* Navigation Arrows */}
-          {/* <button
-            onClick={() => scrollToIndex("left")}
-            className="absolute left-4 top-1/2 -translate-y-1/2 
-              z-20 w-12 h-12 rounded-full bg-white border border-gray-300 
-              flex items-center justify-center hover:bg-gray-50 hover:border-gray-400 
-              transition-all duration-300 shadow-lg"
-          >
-            <ChevronLeft className="w-5 h-5 text-gray-700" />
-          </button>
-
-          <button
-            onClick={() => scrollToIndex("right")}
-            className="absolute right-4 top-1/2 -translate-y-1/2
-              z-20 w-12 h-12 rounded-full bg-white border border-gray-300 
-              flex items-center justify-center hover:bg-gray-50 hover:border-gray-400 
-              transition-all duration-300 shadow-lg"
-          >
-            <ChevronRight className="w-5 h-5 text-gray-700" />
-          </button> */}
-
           {/* Gradient Fades */}
           <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
           <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
@@ -1073,7 +1052,7 @@ export default function TestimonialSlider() {
                   }}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
                     currentIndex % testimonials.length === index
-                      ? "w-8 bg-gradient-to-r from-green-500 to-emerald-600"
+                      ? "w-8 bg-[#0F2A44]"
                       : "bg-gray-300 hover:bg-gray-400"
                   }`}
                 />
@@ -1106,7 +1085,7 @@ function TestimonialCard({ item, index }) {
             className="rounded-xl object-cover border-2 border-white shadow-md"
           />
           {/* Verified Badge */}
-          <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center">
+          <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-orange-400 flex items-center justify-center">
             <span className="text-white text-xs font-bold">✓</span>
           </div>
         </div>
@@ -1155,11 +1134,11 @@ function TestimonialCard({ item, index }) {
       {/* Footer Info */}
       <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <div className="w-2 h-2 bg-[#0F2A44] rounded-full animate-pulse"></div>
           <span className="text-xs text-gray-500">Placed in {item.joined}</span>
         </div>
 
-        <div className="flex items-center gap-1 text-green-600 text-sm">
+        <div className="flex items-center gap-1 text-orange-400 text-sm">
           <span className="font-medium">Success Story</span>
           <ChevronRight className="w-3 h-3" />
         </div>
