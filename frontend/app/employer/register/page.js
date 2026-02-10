@@ -1,355 +1,4 @@
-// "use client";
 
-// import { useState } from "react";
-// import axios from "axios";
-// import { useRouter } from "next/navigation";
-
-// export default function Register() {
-//   const router = useRouter();
-//   const API = "http://localhost:5000/api";
-
-//   const [step, setStep] = useState("register"); // register | otp
-//   const [loading, setLoading] = useState(false);
-
-//   const [form, setForm] = useState({
-//     name: "",
-//     email: "",
-//     password: "",
-//     confirmPassword: "",
-//     phone: "",
-//   });
-
-//   const [otp, setOtp] = useState("");
-
-//   /* ================= REGISTER ================= */
-//   const handleRegister = async (e) => {
-//     e.preventDefault();
-
-//     if (form.password !== form.confirmPassword) {
-//       alert("Passwords do not match ❌");
-//       return;
-//     }
-
-//     try {
-//       setLoading(true);
-
-//       await axios.post(`${API}/auth/register`, {
-//         name: form.name,
-//         email: form.email,
-//         password: form.password,
-//         phone: form.phone,
-//         userType: "employer",
-//       });
-
-//       // send OTP after register
-//       await axios.post(`${API}/otp/send`, {
-//         phone: form.phone,
-//       });
-
-//       alert("OTP sent to your mobile 📲");
-//       setStep("otp");
-//     } catch (err) {
-//       alert(err.response?.data?.message || "Register failed ❌");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   /* ================= VERIFY OTP ================= */
-//   const handleVerifyOtp = async (e) => {
-//     e.preventDefault();
-
-//     if (otp.length !== 6) {
-//       alert("Invalid OTP ❌");
-//       return;
-//     }
-
-//     try {
-//       setLoading(true);
-
-//       await axios.post(`${API}/otp/verify`, {
-//         phone: form.phone,
-//         otp,
-//       });
-
-//       alert("Account verified successfully ✅");
-//       router.push("/login");
-//     } catch (err) {
-//       alert(err.response?.data?.message || "OTP verification failed ❌");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-//       <div className="bg-white p-6 rounded-xl shadow w-full max-w-md">
-//         <h2 className="text-2xl font-bold text-center mb-6">
-//           {step === "register" ? "Create Account" : "Verify OTP"}
-//         </h2>
-
-//         {step === "register" ? (
-//           <form onSubmit={handleRegister}>
-//             <input
-//               placeholder="Full Name"
-//               className="input"
-//               value={form.name}
-//               onChange={(e) => setForm({ ...form, name: e.target.value })}
-//               required
-//             />
-
-//             <input
-//               type="email"
-//               placeholder="Email"
-//               className="input"
-//               value={form.email}
-//               onChange={(e) => setForm({ ...form, email: e.target.value })}
-//               required
-//             />
-
-//             <input
-//               type="password"
-//               placeholder="Password"
-//               className="input"
-//               value={form.password}
-//               onChange={(e) => setForm({ ...form, password: e.target.value })}
-//               required
-//             />
-
-//             <input
-//               type="password"
-//               placeholder="Confirm Password"
-//               className="input"
-//               value={form.confirmPassword}
-//               onChange={(e) =>
-//                 setForm({ ...form, confirmPassword: e.target.value })
-//               }
-//               required
-//             />
-
-//             <input
-//               type="tel"
-//               placeholder="Mobile Number"
-//               maxLength={10}
-//               className="input"
-//               value={form.phone}
-//               onChange={(e) =>
-//                 setForm({ ...form, phone: e.target.value.replace(/\D/g, "") })
-//               }
-//               required
-//             />
-
-//             <button className="btn" disabled={loading}>
-//               {loading ? "Please wait..." : "Register & Send OTP"}
-//             </button>
-//           </form>
-//         ) : (
-//           <form onSubmit={handleVerifyOtp}>
-//             <input value={form.phone} disabled className="input bg-gray-100" />
-
-//             <input
-//               placeholder="Enter OTP"
-//               maxLength={6}
-//               className="input"
-//               value={otp}
-//               onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-//               required
-//             />
-
-//             <button className="btn" disabled={loading}>
-//               {loading ? "Verifying..." : "Verify OTP"}
-//             </button>
-//           </form>
-//         )}
-//       </div>
-//     </div>
-//   );
-// // }
-// "use client";
-
-// import { useState } from "react";
-// import axios from "axios";
-// import { useRouter } from "next/navigation";
-
-// export default function EmployerRegister() {
-//   const router = useRouter();
-//   const API = "http://localhost:5000/api";
-
-//   const [step, setStep] = useState("register"); // register | otp
-//   const [loading, setLoading] = useState(false);
-
-//   const [form, setForm] = useState({
-//     name: "",
-//     email: "",
-//     password: "",
-//     confirmPassword: "",
-//     phone: "",
-//   });
-
-//   const [otp, setOtp] = useState("");
-
-//   /* ================= REGISTER ================= */
-//   const handleRegister = async (e) => {
-//     e.preventDefault();
-
-//     if (form.password !== form.confirmPassword) {
-//       alert("Passwords do not match ❌");
-//       return;
-//     }
-
-//     if (form.phone.length !== 10) {
-//       alert("Enter valid 10 digit phone number ❌");
-//       return;
-//     }
-
-//     try {
-//       setLoading(true);
-
-//       // 1️⃣ Register user
-//       await axios.post(`${API}/auth/register`, {
-//         name: form.name,
-//         email: form.email,
-//         password: form.password,
-//         phone: form.phone,
-//         userType: "employer",
-//       });
-
-//       // 2️⃣ Send OTP
-//       await axios.post(`${API}/otp/send`, {
-//         phone: form.phone,
-//       });
-
-//       alert("OTP sent to your mobile 📲");
-//       setStep("otp");
-//     } catch (err) {
-//       alert(err.response?.data?.message || "Register failed ❌");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   /* ================= VERIFY OTP ================= */
-//   const handleVerifyOtp = async (e) => {
-//     e.preventDefault();
-
-//     if (otp.length !== 6) {
-//       alert("Invalid OTP ❌");
-//       return;
-//     }
-
-//     try {
-//       setLoading(true);
-
-//       await axios.post(`${API}/otp/verify`, {
-//         phone: form.phone,
-//         otp,
-//       });
-//       alert("Account verified successfully ✅");
-//       router.push("/login");
-//     } catch (err) {
-//       alert(err.response?.data?.message || "OTP verification failed ❌");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-//       <div className="bg-white p-6 rounded-xl shadow w-full max-w-md">
-//         <h2 className="text-2xl font-bold text-center mb-6">
-//           {step === "register" ? "Employer Registration" : "Verify OTP"}
-//         </h2>
-
-//         {step === "register" ? (
-//           <form onSubmit={handleRegister} className="space-y-3">
-//             <input
-//               placeholder="Full Name"
-//               className="w-full border p-3 rounded"
-//               value={form.name}
-//               onChange={(e) => setForm({ ...form, name: e.target.value })}
-//               required
-//             />
-
-//             <input
-//               type="email"
-//               placeholder="Email Address"
-//               className="w-full border p-3 rounded"
-//               value={form.email}
-//               onChange={(e) => setForm({ ...form, email: e.target.value })}
-//               required
-//             />
-
-//             <input
-//               type="password"
-//               placeholder="Password"
-//               className="w-full border p-3 rounded"
-//               value={form.password}
-//               onChange={(e) => setForm({ ...form, password: e.target.value })}
-//               required
-//             />
-
-//             <input
-//               type="password"
-//               placeholder="Confirm Password"
-//               className="w-full border p-3 rounded"
-//               value={form.confirmPassword}
-//               onChange={(e) =>
-//                 setForm({ ...form, confirmPassword: e.target.value })
-//               }
-//               required
-//             />
-
-//             <input
-//               type="tel"
-//               placeholder="Mobile Number"
-//               maxLength={10}
-//               className="w-full border p-3 rounded"
-//               value={form.phone}
-//               onChange={(e) =>
-//                 setForm({
-//                   ...form,
-//                   phone: e.target.value.replace(/\D/g, ""),
-//                 })
-//               }
-//               required
-//             />
-
-//             <button
-//               disabled={loading}
-//               className="w-full bg-blue-600 text-white py-3 rounded font-semibold"
-//             >
-//               {loading ? "Please wait..." : "Register & Send OTP"}
-//             </button>
-//           </form>
-//         ) : (
-//           <form onSubmit={handleVerifyOtp} className="space-y-3">
-//             <input
-//               value={form.phone}
-//               disabled
-//               className="w-full border p-3 rounded bg-gray-100"
-//             />
-
-//             <input
-//               placeholder="Enter 6 digit OTP"
-//               maxLength={6}
-//               className="w-full border p-3 rounded"
-//               value={otp}
-//               onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-//               required
-//             />
-
-//             <button
-//               disabled={loading}
-//               className="w-full bg-green-600 text-white py-3 rounded font-semibold"
-//             >
-//               {loading ? "Verifying..." : "Verify OTP"}
-//             </button>
-//           </form>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
 "use client";
 
 import { useState } from "react";
@@ -506,7 +155,7 @@ export default function EmployerRegister() {
   const renderRegisterStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-4">
+        <div className="w-16 h-16 mx-auto rounded-2xl bg-[#0F2A44] flex items-center justify-center mb-4">
           <Building2 className="w-8 h-8 text-white" />
         </div>
         <h2 className="text-3xl font-bold text-gray-900">Hire Top Talent</h2>
@@ -516,7 +165,7 @@ export default function EmployerRegister() {
       <form onSubmit={handleRegister} className="space-y-5">
         {/* Company Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-base font-medium text-gray-700 mb-2">
             Company Name
           </label>
           <div className="relative">
@@ -529,7 +178,7 @@ export default function EmployerRegister() {
               placeholder="Enter your company name"
               value={form.name}
               onChange={handleInputChange}
-              className={`w-full pl-11 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors ${
+              className={`w-full pl-11 pr-4 py-3  text-black border rounded-lg focus:ring-2 focus:ring-[#0F2A44] focus:border-[#0F2A44] outline-none transition-colors ${
                 errors.name ? "border-red-500" : "border-gray-300"
               }`}
             />
@@ -544,7 +193,7 @@ export default function EmployerRegister() {
 
         {/* Email */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-base font-medium text-gray-700 mb-2">
             Business Email
           </label>
           <div className="relative">
@@ -557,7 +206,7 @@ export default function EmployerRegister() {
               placeholder="company@example.com"
               value={form.email}
               onChange={handleInputChange}
-              className={`w-full pl-11 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors ${
+              className={`w-full pl-11 pr-4 py-3  text-black border rounded-lg focus:ring-2 focus:ring-[#0F2A44] focus:border-[#0F2A44] outline-none transition-colors ${
                 errors.email ? "border-red-500" : "border-gray-300"
               }`}
             />
@@ -585,7 +234,7 @@ export default function EmployerRegister() {
               placeholder="At least 6 characters"
               value={form.password}
               onChange={handleInputChange}
-              className={`w-full pl-11 pr-11 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors ${
+              className={`w-full pl-11 pr-11 py-3  text-black border rounded-lg focus:ring-2 focus:ring-[#0F2A44] focus:border-[#0F2A44] outline-none transition-colors ${
                 errors.password ? "border-red-500" : "border-gray-300"
               }`}
             />
@@ -611,7 +260,7 @@ export default function EmployerRegister() {
 
         {/* Confirm Password */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-base font-medium text-gray-700 mb-2">
             Confirm Password
           </label>
           <div className="relative">
@@ -624,7 +273,7 @@ export default function EmployerRegister() {
               placeholder="Re-enter your password"
               value={form.confirmPassword}
               onChange={handleInputChange}
-              className={`w-full pl-11 pr-11 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors ${
+              className={`w-full pl-11 pr-11 py-3  text-black border rounded-lg focus:ring-2 focus:ring-[#0F2A44] focus:border-[#0F2A44] outline-none transition-colors ${
                 errors.confirmPassword ? "border-red-500" : "border-gray-300"
               }`}
             />
@@ -650,7 +299,7 @@ export default function EmployerRegister() {
 
         {/* Phone */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-base font-medium text-gray-700 mb-2">
             Mobile Number
           </label>
           <div className="relative">
@@ -664,7 +313,7 @@ export default function EmployerRegister() {
               maxLength={10}
               value={form.phone}
               onChange={handleInputChange}
-              className={`w-full pl-11 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors ${
+              className={`w-full pl-11 pr-4 py-3  text-black border rounded-lg focus:ring-2 focus:ring-[#0F2A44] focus:border-[#0F2A44] outline-none transition-colors ${
                 errors.phone ? "border-red-500" : "border-gray-300"
               }`}
             />
@@ -681,7 +330,7 @@ export default function EmployerRegister() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3.5 px-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-green-200 hover:scale-[1.02] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full py-3.5 px-4 bg-[#0F2A44] text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-green-200 hover:scale-[1.02] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {loading ? (
             <>
@@ -702,7 +351,7 @@ export default function EmployerRegister() {
           Already have an account?{" "}
           <button
             onClick={() => router.push("/employer/login")}
-            className="text-green-600 font-semibold hover:text-green-700 hover:underline"
+            className="text-[#0F2A44] font-semibold hover:text-green-700 hover:underline"
           >
             Sign In
           </button>
@@ -721,7 +370,7 @@ export default function EmployerRegister() {
           <ArrowLeft className="w-6 h-6" />
         </button>
 
-        <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-4">
+        <div className="w-16 h-16 mx-auto rounded-2xl bg-[#0F2A44] flex items-center justify-center mb-4">
           <Shield className="w-8 h-8 text-white" />
         </div>
         <h2 className="text-3xl font-bold text-gray-900">Verify Your Number</h2>
@@ -746,7 +395,7 @@ export default function EmployerRegister() {
                   document.getElementById(`otp-${index - 1}`).focus();
                 }
               }}
-              className="w-12 h-12 text-xl font-bold text-center border-2 border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
+              className="w-12 h-12 text-xl font-bold text-center border-2 border-gray-300 rounded-lg focus:border-[#0F2A44] focus:ring-2 focus:ring-[#0F2A44] outline-none transition-all"
             />
           ))}
         </div>
@@ -754,7 +403,7 @@ export default function EmployerRegister() {
         <button
           type="submit"
           disabled={loading || otp.join("").length !== 6}
-          className="w-full py-3.5 px-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-green-200 hover:scale-[1.02] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full py-3.5 px-4 bg-[#0F2A44] text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-green-200 hover:scale-[1.02] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {loading ? (
             <>

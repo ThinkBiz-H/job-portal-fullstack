@@ -1,5 +1,5 @@
 "use client";
-
+import EmployerHeader from "@/components/EmployerHeader";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -287,350 +287,358 @@ export default function ApplicantsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* HEADER */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-emerald-50 rounded-lg">
-                  <Users className="text-orange-400" size={24} />
-                </div>
-                <div>
-                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-                    Applicants
-                  </h1>
-                  <p className="text-gray-600 mt-1">
-                    Manage all job applications in one place
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={fetchApplicants}
-                className="flex items-center gap-2 px-4 py-2 bg-[#0F2A44] border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-[#0F2A44] transition-colors"
-              >
-                <RefreshCw size={18} />
-                <span className="hidden sm:inline">Refresh</span>
-              </button>
-
-              <button className="flex items-center gap-2 px-4 py-2 bg-[#0F2A44] text-white rounded-lg transition-colors">
-                <Download size={18} />
-                <span className="hidden sm:inline">Export CSV</span>
-              </button>
-            </div>
-          </div>
-
-          {/* STATS */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
-            <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-base font-semibold text-gray-500">
-                Total Applicants
-              </p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
-                {filteredApplicants.length}
-              </p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-base font-semibold text-gray-500">Pending</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
-                {applicants.filter((a) => a.status === "pending").length}
-              </p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-base font-semibold text-gray-500">Reviewed</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
-                {applicants.filter((a) => a.status === "reviewed").length}
-              </p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-base font-semibold text-gray-500">
-                Shortlisted
-              </p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
-                {applicants.filter((a) => a.status === "shortlisted").length}
-              </p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-base font-semibold text-gray-500">Accepted</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
-                {applicants.filter((a) => a.status === "accepted").length}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CONTENT */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* FILTER BAR */}
-        <div className="bg-white rounded-xl border shadow-sm p-4 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* SEARCH */}
-            <div className="flex-1">
-              <div className="relative">
-                <Search
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                  size={20}
-                />
-                <input
-                  placeholder="Search by name, email, or job title..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 text-black border rounded-lg focus:ring-2 focus:ring-[#0F2A44] outline-none transition"
-                />
-              </div>
-            </div>
-
-            {/* FILTERS */}
-            <div className="flex flex-wrap gap-3">
-              {/* JOB FILTER */}
-              <div className="relative">
-                <Briefcase
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                  size={18}
-                />
-
-                <select
-                  value={selectedJob}
-                  onChange={(e) => setSelectedJob(e.target.value)}
-                  className="pl-10 pr-8 py-2.5 text-black border rounded-lg appearance-none focus:ring-2 focus:ring-[#0F2A44] outline-none transition"
-                >
-                  <option value="all">All Jobs</option>
-
-                  {jobsList.map((job) => (
-                    <option key={job.id} value={job.id}>
-                      {job.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="relative">
-                <Filter
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                  size={18}
-                />
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="pl-10 pr-8 py-2.5 text-black border rounded-lg appearance-none focus:ring-2 focus:ring-[#0F2A44] outline-none transition"
-                >
-                  <option value="all">All Status</option>
-                  <option value="pending">Pending</option>
-                  <option value="reviewed">Reviewed</option>
-                  <option value="shortlisted">Shortlisted</option>
-                  <option value="rejected">Rejected</option>
-                  <option value="accepted">Accepted</option>
-                </select>
-              </div>
-
-              <div className="relative">
-                <Calendar
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                  size={18}
-                />
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="pl-10 pr-8 py-2.5 text-black border rounded-lg appearance-none focus:ring-2 focus:ring-[#0F2A44] outline-none transition"
-                >
-                  <option value="newest">Newest First</option>
-                  <option value="oldest">Oldest First</option>
-                  <option value="name">Sort by Name</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* APPLICANTS GRID/CARDS */}
-        {current.length === 0 ? (
-          <div className="bg-white rounded-xl border shadow-sm p-12 text-center">
-            <Users className="mx-auto text-gray-300" size={64} />
-            <h3 className="text-xl font-semibold text-gray-700 mt-4">
-              No applicants found
-            </h3>
-            <p className="text-gray-500 mt-2">
-              {searchQuery || statusFilter !== "all"
-                ? "Try adjusting your search or filters"
-                : "No applications have been submitted yet"}
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {current.map((app) => (
-              <div
-                key={app.id}
-                className="bg-white rounded-xl border shadow-sm hover:shadow-md transition-shadow overflow-hidden"
-              >
-                <div className="p-6">
-                  {/* HEADER */}
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
-                        <User className="text-emerald-600" size={24} />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-xl text-gray-900">
-                          {app.name}
-                        </h3>
-                        <p className="text-base text-gray-700">{app.email}</p>
-                        <p className="text-base text-gray-700">{app.phone}</p>
-                      </div>
-                    </div>
-                    <select
-                      value={app.status}
-                      onChange={(e) => updateStatus(app.id, e.target.value)}
-                      className="text-base text-black border rounded-lg px-2 py-1 outline-none focus:ring-2 focus:ring-[#0F2A44]"
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="reviewed">Reviewed</option>
-                      <option value="shortlisted">Shortlisted</option>
-                      <option value="rejected">Rejected</option>
-                      <option value="accepted">Accepted</option>
-                    </select>
+    <>
+      <EmployerHeader />
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        {/* HEADER */}
+        <div className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-emerald-50 rounded-lg">
+                    <Users className="text-orange-400" size={24} />
                   </div>
-
-                  {/* JOB INFO */}
-                  <div className="mt-4 flex items-center gap-4 text-sm">
-                    <div className="flex items-center gap-1 text-gray-800">
-                      <Briefcase size={16} />
-                      <span className="font-medium text-base">
-                        Applied for:
-                      </span>
-                      <span className="ml-1 text-lg font-bold">
-                        {app.appliedFor}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 text-base text-gray-800">
-                      <MapPin size={16} />
-                      <span>{app.location}</span>
-                    </div>
-                  </div>
-
-                  {/* SKILLS */}
-                  <div className="mt-4">
-                    <p className="text-lg font-medium text-gray-700 mb-2">
-                      Skills
+                  <div>
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+                      Applicants
+                    </h1>
+                    <p className="text-gray-600 mt-1">
+                      Manage all job applications in one place
                     </p>
-                    <div className="flex flex-wrap gap-2">
-                      {app.skills.map((skill, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-base"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* DATE & ACTIONS */}
-                  <div className="mt-6 flex items-center justify-between">
-                    <div className="text-base text-gray-700">
-                      Applied on{" "}
-                      {new Date(app.appliedDate).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </div>
-                    <div className="flex gap-2">
-                      <Link href={`/employer/applicants/${app.id}`}>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-[#0F2A44] rounded-lg transition-colors">
-                          <Eye size={16} />
-                          View Details
-                        </button>
-                      </Link>
-                      <a
-                        href={`mailto:${app.email}`}
-                        className="p-2 border text-black rounded-lg hover:bg-gray-50 transition-colors"
-                        title="Send Email"
-                      >
-                        <Mail size={16} />
-                      </a>
-                      <a
-                        href={app.resumeUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 border text-black rounded-lg hover:bg-gray-50 transition-colors"
-                        title="View Resume"
-                      >
-                        <FileText size={16} />
-                      </a>
-                    </div>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
 
-        {/* PAGINATION */}
-        {totalPages > 1 && (
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-gray-600">
-              Showing {first + 1} to {Math.min(last, filteredApplicants.length)}{" "}
-              of {filteredApplicants.length} applicants
-            </p>
-            <div className="flex items-center gap-2">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((p) => p - 1)}
-                className="flex items-center gap-2 px-4 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              >
-                <ChevronLeft size={18} />
-                <span>Previous</span>
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={fetchApplicants}
+                  className="flex items-center gap-2 px-4 py-2 bg-[#0F2A44] border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-[#0F2A44] transition-colors"
+                >
+                  <RefreshCw size={18} />
+                  <span className="hidden sm:inline">Refresh</span>
+                </button>
 
-              <div className="flex items-center gap-1">
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum;
-                  if (totalPages <= 5) {
-                    pageNum = i + 1;
-                  } else if (currentPage <= 3) {
-                    pageNum = i + 1;
-                  } else if (currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i;
-                  } else {
-                    pageNum = currentPage - 2 + i;
-                  }
-
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => setCurrentPage(pageNum)}
-                      className={`w-10 h-10 rounded-lg ${
-                        currentPage === pageNum
-                          ? "bg-emerald-600 text-white"
-                          : "border hover:bg-gray-50"
-                      } transition-colors`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
-                {totalPages > 5 && (
-                  <span className="px-2 text-gray-500">...</span>
-                )}
+                <button className="flex items-center gap-2 px-4 py-2 bg-[#0F2A44] text-white rounded-lg transition-colors">
+                  <Download size={18} />
+                  <span className="hidden sm:inline">Export CSV</span>
+                </button>
               </div>
+            </div>
 
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage((p) => p + 1)}
-                className="flex items-center gap-2 px-4 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              >
-                <span>Next</span>
-                <ChevronRight size={18} />
-              </button>
+            {/* STATS */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
+              <div className="bg-white p-4 rounded-xl border shadow-sm">
+                <p className="text-base font-semibold text-gray-500">
+                  Total Applicants
+                </p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">
+                  {filteredApplicants.length}
+                </p>
+              </div>
+              <div className="bg-white p-4 rounded-xl border shadow-sm">
+                <p className="text-base font-semibold text-gray-500">Pending</p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">
+                  {applicants.filter((a) => a.status === "pending").length}
+                </p>
+              </div>
+              <div className="bg-white p-4 rounded-xl border shadow-sm">
+                <p className="text-base font-semibold text-gray-500">
+                  Reviewed
+                </p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">
+                  {applicants.filter((a) => a.status === "reviewed").length}
+                </p>
+              </div>
+              <div className="bg-white p-4 rounded-xl border shadow-sm">
+                <p className="text-base font-semibold text-gray-500">
+                  Shortlisted
+                </p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">
+                  {applicants.filter((a) => a.status === "shortlisted").length}
+                </p>
+              </div>
+              <div className="bg-white p-4 rounded-xl border shadow-sm">
+                <p className="text-base font-semibold text-gray-500">
+                  Accepted
+                </p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">
+                  {applicants.filter((a) => a.status === "accepted").length}
+                </p>
+              </div>
             </div>
           </div>
-        )}
+        </div>
+
+        {/* CONTENT */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* FILTER BAR */}
+          <div className="bg-white rounded-xl border shadow-sm p-4 mb-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* SEARCH */}
+              <div className="flex-1">
+                <div className="relative">
+                  <Search
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={20}
+                  />
+                  <input
+                    placeholder="Search by name, email, or job title..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 text-black border rounded-lg focus:ring-2 focus:ring-[#0F2A44] outline-none transition"
+                  />
+                </div>
+              </div>
+
+              {/* FILTERS */}
+              <div className="flex flex-wrap gap-3">
+                {/* JOB FILTER */}
+                <div className="relative">
+                  <Briefcase
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+
+                  <select
+                    value={selectedJob}
+                    onChange={(e) => setSelectedJob(e.target.value)}
+                    className="pl-10 pr-8 py-2.5 text-black border rounded-lg appearance-none focus:ring-2 focus:ring-[#0F2A44] outline-none transition"
+                  >
+                    <option value="all">All Jobs</option>
+
+                    {jobsList.map((job) => (
+                      <option key={job.id} value={job.id}>
+                        {job.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="relative">
+                  <Filter
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="pl-10 pr-8 py-2.5 text-black border rounded-lg appearance-none focus:ring-2 focus:ring-[#0F2A44] outline-none transition"
+                  >
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="reviewed">Reviewed</option>
+                    <option value="shortlisted">Shortlisted</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="accepted">Accepted</option>
+                  </select>
+                </div>
+
+                <div className="relative">
+                  <Calendar
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="pl-10 pr-8 py-2.5 text-black border rounded-lg appearance-none focus:ring-2 focus:ring-[#0F2A44] outline-none transition"
+                  >
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="name">Sort by Name</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* APPLICANTS GRID/CARDS */}
+          {current.length === 0 ? (
+            <div className="bg-white rounded-xl border shadow-sm p-12 text-center">
+              <Users className="mx-auto text-gray-300" size={64} />
+              <h3 className="text-xl font-semibold text-gray-700 mt-4">
+                No applicants found
+              </h3>
+              <p className="text-gray-500 mt-2">
+                {searchQuery || statusFilter !== "all"
+                  ? "Try adjusting your search or filters"
+                  : "No applications have been submitted yet"}
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {current.map((app) => (
+                <div
+                  key={app.id}
+                  className="bg-white rounded-xl border shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+                >
+                  <div className="p-6">
+                    {/* HEADER */}
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
+                          <User className="text-emerald-600" size={24} />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-xl text-gray-900">
+                            {app.name}
+                          </h3>
+                          <p className="text-base text-gray-700">{app.email}</p>
+                          <p className="text-base text-gray-700">{app.phone}</p>
+                        </div>
+                      </div>
+                      <select
+                        value={app.status}
+                        onChange={(e) => updateStatus(app.id, e.target.value)}
+                        className="text-base text-black border rounded-lg px-2 py-1 outline-none focus:ring-2 focus:ring-[#0F2A44]"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="reviewed">Reviewed</option>
+                        <option value="shortlisted">Shortlisted</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="accepted">Accepted</option>
+                      </select>
+                    </div>
+
+                    {/* JOB INFO */}
+                    <div className="mt-4 flex items-center gap-4 text-sm">
+                      <div className="flex items-center gap-1 text-gray-800">
+                        <Briefcase size={16} />
+                        <span className="font-medium text-base">
+                          Applied for:
+                        </span>
+                        <span className="ml-1 text-lg font-bold">
+                          {app.appliedFor}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1 text-base text-gray-800">
+                        <MapPin size={16} />
+                        <span>{app.location}</span>
+                      </div>
+                    </div>
+
+                    {/* SKILLS */}
+                    <div className="mt-4">
+                      <p className="text-lg font-medium text-gray-700 mb-2">
+                        Skills
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {app.skills.map((skill, idx) => (
+                          <span
+                            key={idx}
+                            className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-base"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* DATE & ACTIONS */}
+                    <div className="mt-6 flex items-center justify-between">
+                      <div className="text-base text-gray-700">
+                        Applied on{" "}
+                        {new Date(app.appliedDate).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </div>
+                      <div className="flex gap-2">
+                        <Link href={`/employer/applicants/${app.id}`}>
+                          <button className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-[#0F2A44] rounded-lg transition-colors">
+                            <Eye size={16} />
+                            View Details
+                          </button>
+                        </Link>
+                        <a
+                          href={`mailto:${app.email}`}
+                          className="p-2 border text-black rounded-lg hover:bg-gray-50 transition-colors"
+                          title="Send Email"
+                        >
+                          <Mail size={16} />
+                        </a>
+                        <a
+                          href={app.resumeUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 border text-black rounded-lg hover:bg-gray-50 transition-colors"
+                          title="View Resume"
+                        >
+                          <FileText size={16} />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* PAGINATION */}
+          {totalPages > 1 && (
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className="text-sm text-gray-600">
+                Showing {first + 1} to{" "}
+                {Math.min(last, filteredApplicants.length)} of{" "}
+                {filteredApplicants.length} applicants
+              </p>
+              <div className="flex items-center gap-2">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((p) => p - 1)}
+                  className="flex items-center gap-2 px-4 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                >
+                  <ChevronLeft size={18} />
+                  <span>Previous</span>
+                </button>
+
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`w-10 h-10 rounded-lg ${
+                          currentPage === pageNum
+                            ? "bg-emerald-600 text-white"
+                            : "border hover:bg-gray-50"
+                        } transition-colors`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  })}
+                  {totalPages > 5 && (
+                    <span className="px-2 text-gray-500">...</span>
+                  )}
+                </div>
+
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage((p) => p + 1)}
+                  className="flex items-center gap-2 px-4 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                >
+                  <span>Next</span>
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

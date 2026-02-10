@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import EmployerHeader from "@/components/EmployerHeader";
 import {
   ArrowLeft,
   Briefcase,
@@ -118,6 +119,7 @@ export default function PostJobPage() {
     contactPhone: "",
     isUrgent: false,
     isFeatured: false,
+    screeningQuestions: [],
   });
 
   const jobCategories = [
@@ -222,6 +224,49 @@ export default function PostJobPage() {
       skills: prev.skills.filter((skill) => skill !== skillToRemove),
     }));
   };
+  const addQuestion = () => {
+    setForm((prev) => ({
+      ...prev,
+      screeningQuestions: [
+        ...prev.screeningQuestions,
+        {
+          question: "",
+          type: "text",
+          required: true,
+          options: [],
+        },
+      ],
+    }));
+  };
+
+  const updateQuestion = (index, key, value) => {
+    const updated = [...form.screeningQuestions];
+
+    updated[index] = {
+      ...updated[index],
+      [key]: value,
+    };
+
+    // 🔥 MCQ select hote hi options init kar do
+    if (key === "type" && value === "mcq" && !updated[index].options) {
+      updated[index].options = [""];
+    }
+
+    // 🔥 agar text / yesno ho to options hata do
+    if (key === "type" && value !== "mcq") {
+      updated[index].options = [];
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      screeningQuestions: updated,
+    }));
+  };
+
+  const removeQuestion = (index) => {
+    const updated = form.screeningQuestions.filter((_, i) => i !== index);
+    setForm((prev) => ({ ...prev, screeningQuestions: updated }));
+  };
 
   const addPopularSkill = (skill) => {
     if (!form.skills.includes(skill)) {
@@ -232,77 +277,6 @@ export default function PostJobPage() {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-
-  //   try {
-  //     const token = localStorage.getItem("token");
-
-  //     if (!token) {
-  //       alert("Please login first");
-  //       router.push("/login");
-  //       return;
-  //     }
-
-  //     const API = "http://localhost:5000/api";
-
-  //     // Backend format me data bhejo
-  //     const jobData = {
-  //       title: form.title,
-  //       company: form.company,
-  //       location: form.location,
-
-  //       salary: {
-  //         min: Number(form.salaryMin),
-  //         max: Number(form.salaryMax),
-  //       },
-
-  //       jobType: form.type,
-  //       workMode: form.workMode,
-
-  //       experience: {
-  //         min: Number(form.experienceMin),
-  //         max: Number(form.experienceMax),
-  //       },
-
-  //       description: form.description,
-  //       responsibilities: form.responsibilities,
-  //       requirements: form.requirements,
-  //       benefits: form.benefits,
-
-  //       skills: form.skills,
-
-  //       vacancies: Number(form.vacancies),
-  //       deadline: form.deadline,
-
-  //       category: form.category,
-
-  //       applyLink: form.applyLink,
-  //       contactEmail: form.contactEmail,
-  //       contactPhone: form.contactPhone,
-
-  //       isUrgent: form.isUrgent,
-  //       isFeatured: form.isFeatured,
-  //     };
-
-  //     await axios.post(`${API}/jobs`, jobData, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     alert("🎉 Job Posted Successfully!");
-
-  //     router.push("/jobs"); // public jobs page
-  //   } catch (err) {
-  //     console.log("POST JOB ERROR:", err.response?.data || err);
-
-  //     alert(err.response?.data?.message || "Job post failed");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -318,59 +292,6 @@ export default function PostJobPage() {
 
       const API = "http://localhost:5000/api";
 
-      // Backend format me data bhejo
-      // const jobData = {
-      //   title: form.title,
-      //   company: form.company,
-      //   location: form.location,
-
-      //   salary: {
-      //     min: Number(form.salaryMin),
-      //     max: Number(form.salaryMax),
-      //     currency: "INR",
-      //   },
-
-      //   jobType: form.type,
-      //   workMode: form.workMode,
-
-      //   experience: {
-      //     min: Number(form.experienceMin),
-      //     max: Number(form.experienceMax),
-      //   },
-
-      //   description: form.description,
-
-      //   // ये arrays में convert करो
-      //   responsibilities: form.responsibilities
-      //     ? form.responsibilities.split("\n").filter((line) => line.trim())
-      //     : [],
-      //   requirements: form.requirements
-      //     ? form.requirements.split("\n").filter((line) => line.trim())
-      //     : [],
-      //   benefits: form.benefits
-      //     ? form.benefits.split("\n").filter((line) => line.trim())
-      //     : [],
-
-      //   // skillsRequired field use करो (MongoDB में यही field है)
-      //   skillsRequired: form.skills,
-
-      //   vacancies: Number(form.vacancies),
-      //   deadline: form.deadline,
-
-      //   category: form.category,
-
-      //   applyLink: form.applyLink,
-      //   contactEmail: form.contactEmail,
-      //   contactPhone: form.contactPhone,
-
-      //   isUrgent: form.isUrgent,
-      //   isFeatured: form.isFeatured,
-
-      //   // Default values
-      //   isActive: true,
-      //   totalViews: 0,
-      //   totalApplications: 0,
-      // };
       const jobData = {
         title: form.title,
         company: form.company,
@@ -413,6 +334,7 @@ export default function PostJobPage() {
         contactPhone: form.contactPhone,
         isUrgent: form.isUrgent,
         isFeatured: form.isFeatured,
+        screeningQuestions: form.screeningQuestions,
       };
       console.log("Sending job data:", jobData); // Debug log
 
@@ -560,679 +482,811 @@ export default function PostJobPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-      {/* Navigation */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center text-xl font-bold">
-              <Link
-                href="/employer/dashboard"
-                className="flex items-center  gap-2 text-gray-700 hover:text-gray-900"
-              >
-                <ArrowLeft size={20} />
-                <span className="text-base">Back to Dashboard</span>
-              </Link>
-            </div>
+    <>
+      <EmployerHeader />
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+        {/* Navigation */}
 
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setPreviewMode(!previewMode)}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-[#0F2A44] hover:bg-orange-400 transition"
-              >
-                {previewMode ? <EyeOff size={18} /> : <Eye size={18} />}
-                {previewMode ? "Edit Mode" : "Preview Mode"}
-              </button>
+        <div className="bg-white border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center text-xl font-bold">
+                <Link
+                  href="/employer/dashboard"
+                  className="flex items-center  gap-2 text-gray-700 hover:text-gray-900"
+                >
+                  <ArrowLeft size={20} />
+                  <span className="text-base">Back to Dashboard</span>
+                </Link>
+              </div>
 
-              <div className="flex items-center gap-2">
-                <div className="flex">
-                  {[1, 2, 3].map((step) => (
-                    <div key={step} className="flex items-center">
-                      <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center ${activeStep >= step ? "bg-green-100 text-[#0F2A44] border-2 border-orange-400" : "bg-gray-100 text-gray-400"}`}
-                      >
-                        {step}
-                      </div>
-                      {step < 3 && (
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setPreviewMode(!previewMode)}
+                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-[#0F2A44] hover:bg-orange-400 transition"
+                >
+                  {previewMode ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {previewMode ? "Edit Mode" : "Preview Mode"}
+                </button>
+
+                <div className="flex items-center gap-2">
+                  <div className="flex">
+                    {[1, 2, 3].map((step) => (
+                      <div key={step} className="flex items-center">
                         <div
-                          className={`w-8 h-0.5 ${activeStep > step ? "bg-green-600" : "bg-gray-300"}`}
-                        ></div>
-                      )}
-                    </div>
-                  ))}
+                          className={`w-8 h-8 rounded-full flex items-center justify-center ${activeStep >= step ? "bg-green-100 text-[#0F2A44] border-2 border-orange-400" : "bg-gray-100 text-gray-400"}`}
+                        >
+                          {step}
+                        </div>
+                        {step < 3 && (
+                          <div
+                            className={`w-8 h-0.5 ${activeStep > step ? "bg-green-600" : "bg-gray-300"}`}
+                          ></div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <Sparkles className="text-yellow-500" />
-            Create New Job Posting
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Fill in the details below to attract the best talent for your
-            company
-          </p>
-        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+              <Sparkles className="text-yellow-500" />
+              Create New Job Posting
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Fill in the details below to attract the best talent for your
+              company
+            </p>
+          </div>
 
-        {previewMode ? (
-          <JobPreview />
-        ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
-          >
-            {/* Step 1: Basic Information */}
-            {activeStep === 1 && (
-              <div className="p-6 space-y-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Briefcase className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <h2 className="text-xl font-bold text-gray-900">
-                    Basic Job Information
-                  </h2>
-                </div>
-
-                {/* Job Title */}
-                <div>
-                  <label className="block text-base font-medium text-gray-700 mb-2">
-                    Job Title *
-                  </label>
-                  <div className="relative">
-                    <Briefcase
-                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                      size={20}
-                    />
-                    <input
-                      type="text"
-                      name="title"
-                      value={form.title}
-                      onChange={handleChange}
-                      placeholder="e.g., Senior Frontend Developer (React)"
-                      className="w-full pl-10 pr-4 py-3 border text-black focus:ring-[#0F2A44] border-gray-300 rounded-xl focus:ring-2  focus:border-transparent outline-none transition"
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Company & Location */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-base font-medium text-gray-700 mb-2">
-                      Company *
-                    </label>
-                    <div className="relative">
-                      <Building
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                        size={20}
-                      />
-                      <input
-                        type="text"
-                        name="company"
-                        value={form.company}
-                        onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 border text-black border-gray-300 rounded-xl bg-gray-50 cursor-not-allowed"
-                        readOnly
-                      />
+          {previewMode ? (
+            <JobPreview />
+          ) : (
+            <form
+              onSubmit={handleSubmit}
+              className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
+            >
+              {/* Step 1: Basic Information */}
+              {activeStep === 1 && (
+                <div className="p-6 space-y-6">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <Briefcase className="w-6 h-6 text-blue-600" />
                     </div>
+                    <h2 className="text-xl font-bold text-gray-900">
+                      Basic Job Information
+                    </h2>
                   </div>
 
+                  {/* Job Title */}
                   <div>
                     <label className="block text-base font-medium text-gray-700 mb-2">
-                      Location *
+                      Job Title *
                     </label>
                     <div className="relative">
-                      <MapPin
+                      <Briefcase
                         className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                         size={20}
                       />
                       <input
                         type="text"
-                        name="location"
-                        value={form.location}
+                        name="title"
+                        value={form.title}
                         onChange={handleChange}
-                        placeholder="e.g., Bangalore, Karnataka (Remote/On-site)"
-                        className="w-full pl-10 pr-4 py-3 border text-black border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none transition"
+                        placeholder="e.g., Senior Frontend Developer (React)"
+                        className="w-full pl-10 pr-4 py-3 border text-black focus:ring-[#0F2A44] border-gray-300 rounded-xl focus:ring-2  focus:border-transparent outline-none transition"
                         required
                       />
                     </div>
                   </div>
-                </div>
 
-                {/* Job Type & Work Mode */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-base font-medium text-gray-700 mb-2">
-                      Job Type *
-                    </label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {jobTypes.map((type) => (
-                        <button
-                          key={type.value}
-                          type="button"
-                          onClick={() =>
-                            setForm((prev) => ({ ...prev, type: type.value }))
-                          }
-                          className={`p-3 rounded-lg border flex items-center justify-center gap-2 transition ${form.type === type.value ? "border-[#0F2A44] bg-blue-50 text-black" : "border-gray-200 hover:border-gray-300"}`}
-                        >
-                          {type.icon}
-                          <span>{type.label}</span>
-                        </button>
-                      ))}
+                  {/* Company & Location */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-base font-medium text-gray-700 mb-2">
+                        Company *
+                      </label>
+                      <div className="relative">
+                        <Building
+                          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                          size={20}
+                        />
+                        <input
+                          type="text"
+                          name="company"
+                          value={form.company}
+                          onChange={handleChange}
+                          className="w-full pl-10 pr-4 py-3 border text-black border-gray-300 rounded-xl bg-gray-50 cursor-not-allowed"
+                          readOnly
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-base font-medium text-gray-700 mb-2">
+                        Location *
+                      </label>
+                      <div className="relative">
+                        <MapPin
+                          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                          size={20}
+                        />
+                        <input
+                          type="text"
+                          name="location"
+                          value={form.location}
+                          onChange={handleChange}
+                          placeholder="e.g., Bangalore, Karnataka (Remote/On-site)"
+                          className="w-full pl-10 pr-4 py-3 border text-black border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none transition"
+                          required
+                        />
+                      </div>
                     </div>
                   </div>
 
+                  {/* Job Type & Work Mode */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-base font-medium text-gray-700 mb-2">
+                        Job Type *
+                      </label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {jobTypes.map((type) => (
+                          <button
+                            key={type.value}
+                            type="button"
+                            onClick={() =>
+                              setForm((prev) => ({ ...prev, type: type.value }))
+                            }
+                            className={`p-3 rounded-lg border flex items-center justify-center gap-2 transition ${form.type === type.value ? "border-[#0F2A44] bg-blue-50 text-black" : "border-gray-200 hover:border-gray-300"}`}
+                          >
+                            {type.icon}
+                            <span>{type.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-base font-medium text-gray-700 mb-2">
+                        Work Mode *
+                      </label>
+                      <div className="flex gap-2">
+                        {workModes.map((mode) => (
+                          <button
+                            key={mode.value}
+                            type="button"
+                            onClick={() =>
+                              setForm((prev) => ({
+                                ...prev,
+                                workMode: mode.value,
+                              }))
+                            }
+                            className={`flex-1 py-3 rounded-lg border flex items-center justify-center gap-2 transition ${form.workMode === mode.value ? "border-[#0F2A44] bg-blue-50 text-black" : "border-gray-200 hover:border-gray-300"}`}
+                          >
+                            {mode.icon}
+                            <span>{mode.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Salary Range */}
                   <div>
                     <label className="block text-base font-medium text-gray-700 mb-2">
-                      Work Mode *
+                      Salary Range (Annual)
                     </label>
-                    <div className="flex gap-2">
-                      {workModes.map((mode) => (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {salaryRanges.map((range, index) => (
                         <button
-                          key={mode.value}
+                          key={index}
                           type="button"
                           onClick={() =>
                             setForm((prev) => ({
                               ...prev,
-                              workMode: mode.value,
+                              salaryMin: range.min,
+                              salaryMax: range.max,
                             }))
                           }
-                          className={`flex-1 py-3 rounded-lg border flex items-center justify-center gap-2 transition ${form.workMode === mode.value ? "border-[#0F2A44] bg-blue-50 text-black" : "border-gray-200 hover:border-gray-300"}`}
+                          className={`p-3 rounded-lg border flex items-center gap-1 justify-center transition ${form.salaryMin === range.min ? "border-[#0F2A44] bg-blue-50 text-black" : "border-gray-200 hover:border-gray-300"}`}
                         >
-                          {mode.icon}
-                          <span>{mode.label}</span>
+                          <DollarSign size={16} />
+                          {range.label}
                         </button>
                       ))}
                     </div>
+                    <div className="mt-4 grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-base text-gray-600 mb-1">
+                          Minimum (LPA)
+                        </label>
+                        <input
+                          type="number"
+                          name="salaryMin"
+                          value={form.salaryMin}
+                          onChange={handleChange}
+                          placeholder="8"
+                          className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-base text-gray-600 mb-1">
+                          Maximum (LPA)
+                        </label>
+                        <input
+                          type="number"
+                          name="salaryMax"
+                          value={form.salaryMax}
+                          onChange={handleChange}
+                          placeholder="15"
+                          className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Experience & Vacancies */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-base font-medium text-gray-700 mb-2">
+                        Experience Required
+                      </label>
+                      <select
+                        name="experienceMin"
+                        value={form.experienceMin}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 text-black border border-[#0F2A44] rounded-xl"
+                      >
+                        <option value="">Select minimum experience</option>
+                        {[...Array(21)].map((_, i) => (
+                          <option key={i} value={i}>
+                            {i} year{i !== 1 ? "s" : ""}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-base font-medium text-gray-700 mb-2">
+                        Number of Vacancies
+                      </label>
+                      <select
+                        name="vacancies"
+                        value={form.vacancies}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 border text-black border-[#0F2A44] rounded-xl"
+                      >
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30, 50].map(
+                          (num) => (
+                            <option key={num} value={num}>
+                              {num} position{num > 1 ? "s" : ""}
+                            </option>
+                          ),
+                        )}
+                      </select>
+                    </div>
                   </div>
                 </div>
+              )}
 
-                {/* Salary Range */}
-                <div>
-                  <label className="block text-base font-medium text-gray-700 mb-2">
-                    Salary Range (Annual)
-                  </label>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {salaryRanges.map((range, index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        onClick={() =>
+              {/* Step 2: Details & Requirements */}
+              {activeStep === 2 && (
+                <div className="p-6 space-y-6">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-purple-100 rounded-lg">
+                      <FileText className="w-6 h-6 text-purple-600" />
+                    </div>
+                    <h2 className="text-xl font-bold text-gray-900">
+                      Details & Requirements
+                    </h2>
+                  </div>
+
+                  {/* Job Description */}
+                  <div>
+                    <label className="block text-base  font-medium text-gray-700 mb-2">
+                      Job Description *
+                    </label>
+                    <textarea
+                      name="description"
+                      value={form.description}
+                      onChange={handleChange}
+                      rows={6}
+                      placeholder="Describe the job responsibilities, what you're looking for in a candidate, and what makes this role exciting..."
+                      className="w-full p-4 text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none resize-none"
+                      required
+                    />
+                    <div className="mt-2 text-sm text-gray-900">
+                      Tip: Include key responsibilities, team information, and
+                      growth opportunities.
+                    </div>
+                  </div>
+
+                  {/* Key Responsibilities */}
+                  <div>
+                    <label className="block text-base  font-medium text-gray-700 mb-2">
+                      Key Responsibilities
+                    </label>
+                    <textarea
+                      name="responsibilities"
+                      value={form.responsibilities}
+                      onChange={handleChange}
+                      rows={4}
+                      placeholder="List the main responsibilities and tasks for this role (one per line)..."
+                      className="w-full p-4 text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none resize-none"
+                    />
+                  </div>
+
+                  {/* Requirements */}
+                  <div>
+                    <label className="block text-base font-medium text-gray-700 mb-2">
+                      Requirements & Qualifications
+                    </label>
+                    <textarea
+                      name="requirements"
+                      value={form.requirements}
+                      onChange={handleChange}
+                      rows={4}
+                      placeholder="List the required skills, education, and experience (one per line)..."
+                      className="w-full p-4  text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none resize-none"
+                    />
+                  </div>
+
+                  {/* Skills */}
+                  <div>
+                    <label className="block text-base font-medium text-gray-700 mb-2">
+                      Required Skills
+                    </label>
+                    <div className="flex gap-2 mb-3">
+                      <input
+                        type="text"
+                        value={form.newSkill}
+                        onChange={(e) =>
                           setForm((prev) => ({
                             ...prev,
-                            salaryMin: range.min,
-                            salaryMax: range.max,
+                            newSkill: e.target.value,
                           }))
                         }
-                        className={`p-3 rounded-lg border flex items-center gap-1 justify-center transition ${form.salaryMin === range.min ? "border-[#0F2A44] bg-blue-50 text-black" : "border-gray-200 hover:border-gray-300"}`}
+                        placeholder="Add a skill (e.g., React, Node.js)"
+                        className="flex-1 px-4 py-2  text-black border border-[#0F2A44] rounded-lg"
+                        onKeyDown={(e) =>
+                          e.key === "Enter" && (e.preventDefault(), addSkill())
+                        }
+                      />
+                      <button
+                        type="button"
+                        onClick={addSkill}
+                        className="px-4 py-2 bg-[#0F2A44]    rounded-lg transition flex items-center gap-1"
                       >
-                        <DollarSign size={16} />
-                        {range.label}
+                        <Plus size={18} />
+                        Add
                       </button>
-                    ))}
-                  </div>
-                  <div className="mt-4 grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-base text-gray-600 mb-1">
-                        Minimum (LPA)
-                      </label>
-                      <input
-                        type="number"
-                        name="salaryMin"
-                        value={form.salaryMin}
-                        onChange={handleChange}
-                        placeholder="8"
-                        className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg"
-                      />
                     </div>
-                    <div>
-                      <label className="block text-base text-gray-600 mb-1">
-                        Maximum (LPA)
-                      </label>
-                      <input
-                        type="number"
-                        name="salaryMax"
-                        value={form.salaryMax}
-                        onChange={handleChange}
-                        placeholder="15"
-                        className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg"
-                      />
-                    </div>
-                  </div>
-                </div>
 
-                {/* Experience & Vacancies */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-base font-medium text-gray-700 mb-2">
-                      Experience Required
-                    </label>
-                    <select
-                      name="experienceMin"
-                      value={form.experienceMin}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 text-black border border-[#0F2A44] rounded-xl"
-                    >
-                      <option value="">Select minimum experience</option>
-                      {[...Array(21)].map((_, i) => (
-                        <option key={i} value={i}>
-                          {i} year{i !== 1 ? "s" : ""}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-base font-medium text-gray-700 mb-2">
-                      Number of Vacancies
-                    </label>
-                    <select
-                      name="vacancies"
-                      value={form.vacancies}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border text-black border-[#0F2A44] rounded-xl"
-                    >
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30, 50].map(
-                        (num) => (
-                          <option key={num} value={num}>
-                            {num} position{num > 1 ? "s" : ""}
-                          </option>
-                        ),
-                      )}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Step 2: Details & Requirements */}
-            {activeStep === 2 && (
-              <div className="p-6 space-y-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <FileText className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <h2 className="text-xl font-bold text-gray-900">
-                    Details & Requirements
-                  </h2>
-                </div>
-
-                {/* Job Description */}
-                <div>
-                  <label className="block text-base  font-medium text-gray-700 mb-2">
-                    Job Description *
-                  </label>
-                  <textarea
-                    name="description"
-                    value={form.description}
-                    onChange={handleChange}
-                    rows={6}
-                    placeholder="Describe the job responsibilities, what you're looking for in a candidate, and what makes this role exciting..."
-                    className="w-full p-4 text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none resize-none"
-                    required
-                  />
-                  <div className="mt-2 text-sm text-gray-900">
-                    Tip: Include key responsibilities, team information, and
-                    growth opportunities.
-                  </div>
-                </div>
-
-                {/* Key Responsibilities */}
-                <div>
-                  <label className="block text-base  font-medium text-gray-700 mb-2">
-                    Key Responsibilities
-                  </label>
-                  <textarea
-                    name="responsibilities"
-                    value={form.responsibilities}
-                    onChange={handleChange}
-                    rows={4}
-                    placeholder="List the main responsibilities and tasks for this role (one per line)..."
-                    className="w-full p-4 text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none resize-none"
-                  />
-                </div>
-
-                {/* Requirements */}
-                <div>
-                  <label className="block text-base font-medium text-gray-700 mb-2">
-                    Requirements & Qualifications
-                  </label>
-                  <textarea
-                    name="requirements"
-                    value={form.requirements}
-                    onChange={handleChange}
-                    rows={4}
-                    placeholder="List the required skills, education, and experience (one per line)..."
-                    className="w-full p-4  text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none resize-none"
-                  />
-                </div>
-
-                {/* Skills */}
-                <div>
-                  <label className="block text-base font-medium text-gray-700 mb-2">
-                    Required Skills
-                  </label>
-                  <div className="flex gap-2 mb-3">
-                    <input
-                      type="text"
-                      value={form.newSkill}
-                      onChange={(e) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          newSkill: e.target.value,
-                        }))
-                      }
-                      placeholder="Add a skill (e.g., React, Node.js)"
-                      className="flex-1 px-4 py-2  text-black border border-[#0F2A44] rounded-lg"
-                      onKeyDown={(e) =>
-                        e.key === "Enter" && (e.preventDefault(), addSkill())
-                      }
-                    />
-                    <button
-                      type="button"
-                      onClick={addSkill}
-                      className="px-4 py-2 bg-[#0F2A44]    rounded-lg transition flex items-center gap-1"
-                    >
-                      <Plus size={18} />
-                      Add
-                    </button>
-                  </div>
-
-                  {/* Popular Skills */}
-                  <div className="mb-3">
-                    <div className="text-base font-bold text-gray-600 mb-2">
-                      Popular Skills:
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {popularSkills.map((skill) => (
-                        <button
-                          key={skill}
-                          type="button"
-                          onClick={() => addPopularSkill(skill)}
-                          className={`px-3 py-1 rounded-full text-base text-black ${form.skills.includes(skill) ? "bg-blue-50 text-orange-400 border border-[#0F2A44]" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-                        >
-                          {skill}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Selected Skills */}
-                  {form.skills.length > 0 && (
-                    <div>
-                      <div className="text-sm text-gray-600 mb-2">
-                        Selected Skills ({form.skills.length}):
+                    {/* Popular Skills */}
+                    <div className="mb-3">
+                      <div className="text-base font-bold text-gray-600 mb-2">
+                        Popular Skills:
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        {form.skills.map((skill, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center gap-1 bg-blue-50 text-[#0F2A44] px-3 py-1.5 rounded-lg"
+                        {popularSkills.map((skill) => (
+                          <button
+                            key={skill}
+                            type="button"
+                            onClick={() => addPopularSkill(skill)}
+                            className={`px-3 py-1 rounded-full text-base text-black ${form.skills.includes(skill) ? "bg-blue-50 text-orange-400 border border-[#0F2A44]" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
                           >
-                            <span>{skill}</span>
-                            <button
-                              type="button"
-                              onClick={() => removeSkill(skill)}
-                              className="text-blue-900 hover:text-blue-700"
-                            >
-                              <X size={16} />
-                            </button>
-                          </div>
+                            {skill}
+                          </button>
                         ))}
                       </div>
                     </div>
-                  )}
-                </div>
-              </div>
-            )}
 
-            {/* Step 3: Additional Info & Publish */}
-            {activeStep === 3 && (
-              <div className="p-6 space-y-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-blue-50 rounded-lg">
-                    <CheckCircle2 className="w-6 h-6 text-orange-400" />
-                  </div>
-                  <h2 className="text-xl font-bold text-gray-900">
-                    Additional Information
-                  </h2>
-                </div>
-
-                {/* Benefits & Perks */}
-                <div>
-                  <label className="block text-base  font-medium text-gray-700 mb-2">
-                    Benefits & Perks
-                  </label>
-                  <textarea
-                    name="benefits"
-                    value={form.benefits}
-                    onChange={handleChange}
-                    rows={4}
-                    placeholder="List the benefits and perks (e.g., Health insurance, Flexible hours, Learning budget, etc.)"
-                    className="w-full p-4  text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none resize-none"
-                  />
-                </div>
-
-                {/* Job Category */}
-                <div>
-                  <label className="block text-base  font-medium text-gray-700 mb-2">
-                    Job Category
-                  </label>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                    {jobCategories.map((category) => (
-                      <button
-                        key={category.value}
-                        type="button"
-                        onClick={() =>
-                          setForm((prev) => ({
-                            ...prev,
-                            category: category.value,
-                          }))
-                        }
-                        className={`p-3 rounded-lg border flex flex-col items-center justify-center gap-2 transition ${form.category === category.value ? "border-[#0F2A44] bg-purple-50 text-orange-400" : "border-gray-200 hover:border-gray-300"}`}
-                      >
-                        {category.icon}
-                        <span className="text-sm">{category.label}</span>
-                      </button>
-                    ))}
+                    {/* Selected Skills */}
+                    {form.skills.length > 0 && (
+                      <div>
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected Skills ({form.skills.length}):
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.skills.map((skill, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center gap-1 bg-blue-50 text-[#0F2A44] px-3 py-1.5 rounded-lg"
+                            >
+                              <span>{skill}</span>
+                              <button
+                                type="button"
+                                onClick={() => removeSkill(skill)}
+                                className="text-blue-900 hover:text-blue-700"
+                              >
+                                <X size={16} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
+              )}
 
-                {/* Additional Options */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-base  font-medium text-gray-700 mb-2">
-                      Application Deadline
-                    </label>
-                    <input
-                      type="date"
-                      name="deadline"
-                      value={form.deadline}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 text-black border border-gray-300 rounded-xl"
-                      min={new Date().toISOString().split("T")[0]}
-                    />
+              {/* Step 3: Additional Info & Publish */}
+              {activeStep === 3 && (
+                <div className="p-6 space-y-6">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-blue-50 rounded-lg">
+                      <CheckCircle2 className="w-6 h-6 text-orange-400" />
+                    </div>
+                    <h2 className="text-xl font-bold text-gray-900">
+                      Additional Information
+                    </h2>
                   </div>
 
+                  {/* Benefits & Perks */}
                   <div>
                     <label className="block text-base font-medium text-gray-700 mb-2">
-                      Application Link/Email
+                      Benefits & Perks
                     </label>
-                    <input
-                      type="text"
-                      name="applyLink"
-                      value={form.applyLink}
+                    <textarea
+                      name="benefits"
+                      value={form.benefits}
                       onChange={handleChange}
-                      placeholder="https://apply.example.com OR email@example.com"
-                      className="w-full px-4 text-black py-3 border border-[#0F2A44] rounded-xl"
+                      rows={4}
+                      placeholder="List the benefits and perks (e.g., Health insurance, Flexible hours, Learning budget, etc.)"
+                      className="w-full p-4 text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none resize-none"
                     />
                   </div>
-                </div>
 
-                {/* Flags */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <label className="flex items-center gap-3 p-4 border border-[#0F2A44] rounded-xl cursor-pointer hover:bg-gray-200">
-                    <input
-                      type="checkbox"
-                      name="isUrgent"
-                      checked={form.isUrgent}
-                      onChange={handleChange}
-                      className="w-4 h-4 text-green-600 rounded"
-                    />
+                  {/* Job Category */}
+                  <div>
+                    <label className="block text-base font-medium text-gray-700 mb-2">
+                      Job Category
+                    </label>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                      {jobCategories.map((category) => (
+                        <button
+                          key={category.value}
+                          type="button"
+                          onClick={() =>
+                            setForm((prev) => ({
+                              ...prev,
+                              category: category.value,
+                            }))
+                          }
+                          className={`p-3 rounded-lg border flex flex-col items-center justify-center gap-2 transition ${
+                            form.category === category.value
+                              ? "border-[#0F2A44] bg-purple-50 text-orange-400"
+                              : "border-gray-200 hover:border-gray-300"
+                          }`}
+                        >
+                          {category.icon}
+                          <span className="text-sm">{category.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Additional Options */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <div className="font-medium text-gray-900">
-                        Urgent Hiring
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        Mark this job as urgent
-                      </div>
+                      <label className="block text-base font-medium text-gray-700 mb-2">
+                        Application Deadline
+                      </label>
+                      <input
+                        type="date"
+                        name="deadline"
+                        value={form.deadline}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 text-black border border-gray-300 rounded-xl"
+                        min={new Date().toISOString().split("T")[0]}
+                      />
                     </div>
-                    <Zap className="ml-auto text-yellow-500" size={20} />
-                  </label>
 
-                  <label className="flex items-center gap-3 p-4 border border-[#0F2A44] rounded-xl cursor-pointer hover:bg-gray-200">
-                    <input
-                      type="checkbox"
-                      name="isFeatured"
-                      checked={form.isFeatured}
-                      onChange={handleChange}
-                      className="w-4 h-4 text-green-600 rounded"
-                    />
                     <div>
-                      <div className="font-medium text-gray-900">
-                        Featured Job
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        Highlight this job listing
-                      </div>
-                    </div>
-                    <Award className="ml-auto text-purple-500" size={20} />
-                  </label>
-                </div>
-
-                {/* Contact Information */}
-                <div>
-                  <label className="block text-base font-medium text-gray-700 mb-2">
-                    Contact Information
-                  </label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="relative">
-                      <Mail
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                        size={20}
-                      />
+                      <label className="block text-base font-medium text-gray-700 mb-2">
+                        Application Link/Email
+                      </label>
                       <input
-                        type="email"
-                        name="contactEmail"
-                        value={form.contactEmail}
+                        type="text"
+                        name="applyLink"
+                        value={form.applyLink}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-2.5 text-black border border-gray-300 rounded-lg"
-                      />
-                    </div>
-                    <div className="relative">
-                      <Phone
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                        size={20}
-                      />
-                      <input
-                        type="tel"
-                        name="contactPhone"
-                        value={form.contactPhone}
-                        onChange={handleChange}
-                        placeholder="Contact phone number"
-                        className="w-full pl-10 pr-4 py-2.5 text-black border border-gray-300 rounded-lg"
+                        placeholder="https://apply.example.com OR email@example.com"
+                        className="w-full px-4 text-black py-3 border border-[#0F2A44] rounded-xl"
                       />
                     </div>
                   </div>
-                </div>
-              </div>
-            )}
 
-            {/* Navigation Buttons */}
-            <div className="p-6 border-t border-gray-200 bg-gray-50">
-              <div className="flex justify-between">
-                <div>
-                  {activeStep > 1 && (
-                    <button
-                      type="button"
-                      onClick={prevStep}
-                      className="px-6 py-3 bg-[#0F2A44] border  border-gray-300 rounded-xl transition flex items-center gap-2"
-                    >
-                      <ArrowLeft size={18} />
-                      Previous Step
-                    </button>
-                  )}
-                </div>
+                  {/* Flags */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <label className="flex items-center gap-3 p-4 border border-[#0F2A44] rounded-xl cursor-pointer hover:bg-gray-200">
+                      <input
+                        type="checkbox"
+                        name="isUrgent"
+                        checked={form.isUrgent}
+                        onChange={handleChange}
+                        className="w-4 h-4 text-green-600 rounded"
+                      />
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          Urgent Hiring
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          Mark this job as urgent
+                        </div>
+                      </div>
+                      <Zap className="ml-auto text-yellow-500" size={20} />
+                    </label>
 
-                <div className="flex gap-3">
-                  {activeStep < 3 ? (
-                    <button
-                      type="button"
-                      onClick={nextStep}
-                      className="px-6 py-3 bg-[#0F2A44] hover:bg-orange- text-white rounded-xl font-medium transition flex items-center gap-2"
-                    >
-                      Continue to Next Step
-                      <ArrowLeft className="rotate-180" size={18} />
-                    </button>
-                  ) : (
-                    <div className="flex gap-3">
+                    <label className="flex items-center gap-3 p-4 border border-[#0F2A44] rounded-xl cursor-pointer hover:bg-gray-200">
+                      <input
+                        type="checkbox"
+                        name="isFeatured"
+                        checked={form.isFeatured}
+                        onChange={handleChange}
+                        className="w-4 h-4 text-green-600 rounded"
+                      />
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          Featured Job
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          Highlight this job listing
+                        </div>
+                      </div>
+                      <Award className="ml-auto text-purple-500" size={20} />
+                    </label>
+                  </div>
+
+                  {/* Contact Information */}
+                  <div>
+                    <label className="block text-base font-medium text-gray-700 mb-2">
+                      Contact Information
+                    </label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="relative">
+                        <Mail
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                          size={20}
+                        />
+                        <input
+                          type="email"
+                          name="contactEmail"
+                          value={form.contactEmail}
+                          onChange={handleChange}
+                          className="w-full pl-10 pr-4 py-2.5 text-black border border-gray-300 rounded-lg"
+                        />
+                      </div>
+
+                      <div className="relative">
+                        <Phone
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                          size={20}
+                        />
+                        <input
+                          type="tel"
+                          name="contactPhone"
+                          value={form.contactPhone}
+                          onChange={handleChange}
+                          placeholder="Contact phone number"
+                          className="w-full pl-10 pr-4 py-2.5 text-black border border-gray-300 rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 🔥 SCREENING QUESTIONS (NO UI CHANGE) */}
+                  <div>
+                    <label className="block text-base font-medium text-gray-700 mb-2">
+                      Screening Questions (Optional)
+                    </label>
+
+                    <div className="space-y-4">
+                      {form.screeningQuestions.map((q, index) => (
+                        <div
+                          key={index}
+                          className="p-4 border border-gray-300 rounded-xl space-y-2"
+                        >
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium text-gray-800">
+                              Question {index + 1}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => removeQuestion(index)}
+                              className="text-red-500"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+
+                          <input
+                            type="text"
+                            value={q.question}
+                            onChange={(e) =>
+                              updateQuestion(index, "question", e.target.value)
+                            }
+                            placeholder="Enter your question"
+                            className="w-full px-3 py-2 border rounded-lg text-black"
+                          />
+
+                          <div className="flex gap-3">
+                            <select
+                              value={q.type}
+                              onChange={(e) =>
+                                updateQuestion(index, "type", e.target.value)
+                              }
+                              className="px-3 py-2 border rounded-lg bg-[#0F2A44]"
+                            >
+                              <option value="text">Text</option>
+                              <option value="yesno">Yes / No</option>
+                              <option value="mcq">MCQ</option>
+                            </select>
+
+                            <label className="flex items-center gap-2 text-base text-black">
+                              <input
+                                type="checkbox"
+                                checked={q.required}
+                                onChange={(e) =>
+                                  updateQuestion(
+                                    index,
+                                    "required",
+                                    e.target.checked,
+                                  )
+                                }
+                              />
+                              Required
+                            </label>
+                          </div>
+                          {/* MCQ Options */}
+                          {q.type === "mcq" && (
+                            <div className="space-y-2">
+                              {(q.options || []).map((opt, optIndex) => (
+                                <div key={optIndex} className="flex gap-2">
+                                  <input
+                                    type="text"
+                                    value={opt}
+                                    onChange={(e) => {
+                                      const updated = [...(q.options || [])];
+                                      updated[optIndex] = e.target.value;
+                                      updateQuestion(index, "options", updated);
+                                    }}
+                                    placeholder={`Option ${optIndex + 1}`}
+                                    className="flex-1 px-3 py-2 border rounded-lg text-black"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const updated = q.options.filter(
+                                        (_, i) => i !== optIndex,
+                                      );
+                                      updateQuestion(index, "options", updated);
+                                    }}
+                                    className="text-red-500"
+                                  >
+                                    <Trash2 size={14} />
+                                  </button>
+                                </div>
+                              ))}
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  updateQuestion(index, "options", [
+                                    ...(q.options || []),
+                                    "",
+                                  ])
+                                }
+                                className="text-sm flex items-center gap-2 text-blue-600"
+                              >
+                                <Plus size={14} />
+                                Add Option
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+
                       <button
                         type="button"
-                        onClick={() => setPreviewMode(true)}
-                        className="px-6 py-3 border border-[#0F2A44] bg-[#0F2A44] rounded-xl hover:bg-gray-100 transition"
+                        onClick={addQuestion}
+                        className="flex items-center gap-2 px-4 py-2 border rounded-lg text-base bg-[#0F2A44]"
                       >
-                        Preview
-                      </button>
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="px-8 py-3 bg-[#0F2A44] text-white rounded-xl font-medium transition flex items-center gap-2 disabled:opacity-50"
-                      >
-                        {loading ? (
-                          <>
-                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                            Publishing...
-                          </>
-                        ) : (
-                          <>
-                            <Send size={18} />
-                            Publish Job
-                          </>
-                        )}
+                        <Plus size={16} />
+                        Add Question
                       </button>
                     </div>
-                  )}
+                  </div>
+                </div>
+              )}
+
+              {/* Navigation Buttons */}
+              <div className="p-6 border-t border-gray-200 bg-gray-50">
+                <div className="flex justify-between">
+                  <div>
+                    {activeStep > 1 && (
+                      <button
+                        type="button"
+                        onClick={prevStep}
+                        className="px-6 py-3 bg-[#0F2A44] border  border-gray-300 rounded-xl transition flex items-center gap-2"
+                      >
+                        <ArrowLeft size={18} />
+                        Previous Step
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex gap-3">
+                    {activeStep < 3 ? (
+                      <button
+                        type="button"
+                        onClick={nextStep}
+                        className="px-6 py-3 bg-[#0F2A44] hover:bg-orange- text-white rounded-xl font-medium transition flex items-center gap-2"
+                      >
+                        Continue to Next Step
+                        <ArrowLeft className="rotate-180" size={18} />
+                      </button>
+                    ) : (
+                      <div className="flex gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setPreviewMode(true)}
+                          className="px-6 py-3 border border-[#0F2A44] bg-[#0F2A44] rounded-xl hover:bg-gray-100 transition"
+                        >
+                          Preview
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={loading}
+                          className="px-8 py-3 bg-[#0F2A44] text-white rounded-xl font-medium transition flex items-center gap-2 disabled:opacity-50"
+                        >
+                          {loading ? (
+                            <>
+                              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                              Publishing...
+                            </>
+                          ) : (
+                            <>
+                              <Send size={18} />
+                              Publish Job
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </form>
-        )}
+            </form>
+          )}
 
-        {/* Help Text */}
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-100 rounded-xl">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="text-blue-600 mt-0.5" size={20} />
-            <div>
-              <h4 className="font-medium text-blue-900 mb-1">
-                Tips for Better Results
-              </h4>
-              <ul className="text-sm text-blue-700 space-y-1">
-                <li>• Be specific with job titles and requirements</li>
-                <li>• Include salary range to attract more candidates</li>
-                <li>• Highlight benefits and growth opportunities</li>
-                <li>• Use relevant skills for better matching</li>
-                <li>• Set a realistic application deadline</li>
-              </ul>
+          {/* Help Text */}
+          <div className="mt-6 p-4 bg-blue-50 border border-blue-100 rounded-xl">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="text-blue-600 mt-0.5" size={20} />
+              <div>
+                <h4 className="font-medium text-blue-900 mb-1">
+                  Tips for Better Results
+                </h4>
+                <ul className="text-sm text-blue-700 space-y-1">
+                  <li>• Be specific with job titles and requirements</li>
+                  <li>• Include salary range to attract more candidates</li>
+                  <li>• Highlight benefits and growth opportunities</li>
+                  <li>• Use relevant skills for better matching</li>
+                  <li>• Set a realistic application deadline</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
