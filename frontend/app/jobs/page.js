@@ -1517,7 +1517,9 @@ import JobsClient from "./JobsClient";
 
 export default function JobsPage() {
   return (
-    <Suspense fallback={<div>Loading jobs...</div>}>
+    <Suspense
+      fallback={<div className="p-10 text-center">Loading jobs...</div>}
+    >
       <JobsClient />
     </Suspense>
   );

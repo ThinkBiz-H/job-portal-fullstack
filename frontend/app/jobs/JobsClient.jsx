@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -26,7 +25,7 @@ import {
 export default function JobsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const API = "http://localhost:5000/api";
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
   // URL से parameters पढ़ें
   const jobFromURL = searchParams.get("job") || "";
