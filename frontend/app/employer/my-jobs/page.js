@@ -31,7 +31,8 @@ import {
 
 export default function MyJobsPage() {
   const router = useRouter();
-
+  const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -55,17 +56,11 @@ export default function MyJobsPage() {
         return;
       }
 
-      // const res = await axios.get("http://localhost:5000/api/jobs/my-jobs", {
-      //   headers: { Authorization: `Bearer ${token}` },
-      // });
-const res = await axios.get(
-  `${API_BASE_URL}/jobs/my-jobs`,
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-);
+      const res = await axios.get(`${API_BASE_URL}/jobs/my-jobs`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setJobs(res.data.data || []);
       setFilteredJobs(res.data.data || []);
@@ -162,7 +157,7 @@ const res = await axios.get(
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/jobs/${id}`, {
+      await axios.delete(`${API_BASE_URL}/jobs/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -182,7 +177,7 @@ const res = await axios.get(
     try {
       const token = localStorage.getItem("token");
       await axios.patch(
-        `http://localhost:5000/api/jobs/${id}/status`,
+        `${API_BASE_URL}/jobs/${id}/status`,
         { isActive: newStatus },
         { headers: { Authorization: `Bearer ${token}` } },
       );
