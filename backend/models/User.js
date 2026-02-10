@@ -29,13 +29,17 @@ const userSchema = new mongoose.Schema(
       enum: ["jobseeker", "employer", "admin"],
       default: "jobseeker",
     },
-
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
     /* ===== BASIC ===== */
     dateOfBirth: Date,
 
     gender: {
       type: String,
       enum: ["Male", "Female", "Other", "Prefer not to say"],
+      default: "Prefer not to say",
     },
 
     college: { type: String, default: "" },
