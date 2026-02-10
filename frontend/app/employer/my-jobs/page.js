@@ -55,9 +55,17 @@ export default function MyJobsPage() {
         return;
       }
 
-      const res = await axios.get("http://localhost:5000/api/jobs/my-jobs", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      // const res = await axios.get("http://localhost:5000/api/jobs/my-jobs", {
+      //   headers: { Authorization: `Bearer ${token}` },
+      // });
+const res = await axios.get(
+  `${API_BASE_URL}/jobs/my-jobs`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
 
       setJobs(res.data.data || []);
       setFilteredJobs(res.data.data || []);

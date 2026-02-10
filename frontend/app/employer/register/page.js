@@ -20,7 +20,9 @@ import {
 
 export default function EmployerRegister() {
   const router = useRouter();
-  const API = "http://localhost:5000/api";
+  // const API = "http://localhost:5000/api";
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
 
   const [step, setStep] = useState("register");
   const [loading, setLoading] = useState(false);

@@ -11,9 +11,10 @@ export default function ApplicantDetailPage() {
 
   const [loading, setLoading] = useState(true);
   const [app, setApp] = useState(null);
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
-  const API = "http://localhost:5000/api";
-
+  // const API = "http://localhost:5000/api";
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     if (id) {
       fetchApplicant();
@@ -181,7 +182,7 @@ export default function ApplicantDetailPage() {
               <p className="font-semibold mb-2 text-gray-700">Resume</p>
 
               <a
-                href={`http://localhost:5000/uploads/resumes/${app.applicant.resume}`}
+                href={`${API_BASE_URL.replace("/api", "")}/uploads/resumes/${app.applicant.resume}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-700 underline text-base"

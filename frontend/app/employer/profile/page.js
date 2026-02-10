@@ -1,4 +1,3 @@
-
 "use client";
 import EmployerHeader from "@/components/EmployerHeader";
 import { useState, useEffect } from "react";
@@ -63,9 +62,10 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
-
+// const API_BASE_URL =
+//   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+// const API = process.env.NEXT_PUBLIC_API_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function ProfilePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);

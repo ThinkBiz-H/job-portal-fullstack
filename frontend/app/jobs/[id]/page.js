@@ -1,4 +1,3 @@
-
 "use client";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
@@ -50,7 +49,9 @@ export default function JobDetailPage() {
   const router = useRouter();
   const [showQuestions, setShowQuestions] = useState(false);
   const [answers, setAnswers] = useState({});
-  const API = "http://localhost:5000/api";
+  // const API = "http://localhost:5000/api";
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
   const { id } = params;
 
   const [job, setJob] = useState(null);

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -14,7 +13,8 @@ export default function Login() {
   const [errors, setErrors] = useState({});
 
   const router = useRouter();
-  const API = "http://localhost:5000/api";
+  // const API = "http://localhost:5000/api";
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
   const validateForm = () => {
     const newErrors = {};

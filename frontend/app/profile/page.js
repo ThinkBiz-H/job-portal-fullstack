@@ -7,7 +7,9 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
-  const API = "http://localhost:5000/api";
+  // const API = "http://localhost:5000/api";
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
   const router = useRouter();
 
   const [profile, setProfile] = useState({

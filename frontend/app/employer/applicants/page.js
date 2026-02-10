@@ -39,8 +39,19 @@ export default function ApplicantsPage() {
     try {
       const token = localStorage.getItem("token");
 
+      // await axios.put(
+      //   `http://localhost:5000/api/applications/${id}/status`,
+      //   { status },
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   },
+      // );
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
       await axios.put(
-        `http://localhost:5000/api/applications/${id}/status`,
+        `${API_BASE_URL}/applications/${id}/status`,
         { status },
         {
           headers: {
@@ -68,8 +79,18 @@ export default function ApplicantsPage() {
         return;
       }
 
+      // const res = await axios.get(
+      //   "http://localhost:5000/api/applications/my-applicants",
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   },
+      // );
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
       const res = await axios.get(
-        "http://localhost:5000/api/applications/my-applicants",
+        `${API_BASE_URL}/applications/my-applicants`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

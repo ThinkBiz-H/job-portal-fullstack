@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -24,7 +23,8 @@ import {
 
 export default function MyApplicationsPage() {
   const router = useRouter();
-  const API = "http://localhost:5000/api";
+  // const API = "http://localhost:5000/api";
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
   const [applications, setApplications] = useState([]);
   const [filteredApplications, setFilteredApplications] = useState([]);

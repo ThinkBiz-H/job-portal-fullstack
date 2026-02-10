@@ -49,8 +49,9 @@ export default function EmployerDashboard() {
   const [activeView, setActiveView] = useState("overview");
   const [companyName, setCompanyName] = useState("TechCorp Solutions");
 
-  const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  // const API_BASE_URL =
+  //   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   // Demo data - baad me backend se aayega
   const [stats, setStats] = useState(null);

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -19,8 +18,8 @@ import {
 
 export default function EmployerLogin() {
   const router = useRouter();
-  const API = "http://localhost:5000/api";
-
+  // const API = "http://localhost:5000/api";
+  const API = process.env.NEXT_PUBLIC_API_URL;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);

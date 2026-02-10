@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -22,7 +21,8 @@ import {
 
 export default function Register() {
   const router = useRouter();
-  const API = "http://localhost:5000/api";
+  // const API = "http://localhost:5000/api";
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
   const [step, setStep] = useState("register"); // register | otp
   const [loading, setLoading] = useState(false);
