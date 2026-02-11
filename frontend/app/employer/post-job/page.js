@@ -495,43 +495,44 @@ export default function PostJobPage() {
 
         <div className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-              <div className="flex items-center text-xl font-bold">
-                <Link
-                  href="/employer/dashboard"
-                  className="flex items-center  gap-2 text-gray-700 hover:text-gray-900"
-                >
-                  <ArrowLeft size={20} />
-                  <span className="text-base">Back to Dashboard</span>
-                </Link>
-              </div>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-3 sm:h-16">
+              {/* LEFT : BACK */}
 
-              <div className="flex items-center gap-4">
+              {/* RIGHT : BUTTON + STEPS */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                {/* PREVIEW BUTTON */}
                 <button
                   onClick={() => setPreviewMode(!previewMode)}
-                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-[#0F2A44] hover:bg-orange-400 transition"
+                  className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-[#0F2A44] text-white hover:bg-orange-400 transition text-sm"
                 >
-                  {previewMode ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {previewMode ? <EyeOff size={16} /> : <Eye size={16} />}
                   {previewMode ? "Edit Mode" : "Preview Mode"}
                 </button>
 
-                <div className="flex items-center gap-2">
-                  <div className="flex">
-                    {[1, 2, 3].map((step) => (
-                      <div key={step} className="flex items-center">
-                        <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center ${activeStep >= step ? "bg-green-100 text-[#0F2A44] border-2 border-orange-400" : "bg-gray-100 text-gray-400"}`}
-                        >
-                          {step}
-                        </div>
-                        {step < 3 && (
-                          <div
-                            className={`w-8 h-0.5 ${activeStep > step ? "bg-green-600" : "bg-gray-300"}`}
-                          ></div>
-                        )}
+                {/* STEPS */}
+                <div className="flex justify-center sm:justify-start">
+                  {[1, 2, 3].map((step) => (
+                    <div key={step} className="flex items-center">
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
+                ${
+                  activeStep >= step
+                    ? "bg-green-100 text-[#0F2A44] border-2 border-orange-400"
+                    : "bg-gray-100 text-gray-400"
+                }`}
+                      >
+                        {step}
                       </div>
-                    ))}
-                  </div>
+
+                      {step < 3 && (
+                        <div
+                          className={`w-6 sm:w-8 h-0.5 ${
+                            activeStep > step ? "bg-green-600" : "bg-gray-300"
+                          }`}
+                        />
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -868,7 +869,7 @@ export default function PostJobPage() {
                       <button
                         type="button"
                         onClick={addSkill}
-                        className="px-4 py-2 bg-[#0F2A44]    rounded-lg transition flex items-center gap-1"
+                        className="px-4 py-2 bg-[#0F2A44]  text-white  rounded-lg transition flex items-center gap-1"
                       >
                         <Plus size={18} />
                         Add
@@ -1129,7 +1130,7 @@ export default function PostJobPage() {
                               onChange={(e) =>
                                 updateQuestion(index, "type", e.target.value)
                               }
-                              className="px-3 py-2 border rounded-lg bg-[#0F2A44]"
+                              className="px-3 py-2 border rounded-lg text-white bg-[#0F2A44]"
                             >
                               <option value="text">Text</option>
                               <option value="yesno">Yes / No</option>
@@ -1203,7 +1204,7 @@ export default function PostJobPage() {
                       <button
                         type="button"
                         onClick={addQuestion}
-                        className="flex items-center gap-2 px-4 py-2 border rounded-lg text-base bg-[#0F2A44]"
+                        className="flex items-center gap-2 px-4 py-2 border rounded-lg text-base text-white bg-[#0F2A44]"
                       >
                         <Plus size={16} />
                         Add Question
@@ -1221,7 +1222,7 @@ export default function PostJobPage() {
                       <button
                         type="button"
                         onClick={prevStep}
-                        className="px-6 py-3 bg-[#0F2A44] border  border-gray-300 rounded-xl transition flex items-center gap-2"
+                        className="px-6 py-3 bg-[#0F2A44] text-white border  border-gray-300 rounded-xl transition flex items-center gap-2"
                       >
                         <ArrowLeft size={18} />
                         Previous Step
@@ -1241,13 +1242,13 @@ export default function PostJobPage() {
                       </button>
                     ) : (
                       <div className="flex gap-3">
-                        <button
+                        {/* <button
                           type="button"
                           onClick={() => setPreviewMode(true)}
-                          className="px-6 py-3 border border-[#0F2A44] bg-[#0F2A44] rounded-xl hover:bg-gray-100 transition"
+                          className="px-6 py-3 border border-[#0F2A44] bg-[#0F2A44] text-white  rounded-xl hover:bg-gray-100 transition"
                         >
                           Preview
-                        </button>
+                        </button> */}
                         <button
                           type="submit"
                           disabled={loading}

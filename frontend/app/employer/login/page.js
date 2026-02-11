@@ -135,7 +135,7 @@ export default function EmployerLogin() {
                   <button
                     type="button"
                     onClick={() => router.push("/forgot-password")}
-                    className="text-sm text-green-600 hover:text-green-700 hover:underline"
+                    className="text-base text-blue-600 hover:text-blue-700 hover:underline"
                   >
                     Forgot Password?
                   </button>
@@ -224,7 +224,7 @@ export default function EmployerLogin() {
                 Don't have an employer account?{" "}
                 <button
                   onClick={() => router.push("/employer/register")}
-                  className="font-semibold text-green-600 hover:text-green-700 hover:underline"
+                  className="font-semibold text-[#0F2A44] hover:underline"
                 >
                   Register Now
                 </button>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -721,28 +720,33 @@ export default function ProfilePage() {
 
               <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
                 {profile.resume ? (
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                    {/* LEFT SIDE */}
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
                         <span className="text-blue-600 font-bold">📄</span>
                       </div>
-                      <div>
-                        <p className="font-medium text-gray-900">
+
+                      <div className="min-w-0">
+                        <p className="font-medium text-gray-900 truncate">
                           {profile.resume}
                         </p>
                         <p className="text-xs text-gray-500">PDF Document</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
+
+                    {/* RIGHT SIDE BUTTONS */}
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                       <button
                         onClick={handleDownloadResume}
-                        className="px-4 py-2 text-sm font-medium text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50"
+                        className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition"
                       >
                         Download
                       </button>
+
                       <button
                         onClick={deleteResume}
-                        className="px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50"
+                        className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition"
                       >
                         Remove
                       </button>

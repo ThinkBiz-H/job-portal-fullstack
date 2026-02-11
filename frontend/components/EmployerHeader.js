@@ -40,26 +40,14 @@ export default function EmployerHeader() {
                 href={item.path}
                 className={`font-medium transition ${
                   isActive
-                    ? "text-green-600 border-b-2 border-green-600 pb-1"
-                    : "text-gray-700 hover:text-green-600"
+                    ? "text-[#0F2A44] text-base font-semibold border-b-2 border-orange-500 pb-1"
+                    : "text-gray-700 hover:text-orange-600"
                 }`}
               >
                 {item.name}
               </Link>
             );
           })}
-        </div>
-
-        {/* RIGHT USER INFO */}
-        <div className="flex items-center gap-4 text-sm">
-          <span className="text-gray-600">{user?.email || user?.phone}</span>
-
-          <button
-            onClick={handleLogout}
-            className="text-red-500 hover:text-red-600 font-medium"
-          >
-            Logout
-          </button>
         </div>
       </div>
     </nav>

@@ -258,7 +258,7 @@ export default function MyJobsPage() {
             <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
               <button
                 onClick={fetchMyJobs}
-                className="inline-flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 rounded-lg bg-[#0F2A44] transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 rounded-lg bg-[#0F2A44] text-white transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
                 Refresh

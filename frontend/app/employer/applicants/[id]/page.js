@@ -210,7 +210,7 @@ export default function ApplicantDetailPage() {
         {/* BACK */}
         <button
           onClick={() => router.back()}
-          className="mt-4 px-4 py-2 bg-[#0F2A44] rounded"
+          className="mt-4 px-4 py-2 text-white bg-[#0F2A44] rounded"
         >
           ⬅ Back
         </button>

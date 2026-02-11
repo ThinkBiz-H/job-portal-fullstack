@@ -654,7 +654,7 @@ export default function ProfilePage() {
             <div className="flex gap-2">
               <button
                 onClick={() => setIsEditing(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg bg-[#0F2A44]"
+                className="px-2 py-1 text-white border  border-gray-300 rounded-lg bg-[#0F2A44]"
               >
                 Cancel
               </button>
@@ -708,12 +708,14 @@ export default function ProfilePage() {
                 type="text"
                 value={formData.tagline || ""}
                 onChange={(e) => handleInputChange("tagline", e.target.value)}
-                className="w-full px-4 py-2.5 text-black border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#0F2A44] focus:border-transparent"
+                className="w-full px-4 py-2.5 text-black border border-gray-300 rounded-lg 
+             focus:ring-1 focus:ring-[#0F2A44] focus:border-transparent
+             overflow-hidden text-ellipsis whitespace-nowrap"
                 placeholder="Describe your company in one line"
               />
             ) : (
-              <div className="text-gray-700">
-                {companyProfile.tagline || "No tagline set"}
+              <div className="text-gray-700 break-words whitespace-pre-wrap">
+                {companyProfile.description || "No description added yet"}
               </div>
             )}
           </div>
@@ -729,11 +731,13 @@ export default function ProfilePage() {
                   handleInputChange("description", e.target.value)
                 }
                 rows={4}
-                className="w-full px-4 py-2.5 text-black border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-2.5 text-black border border-gray-300 rounded-lg 
+             focus:ring-1 focus:ring-green-500 focus:border-transparent 
+             resize-none break-words whitespace-pre-wrap"
                 placeholder="Tell candidates about your company culture, mission, and what makes you unique"
               />
             ) : (
-              <div className="text-gray-700 whitespace-pre-line">
+              <div className="text-gray-700 break-words whitespace-pre-wrap">
                 {companyProfile.description || "No description added yet"}
               </div>
             )}
@@ -885,26 +889,28 @@ export default function ProfilePage() {
       {/* Rest of the tabs remain same... */}
       {/* Locations */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
           <h3 className="text-lg font-bold text-gray-900">Office Locations</h3>
+
           {isEditing && (
-            <div className="flex gap-2">
+            <div className="flex w-full sm:w-auto gap-2">
               <input
                 type="text"
                 value={newLocation}
                 onChange={(e) => setNewLocation(e.target.value)}
                 placeholder="Add new location"
-                className="px-3 py-2  text-black border border-gray-300 rounded-lg"
+                className="flex-1 sm:flex-none px-3 py-2 text-black border border-gray-300 rounded-lg"
                 onKeyDown={(e) =>
                   e.key === "Enter" &&
                   handleArrayAdd("locations", newLocation, setNewLocation)
                 }
               />
+
               <button
                 onClick={() =>
                   handleArrayAdd("locations", newLocation, setNewLocation)
                 }
-                className="px-3 py-2 bg-[#0F2A44] text-white rounded-lg hover:bg-green-700"
+                className="px-3 py-2 bg-[#0F2A44] text-white rounded-lg hover:bg-green-700 shrink-0"
               >
                 <Plus size={18} />
               </button>

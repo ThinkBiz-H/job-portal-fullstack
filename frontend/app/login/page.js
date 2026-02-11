@@ -79,7 +79,7 @@ export default function Login() {
           {/* Header */}
           <div className="p-8">
             <div className="text-center mb-8">
-              <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center mb-4 shadow-lg">
+              <div className="w-16 h-16 mx-auto rounded-full bg-[#0F2A44] flex items-center justify-center mb-4 shadow-lg">
                 <Lock className="w-8 h-8 text-white" />
               </div>
               <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
@@ -90,7 +90,7 @@ export default function Login() {
             <form onSubmit={handleLogin} className="space-y-6">
               {/* Email Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-base font-medium text-gray-700 mb-2">
                   Email Address
                 </label>
                 <div className="relative">
@@ -105,7 +105,7 @@ export default function Login() {
                       setEmail(e.target.value);
                       if (errors.email) setErrors({ ...errors, email: "" });
                     }}
-                    className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
+                    className={`w-full pl-12 pr-4 py-3 text-black border rounded-lg focus:ring-2 focus:ring-[#0F2A44] focus:border-[#0F2A44] outline-none transition-colors ${
                       errors.email ? "border-red-500" : "border-gray-300"
                     }`}
                   />
@@ -120,7 +120,7 @@ export default function Login() {
 
               {/* Password Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-base font-medium text-gray-700 mb-2">
                   Password
                 </label>
                 <div className="relative">
@@ -136,7 +136,7 @@ export default function Login() {
                       if (errors.password)
                         setErrors({ ...errors, password: "" });
                     }}
-                    className={`w-full pl-12 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
+                    className={`w-full pl-12 pr-12 py-3 text-black border rounded-lg focus:ring-2 focus:ring-[#0F2A44] focus:border-[#0F2A44] outline-none transition-colors ${
                       errors.password ? "border-red-500" : "border-gray-300"
                     }`}
                   />
@@ -177,12 +177,12 @@ export default function Login() {
                     type="checkbox"
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-600">Remember me</span>
+                  <span className="text-base text-gray-600">Remember me</span>
                 </label>
                 <button
                   type="button"
                   onClick={() => router.push("/forgot-password")}
-                  className="text-sm text-blue-600 hover:text-blue-700 hover:underline"
+                  className="text-base text-blue-600 hover:text-blue-700 hover:underline"
                 >
                   Forgot Password?
                 </button>
@@ -192,7 +192,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-200 hover:scale-[1.02] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3.5 px-4 bg-[#0F2A44] text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-200 hover:scale-[1.02] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -214,7 +214,7 @@ export default function Login() {
                 Don't have an account?{" "}
                 <button
                   onClick={() => router.push("/register")}
-                  className="font-semibold text-blue-600 hover:text-blue-700 hover:underline"
+                  className="font-semibold text-[#0F2A44] hover:underline"
                 >
                   Create Account
                 </button>

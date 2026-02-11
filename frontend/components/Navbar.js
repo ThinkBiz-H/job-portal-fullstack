@@ -1,11 +1,10 @@
-
 "use client";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 // import LoginModal from "./LoginModal";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
 export default function Navbar() {
   const router = useRouter();
 
@@ -116,8 +115,18 @@ export default function Navbar() {
       <nav className="bg-white text-black shadow-md px-4 md:px-6 py-3 relative z-40">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* LOGO */}
-          <Link href="/" className="text-2xl font-bold text-blue-600">
+          {/* <Link href="/" className="text-2xl font-bold text-blue-600">
             Apna<span className="text-orange-500">Job</span>
+          </Link> */}
+
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/web-logo/main-logo1.png"
+              alt="ApnaJob Logo"
+              width={140}
+              height={40}
+              priority
+            />
           </Link>
 
           {/* ================= DESKTOP MENU ================= */}
@@ -127,9 +136,9 @@ export default function Navbar() {
                 Jobs
               </Link>
             </div>
-            <Link href="#" className="hover:text-blue-600">
+            {/* <Link href="#" className="hover:text-blue-600">
               Job Prep
-            </Link>
+            </Link> */}
             <Link href="#" className="hover:text-blue-600">
               Resume Tools
             </Link>
@@ -141,14 +150,14 @@ export default function Navbar() {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={openCandidateLogin}
-                  className="bg-[#0F2A44] hover:bg-blue-700 text-white px-4 py-2 rounded font-medium"
+                  className="bg-[#0F2A44] hover:bg-orange-500 text-white px-4 py-2 rounded font-medium"
                 >
                   Candidate Login
                 </button>
 
                 <button
                   onClick={openEmployerLogin}
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-medium"
+                  className="bg-orange-500 hover:bg-[#0F2A44] text-white px-4 py-2 rounded font-medium"
                 >
                   Employer Login
                 </button>
@@ -250,13 +259,13 @@ export default function Navbar() {
                 Jobs
               </Link>
 
-              <Link
+              {/* <Link
                 href="/job-prep"
                 onClick={() => setMobileMenu(false)}
                 className="block font-medium py-2"
               >
                 Job Prep
-              </Link>
+              </Link> */}
 
               <Link
                 href="/resume-tools"

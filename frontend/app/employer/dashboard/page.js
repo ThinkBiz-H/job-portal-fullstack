@@ -51,7 +51,7 @@ export default function EmployerDashboard() {
 
   // const API_BASE_URL =
   //   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   // Demo data - baad me backend se aayega
   const [stats, setStats] = useState(null);
@@ -214,13 +214,13 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-sm">
+                    <div className="p-2.5 bg-[#0F2A44] rounded-xl shadow-sm">
                       <Building className="w-7 h-7 text-white" />
                     </div>
                     <div>
                       <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
                         Welcome back,{" "}
-                        <span className="text-green-600">{companyName}</span>
+                        <span className="text-orange-400">{companyName}</span>
                       </h1>
                       <p className="text-gray-600 mt-1">
                         Here's your recruitment overview for{" "}
@@ -242,12 +242,12 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
                     <input
                       type="text"
                       placeholder="Search jobs, applicants..."
-                      className="pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none w-full sm:w-64"
+                      className="pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0F2A44] focus:border-transparent outline-none w-full sm:w-64"
                     />
                   </div>
                   <Link
                     href="/employer/post-job"
-                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-5 py-2.5 rounded-xl font-medium shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center gap-2 group"
+                    className="bg-[#0F2A44] hover:to-emerald-700 text-white px-5 py-2.5 rounded-xl font-medium shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center gap-2 group"
                   >
                     <PlusCircle size={20} />
                     <span>Post New Job</span>

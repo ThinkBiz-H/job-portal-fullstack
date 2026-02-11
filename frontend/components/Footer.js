@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -227,14 +226,17 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-gray-600">
               <p className="font-semibold text-gray-900">
-                © 2024 Apna Jobs. All rights reserved.
+                © 2024 CAREER LINKER. All rights reserved.
               </p>
               <p className="text-sm mt-1">
                 Empowering millions to find meaningful employment
               </p>
+              <p className="font-semibold text-gray-900 text-center mt-3">
+                Developed by <span className="text-orange-500">ThinkBiz</span>
+              </p>
             </div>
 
-            <div className="flex items-center gap-6">
+            {/* <div className="flex items-center gap-6">
               <div className="flex items-center gap-4">
                 <span className="text-gray-600 font-medium">Follow us:</span>
                 <div className="flex gap-3">
@@ -262,7 +264,7 @@ export default function Footer() {
                   <option>తెలుగు</option>
                 </select>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
