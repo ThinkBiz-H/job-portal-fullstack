@@ -19,6 +19,8 @@ const applicationRoutes = require("./routes/applicationRoutes");
 const employerRoutes = require("./routes/employerRoutes");
 const userRoutes = require("./routes/userRoutes");
 const otpRoutes = require("./routes/otpRoutes");
+const sendEmail = require("./utils/sendEmail");
+
 // ================= MIDDLEWARE =================
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
@@ -51,6 +53,24 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/applications", applicationRoutes);
+// ================= EMAIL TEST =================
+app.get("/api/test-email", async (req, res) => {
+  try {
+    await sendEmail({
+      to: process.env.EMAIL_USER, // 👈 same gmail jisse bhej raha
+      subject: "🔥 Email Test Success",
+      html: "<h2>If you got this mail, Nodemailer is working 🚀</h2>",
+    });
+
+    res.json({ success: true, message: "Email sent successfully" });
+  } catch (err) {
+    console.error("❌ EMAIL ERROR:", err);
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+});
 
 // ================= HOME =================
 app.get("/", (req, res) => {
