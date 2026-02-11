@@ -182,7 +182,7 @@ export default function ApplicantDetailPage() {
               <p className="font-semibold mb-2 text-gray-700">Resume</p>
 
               <a
-                href={`${API_BASE_URL.replace("/api", "")}/uploads/resumes/${app.applicant.resume}`}
+                href={`${SERVER_URL}/uploads/resumes/${app.applicant.resume}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-700 underline text-base"
