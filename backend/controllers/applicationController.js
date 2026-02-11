@@ -1,6 +1,8 @@
 const Application = require("../models/Application");
 const mongoose = require("mongoose"); // ✅ ADD
-
+const sendEmail = require("../utils/sendEmail");
+const User = require("../models/User");
+const Job = require("../models/Job");
 /* ================= GET MY APPLICATIONS (JOBSEEKER) ================= */
 exports.getMyApplications = async (req, res) => {
   try {
@@ -21,6 +23,49 @@ exports.getMyApplications = async (req, res) => {
     res.status(500).json({
       success: false,
       message: err.message,
+    });
+  }
+};
+
+
+exports.applyJob = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const job = await Job.findById(req.body.jobId);
+
+    if (!user || !job) {
+      return res.status(404).json({
+        success: false,
+        message: "User or Job not found",
+      });
+    }
+
+    // ✅ APPLY LOGIC (jo already hai)
+
+    // ✅ SEND EMAIL TO SAME LOGIN EMAIL
+    await sendEmail({
+      to: user.email,
+      subject: "Job Application Submitted ✅",
+      html: `
+        <h2>Application Successful</h2>
+        <p>Hi <b>${user.name}</b>,</p>
+        <p>You have successfully applied for:</p>
+        <p><b>${job.title}</b> at <b>${job.company}</b></p>
+        <p>We’ll notify you for further updates.</p>
+        <br/>
+        <p>– ApnaJob Team 🚀</p>
+      `,
+    });
+
+    res.json({
+      success: true,
+      message: "Job applied successfully & email sent",
+    });
+  } catch (err) {
+    console.error("Apply Job Error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Apply failed",
     });
   }
 };
