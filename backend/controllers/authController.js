@@ -53,6 +53,7 @@ exports.register = async (req, res) => {
       phone,
       userType: userType || "jobseeker",
 
+      isVerified: true,
       college: "",
       location: "",
       // gender: "",
@@ -193,51 +194,7 @@ exports.updateEmployerProfile = async (req, res) => {
     });
   }
 };
-// exports.updateEmployerProfile = async (req, res) => {
-//   try {
-//     const user = await User.findById(req.user.id);
-//     // ... existing code ...
 
-//     /* ===== TEXT FIELDS ===== */
-//     const fields = [
-//       "companyName",
-//       "tagline",
-//       "description",
-//       "website",
-//       "industry",
-//       "companyType",
-//       "headquarters",
-//       "linkedin",
-//       "twitter",
-//       "facebook",
-//       "instagram",
-//       "mission",
-//       "vision",
-//       "teamSize",
-//       "workCulture",
-//       "logo", // ✅ ADD THIS
-//       "coverPhoto", // ✅ ADD THIS
-//       "avgEmployeeTenure", // ✅ ADD THIS
-//       "companySize", // ✅ ADD THIS
-//       "foundedYear", // ✅ ADD THIS
-//       "verificationLevel", // ✅ ADD THIS
-//     ];
-
-//     fields.forEach((f) => {
-//       if (f in profile) {
-//         user.employerProfile[f] = String(profile[f] || "");
-//       }
-//     });
-
-//     // ... rest of code ...
-//   } catch (err) {
-//     console.error("Employer Update Error:", err);
-//     res.status(500).json({
-//       success: false,
-//       message: err.message,
-//     });
-//   }
-// };
 /* ================= LOGIN ================= */
 exports.login = async (req, res) => {
   try {
@@ -493,105 +450,6 @@ exports.updateJobseekerProfile = async (req, res) => {
     });
   }
 };
-
-/* ================= SEND OTP ================= */
-// exports.sendOTP = async (req, res) => {
-//   try {
-//     const { phone, userType } = req.body;
-
-//     if (!phone || !userType) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Phone & userType required",
-//       });
-//     }
-
-//     let user = await User.findOne({ phone, userType });
-
-//     if (!user) {
-//       user = await User.create({
-//         name: "User",
-//         phone,
-//         userType,
-//         password: crypto.randomBytes(16).toString("hex"),
-//       });
-//     }
-
-//     /* ===== OTP LIMIT ===== */
-//     if (user.otpCount >= 3) {
-//       return res.status(429).json({
-//         success: false,
-//         message: "Too many OTP requests",
-//       });
-//     }
-
-//     const otp = user.generateOTP();
-
-//     user.otpCount = (user.otpCount || 0) + 1;
-
-//     await user.save({ validateBeforeSave: false });
-
-//     // TODO: Send OTP via SMS API here
-
-//     console.log("DEV OTP:", otp);
-
-//     res.json({
-//       success: true,
-//       message: "OTP sent successfully",
-//     });
-//   } catch (err) {
-//     console.error("OTP Error:", err);
-
-//     res.status(500).json({
-//       success: false,
-//       message: err.message,
-//     });
-//   }
-// };
-
-/* ================= VERIFY OTP ================= */
-// exports.verifyOTP = async (req, res) => {
-//   try {
-//     const { phone, otp, userType } = req.body;
-
-//     if (!phone || !otp || !userType) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "All fields required",
-//       });
-//     }
-
-//     const user = await User.findOne({ phone, userType });
-
-//     if (!user || !user.verifyOTP(otp)) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Invalid OTP",
-//       });
-//     }
-
-//     user.clearOTP();
-
-//     user.otpCount = 0;
-
-//     await user.save({ validateBeforeSave: false });
-
-//     res.json({
-//       success: true,
-//       data: {
-//         ...getSafeUser(user),
-//         token: generateToken(user._id, user.userType),
-//       },
-//     });
-//   } catch (err) {
-//     console.error("Verify OTP Error:", err);
-
-//     res.status(500).json({
-//       success: false,
-//       message: "Verify failed",
-//     });
-//   }
-// };
 
 exports.updateEmployerProfile = async (req, res) => {
   try {
