@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -228,13 +227,9 @@ export default function TestimonialSlider() {
               <Award className="w-5 h-5 text-white" />
             </div>
 
-            <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center text-4xl mb-8">
-              <Quote className="w-8 h-8" />
-            </div>
-
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
-              Trusted by <br />
-              <span className="text-orange-400">5 Crore+</span> <br />
+              Trusted by
+              <span className="text-orange-400"> 5 Crore+</span> <br />
               Job Seekers
             </h2>
 

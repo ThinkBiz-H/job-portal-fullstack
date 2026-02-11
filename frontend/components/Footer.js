@@ -223,48 +223,18 @@ export default function Footer() {
 
         {/* Copyright & Social */}
         <div className="pt-8 border-t border-gray-300">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-gray-600">
-              <p className="font-semibold text-gray-900">
-                © 2024 CAREER LINKER. All rights reserved.
-              </p>
-              <p className="text-sm mt-1">
-                Empowering millions to find meaningful employment
-              </p>
-              <p className="font-semibold text-gray-900 text-center mt-3">
-                Developed by <span className="text-orange-500">ThinkBiz</span>
-              </p>
-            </div>
+          <div className="flex flex-col items-center justify-center text-center gap-3">
+            <p className="font-semibold text-gray-900">
+              © 2024 CAREER LINKER. All rights reserved.
+            </p>
 
-            {/* <div className="flex items-center gap-6">
-              <div className="flex items-center gap-4">
-                <span className="text-gray-600 font-medium">Follow us:</span>
-                <div className="flex gap-3">
-                  {["Twitter", "Facebook", "LinkedIn", "Instagram"].map(
-                    (social) => (
-                      <a
-                        key={social}
-                        href="#"
-                        className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition-colors"
-                        aria-label={social}
-                      >
-                        {social.charAt(0)}
-                      </a>
-                    ),
-                  )}
-                </div>
-              </div>
+            <p className="text-sm text-gray-600">
+              Empowering millions to find meaningful employment
+            </p>
 
-              <div className="flex items-center gap-2 text-gray-600">
-                <Globe className="w-5 h-5" />
-                <select className="bg-transparent border-0 focus:ring-0 text-gray-700">
-                  <option>English</option>
-                  <option>Hindi</option>
-                  <option>தமிழ்</option>
-                  <option>తెలుగు</option>
-                </select>
-              </div>
-            </div> */}
+            <p className="font-semibold text-gray-900">
+              Developed by <span className="text-orange-500">ThinkBiz</span>
+            </p>
           </div>
         </div>
       </div>
