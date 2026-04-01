@@ -121,7 +121,7 @@ export default function Navbar() {
 
           <Link href="/" className="flex items-center">
             <Image
-              src="/web-logo/main-logo1.png"
+              src="/web-logo/main-logo2.png"
               alt="ApnaJob Logo"
               width={140}
               height={40}

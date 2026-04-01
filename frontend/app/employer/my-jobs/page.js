@@ -478,7 +478,7 @@ export default function MyJobsPage() {
                               )}
                             </div>
 
-                            <div className="flex flex-wrap gap-4 mt-3">
+                            <div className="flex flex-wrap gap-4 mt-3">3
                               <div className="flex items-center gap-2 text-base text-gray-600">
                                 <MapPin className="w-4 h-4" />
                                 <span>{job.location}</span>
