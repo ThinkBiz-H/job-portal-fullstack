@@ -160,8 +160,9 @@ export default function ProfilePage() {
       if (data.success) {
         setUserData(data.data);
 
-        if (data.data.userType === "employer" && data.data.profile) {
-          const backendProfile = data.data.profile;
+        if (data.data.userType === "employer") {
+          const backendProfile =
+            data.data.profile || data.data.employerProfile || {};
 
           console.log("Backend Profile:", backendProfile);
           console.log("Founded Year from backend:", backendProfile.foundedYear);
@@ -210,6 +211,9 @@ export default function ProfilePage() {
             avgResponseTime: backendProfile.avgResponseTime || "0 days",
             candidateSatisfaction:
               backendProfile.candidateSatisfaction || "0/5",
+            gstNumber: backendProfile.gstNumber || "",
+            cinNumber: backendProfile.cinNumber || "",
+            verificationStatus: backendProfile.verificationStatus || "pending",
           };
 
           console.log("Merged Profile to set:", mergedProfile);
@@ -244,6 +248,110 @@ export default function ProfilePage() {
   };
 
   // ✅ FIXED: Save Profile with proper data conversion
+  // const handleSaveProfile = async () => {
+  //   if (!token) {
+  //     alert("Please login first");
+  //     router.push("/login");
+  //     return;
+  //   }
+
+  //   setLoading(true);
+
+  //   try {
+  //     // ✅ FIXED: Prepare data properly
+  //     const profileToSend = {
+  //       companyName: formData.companyName,
+  //       tagline: formData.tagline,
+  //       description: formData.description,
+  //       email: formData.email,
+  //       phone: formData.phone,
+  //       website: formData.website,
+  //       // Convert foundedYear to number or null
+  //       foundedYear: formData.foundedYear
+  //         ? parseInt(formData.foundedYear)
+  //         : null,
+  //       // 🔥 ADD THESE
+  //       gstNumber: formData.gstNumber || "",
+  //       cinNumber: formData.cinNumber || "",
+  //       verificationStatus: "pending",
+  //       // Ensure companySize is sent
+  //       companySize: formData.companySize || "1-10",
+  //       companyType: formData.companyType,
+  //       industry: formData.industry,
+  //       headquarters: formData.headquarters,
+  //       locations: formData.locations,
+  //       linkedin: formData.linkedin,
+  //       twitter: formData.twitter,
+  //       facebook: formData.facebook,
+  //       instagram: formData.instagram,
+  //       mission: formData.mission,
+  //       vision: formData.vision,
+  //       values: formData.values,
+  //       specialties: formData.specialties,
+  //       benefits: formData.benefits,
+  //       teamSize: formData.teamSize,
+  //       avgEmployeeTenure: formData.avgEmployeeTenure,
+  //       workCulture: formData.workCulture,
+  //       logo: formData.logo,
+  //       coverPhoto: formData.coverPhoto,
+  //       isVerified: formData.isVerified,
+  //       verificationLevel: formData.verificationLevel,
+  //       documentsVerified: formData.documentsVerified,
+  //       totalJobsPosted: formData.totalJobsPosted,
+  //       totalHires: formData.totalHires,
+  //       avgResponseTime: formData.avgResponseTime,
+  //       candidateSatisfaction: formData.candidateSatisfaction,
+  //       gstNumber: formData.gstNumber || "",
+  //       cinNumber: formData.cinNumber || "",
+  //     };
+
+  //     console.log("Sending to backend:", profileToSend);
+  //     console.log("Company Size sending:", profileToSend.companySize);
+  //     console.log("Founded Year sending:", profileToSend.foundedYear);
+
+  //     const response = await fetch(`${API_BASE_URL}/auth/updateprofile`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify({
+  //         profile: profileToSend,
+  //       }),
+  //     });
+
+  //     const data = await response.json();
+  //     console.log("Backend response:", data);
+
+  //     if (data.success) {
+  //       // Update local state immediately
+  //       if (data.data.profile) {
+  //         console.log("Updated profile from backend:", data.data.profile);
+  //         setCompanyProfile(data.data.profile);
+  //         setFormData(data.data.profile);
+  //       } else {
+  //         // Fallback: Update with what we sent
+  //         setCompanyProfile(profileToSend);
+  //       }
+
+  //       setIsEditing(false);
+  //       alert("Profile updated successfully!");
+
+  //       // Refresh profile data after a short delay
+  //       setTimeout(() => {
+  //         fetchProfile();
+  //       }, 500);
+  //     } else {
+  //       alert(data.message || "Failed to update profile");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error saving profile:", error);
+  //     alert("Error saving profile");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSaveProfile = async () => {
     if (!token) {
       alert("Please login first");
@@ -254,7 +362,6 @@ export default function ProfilePage() {
     setLoading(true);
 
     try {
-      // ✅ FIXED: Prepare data properly
       const profileToSend = {
         companyName: formData.companyName,
         tagline: formData.tagline,
@@ -262,42 +369,40 @@ export default function ProfilePage() {
         email: formData.email,
         phone: formData.phone,
         website: formData.website,
-        // Convert foundedYear to number or null
+
         foundedYear: formData.foundedYear
           ? parseInt(formData.foundedYear)
           : null,
-        // Ensure companySize is sent
+
         companySize: formData.companySize || "1-10",
         companyType: formData.companyType,
         industry: formData.industry,
         headquarters: formData.headquarters,
         locations: formData.locations,
+
         linkedin: formData.linkedin,
         twitter: formData.twitter,
         facebook: formData.facebook,
         instagram: formData.instagram,
+
         mission: formData.mission,
         vision: formData.vision,
         values: formData.values,
         specialties: formData.specialties,
         benefits: formData.benefits,
+
         teamSize: formData.teamSize,
         avgEmployeeTenure: formData.avgEmployeeTenure,
         workCulture: formData.workCulture,
+
         logo: formData.logo,
         coverPhoto: formData.coverPhoto,
-        isVerified: formData.isVerified,
-        verificationLevel: formData.verificationLevel,
-        documentsVerified: formData.documentsVerified,
-        totalJobsPosted: formData.totalJobsPosted,
-        totalHires: formData.totalHires,
-        avgResponseTime: formData.avgResponseTime,
-        candidateSatisfaction: formData.candidateSatisfaction,
-      };
 
-      console.log("Sending to backend:", profileToSend);
-      console.log("Company Size sending:", profileToSend.companySize);
-      console.log("Founded Year sending:", profileToSend.foundedYear);
+        // 🔥 MAIN
+        gstNumber: formData.gstNumber || "",
+        cinNumber: formData.cinNumber || "",
+        verificationStatus: "pending",
+      };
 
       const response = await fetch(`${API_BASE_URL}/auth/updateprofile`, {
         method: "PUT",
@@ -311,26 +416,23 @@ export default function ProfilePage() {
       });
 
       const data = await response.json();
-      console.log("Backend response:", data);
 
       if (data.success) {
-        // Update local state immediately
-        if (data.data.profile) {
-          console.log("Updated profile from backend:", data.data.profile);
-          setCompanyProfile(data.data.profile);
-          setFormData(data.data.profile);
-        } else {
-          // Fallback: Update with what we sent
-          setCompanyProfile(profileToSend);
-        }
+        // ✅ ALWAYS use backend response
+        const updatedProfile =
+          data.data.profile || data.data.employerProfile || {};
 
+        const finalProfile = {
+          ...profileToSend, // 👈 jo tu bhej raha hai (important)
+          ...updatedProfile, // 👈 backend response
+        };
+
+        setCompanyProfile(finalProfile);
+        setFormData(finalProfile);
         setIsEditing(false);
         alert("Profile updated successfully!");
 
-        // Refresh profile data after a short delay
-        setTimeout(() => {
-          fetchProfile();
-        }, 500);
+        // ❌ REMOVE fetchProfile (IMPORTANT)
       } else {
         alert(data.message || "Failed to update profile");
       }
@@ -341,7 +443,6 @@ export default function ProfilePage() {
       setLoading(false);
     }
   };
-
   // Rest of the functions remain same...
   const handleChangePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
@@ -475,16 +576,34 @@ export default function ProfilePage() {
     return `/${image}`;
   };
 
+  // const getVerificationBadge = () => {
+  //   if (companyProfile.verificationLevel === "advanced") {
+  //     return (
+  //       <div className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+  //         <Shield size={14} />
+  //         Advanced Verified
+  //       </div>
+  //     );
+  //   }
+  //   if (companyProfile.isVerified) {
+  //     return (
+  //       <div className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+  //         <CheckCircle size={14} />
+  //         Verified Company
+  //       </div>
+  //     );
+  //   }
+  //   return (
+  //     <div className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+  //       <Shield size={14} />
+  //       Not Verified
+  //     </div>
+  //   );
+  // };
+
+  // ==================== UI COMPONENTS ====================
   const getVerificationBadge = () => {
-    if (companyProfile.verificationLevel === "advanced") {
-      return (
-        <div className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-          <Shield size={14} />
-          Advanced Verified
-        </div>
-      );
-    }
-    if (companyProfile.isVerified) {
+    if (companyProfile.verificationStatus === "approved") {
       return (
         <div className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
           <CheckCircle size={14} />
@@ -492,16 +611,23 @@ export default function ProfilePage() {
         </div>
       );
     }
+
+    if (companyProfile.verificationStatus === "rejected") {
+      return (
+        <div className="inline-flex items-center gap-1 px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
+          <Shield size={14} />
+          Rejected
+        </div>
+      );
+    }
+
     return (
       <div className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
         <Shield size={14} />
-        Not Verified
+        Pending Verification
       </div>
     );
   };
-
-  // ==================== UI COMPONENTS ====================
-
   const profileStats = [
     {
       label: "Profile Completion",
@@ -514,8 +640,18 @@ export default function ProfilePage() {
     },
     {
       label: "Verification Status",
-      value: companyProfile.isVerified ? "Verified ✓" : "Not Verified",
-      color: companyProfile.isVerified ? "blue" : "yellow",
+      value:
+        companyProfile.verificationStatus === "approved"
+          ? "Verified ✓"
+          : companyProfile.verificationStatus === "rejected"
+            ? "Rejected"
+            : "Pending",
+      color:
+        companyProfile.verificationStatus === "approved"
+          ? "blue"
+          : companyProfile.verificationStatus === "rejected"
+            ? "red"
+            : "yellow",
       icon: <Shield size={20} />,
     },
     {
@@ -782,6 +918,45 @@ export default function ProfilePage() {
                 {companyProfile.coverPhoto
                   ? "Cover photo set"
                   : "No cover photo"}
+              </div>
+            )}
+          </div>
+          <div>
+            <label className="block text-base font-medium text-gray-700 mb-2">
+              GST Number
+            </label>
+
+            {isEditing ? (
+              <input
+                type="text"
+                value={formData.gstNumber || ""}
+                onChange={(e) => handleInputChange("gstNumber", e.target.value)}
+                className="w-full px-4 py-2.5 text-black border border-gray-300 rounded-lg"
+                placeholder="Enter GST Number"
+              />
+            ) : (
+              <div className="text-gray-700">
+                {companyProfile.gstNumber || "Not provided"}
+              </div>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-base font-medium text-gray-700 mb-2">
+              CIN Number
+            </label>
+
+            {isEditing ? (
+              <input
+                type="text"
+                value={formData.cinNumber || ""}
+                onChange={(e) => handleInputChange("cinNumber", e.target.value)}
+                className="w-full px-4 py-2.5 text-black border border-gray-300 rounded-lg"
+                placeholder="Enter CIN Number"
+              />
+            ) : (
+              <div className="text-gray-700">
+                {companyProfile.cinNumber || "Not provided"}
               </div>
             )}
           </div>

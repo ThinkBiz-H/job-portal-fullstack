@@ -165,6 +165,19 @@ const userSchema = new mongoose.Schema(
       totalHires: { type: Number, default: 0 },
       avgResponseTime: { type: String, default: "0 days" },
       candidateSatisfaction: { type: String, default: "0/5" },
+      gstNumber: {
+        type: String,
+        default: "",
+      },
+      cinNumber: {
+        type: String,
+        default: "",
+      },
+      verificationStatus: {
+        type: String,
+        enum: ["pending", "approved", "rejected"],
+        default: "pending",
+      },
     },
 
     /* ===== OTP ===== */

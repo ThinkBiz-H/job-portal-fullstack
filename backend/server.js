@@ -20,6 +20,7 @@ const employerRoutes = require("./routes/employerRoutes");
 const userRoutes = require("./routes/userRoutes");
 const otpRoutes = require("./routes/otpRoutes");
 const sendEmail = require("./utils/sendEmail");
+const adminRoutes = require("./routes/adminRoutes");
 
 // ================= MIDDLEWARE =================
 app.use(cors());
@@ -30,6 +31,7 @@ app.use("/api/employer", employerRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/otp", otpRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/admin", adminRoutes);
 // ================= DATABASE =================
 const connectDB = async () => {
   try {

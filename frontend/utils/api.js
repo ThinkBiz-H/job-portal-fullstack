@@ -67,3 +67,36 @@ export const jobsAPI = {
       body: JSON.stringify(data),
     }),
 };
+// ================= ADMIN =================
+
+export const getAllEmployers = async (token) => {
+  const res = await fetch("/api/admin/employers", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.json();
+};
+
+export const approveEmployer = async (id, token) => {
+  const res = await fetch(`/api/admin/approve/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.json();
+};
+
+export const rejectEmployer = async (id, token) => {
+  const res = await fetch(`/api/admin/reject/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.json();
+};

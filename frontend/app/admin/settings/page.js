@@ -41,7 +41,7 @@ export default function AdminSettings() {
 
     try {
       const token = localStorage.getItem("adminToken");
-      await fetch("/api/admin/settings", {
+      await fetch("http://localhost:5000/api/admin/", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
