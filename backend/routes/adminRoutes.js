@@ -64,5 +64,20 @@ router.put("/reject/:id", async (req, res) => {
     });
   }
 });
+router.get("/users", async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
 
+    res.json({
+      success: true,
+      data: users,
+    });
+  } catch (err) {
+    console.error("Admin Users Error:", err);
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+});
 module.exports = router;

@@ -84,7 +84,39 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
     };
     reader.readAsDataURL(file);
   };
+  const handleResumeUpload = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append("resume", file);
 
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`${API_BASE_URL}/auth/upload-resume`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setProfile((prev) => ({
+          ...prev,
+          resume: data.resume,
+          resumeName: data.originalName, // 👈 ADD THIS
+        }));
+
+        alert("✅ Resume uploaded!");
+      } else {
+        alert("❌ " + data.message);
+      }
+    } catch (err) {
+      console.error("Upload Error:", err);
+      alert("❌ Upload failed");
+    }
+  };
   /* ================= SUBMIT - FIXED VERSION ================= */
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -172,9 +204,16 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
         }
         break;
 
+      // case "resume":
+      //   if (formData.resume) {
+      //     updatedProfile.resume = formData.resume.name;
+      //   }
+      //   break;
       case "resume":
         if (formData.resume) {
-          updatedProfile.resume = formData.resume.name;
+          await handleResumeUpload(formData.resume);
+          close(); // modal band
+          return; // IMPORTANT (aage ka code mat chalana)
         }
         break;
     }
@@ -244,7 +283,6 @@ export default function ProfileModal({ type, close, profile, setProfile }) {
     try {
       const token = localStorage.getItem("token");
 
-      
       const res = await fetch(`${API_BASE_URL}/auth/update-jobseeker-profile`, {
         method: "PUT",
         headers: {

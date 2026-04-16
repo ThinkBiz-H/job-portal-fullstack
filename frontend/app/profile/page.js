@@ -70,7 +70,11 @@ export default function ProfilePage() {
         basic: {
           email: user.email || "",
           mobile: user.phone || "",
-          dob: user.dob || user.dateOfBirth || "",
+          dob: user.dob
+            ? user.dob.split("T")[0]
+            : user.dateOfBirth
+              ? user.dateOfBirth.split("T")[0]
+              : "",
           gender: user.gender || "",
         },
         userInfo: {
@@ -85,6 +89,7 @@ export default function ProfilePage() {
         certificate: user.jobseekerProfile?.certifications || [],
         language: user.jobseekerProfile?.languages || [],
         resume: user.resume || user.jobseekerProfile?.resume || "",
+        resumeName: user.resumeOriginalName || "",
       };
 
       console.log("🗺️ Mapped profile:", mappedProfile);
@@ -163,8 +168,13 @@ export default function ProfilePage() {
   const handleDownloadResume = () => {
     if (profile.resume) {
       const link = document.createElement("a");
+
+      // ✅ ALWAYS server filename use kar
       link.href = `http://localhost:5000/uploads/resumes/${profile.resume}`;
-      link.download = profile.resume;
+
+      // ✅ USER ko original name dikhe
+      link.download = profile.resumeName || "resume.pdf";
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -729,7 +739,7 @@ export default function ProfilePage() {
 
                       <div className="min-w-0">
                         <p className="font-medium text-gray-900 truncate">
-                          {profile.resume}
+                          {profile.resumeName || profile.resume}
                         </p>
                         <p className="text-xs text-gray-500">PDF Document</p>
                       </div>

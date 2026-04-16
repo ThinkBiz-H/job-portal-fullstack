@@ -51,6 +51,7 @@ const userSchema = new mongoose.Schema(
     },
 
     resume: { type: String, default: "" },
+    resumeOriginalName: { type: String, default: "" },
 
     /* ===== JOBSEEKER ===== */
     jobseekerProfile: {

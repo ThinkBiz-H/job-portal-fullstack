@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Blog Details | Read Full Story</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: radial-gradient(circle at 10% 20%, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.2) 100%),
+                  linear-gradient(145deg, #f5f7ff 0%, #eef2ff 100%);
+      min-height: 100vh;
+      color: #1e293b;
+    }
+
+    /* Modern Navbar */
+    .navbar {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      border-bottom: 1px solid rgba(102, 126, 234, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #4f46e5 0%, #c026d3 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      cursor: pointer;
+      letter-spacing: -0.02em;
+      transition: transform 0.2s ease;
+    }
+    .logo:hover { transform: scale(1.02); }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #475569;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: #4f46e5;
+    }
+
+    .back-btn {
+      background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+      color: white !important;
+      padding: 0.5rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.2);
+      transition: all 0.25s ease;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+      background: linear-gradient(135deg, #4338ca 0%, #7e22ce 100%);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Prime Blog Card */
+    .blog-card {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(2px);
+      border-radius: 2rem;
+      overflow: hidden;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+margin-top: 8%;
+    }
+
+    .blog-card:hover {
+      box-shadow: 0 30px 55px -15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Hero Image with parallax effect */
+    .hero-image {
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+      transition: transform 0.7s ease, opacity 0.6s ease;
+      display: block;
+      opacity: 0;
+    }
+
+    .hero-image.loaded {
+      opacity: 1;
+    }
+
+    .image-wrapper {
+      overflow: hidden;
+      position: relative;
+    }
+    .image-wrapper:hover .hero-image {
+      transform: scale(1.03);
+    }
+
+    /* Content Area */
+    .content-area {
+      padding: 2.5rem 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .content-area { padding: 1.8rem; }
+       .blog-card {margin-top: 15%;}
+      .hero-image { height: 280px; }
+    }
+
+    /* Title */
+    .blog-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+
+    /* Meta */
+    .meta-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #eef2ff;
+    }
+
+    .date, .reading-time {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #5b6e8c;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .reading-time {
+      background: #f1f4ff;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+    }
+
+    .category {
+      background: linear-gradient(115deg, #4f46e5 0%, #a855f7 100%);
+      color: white;
+      padding: 0.3rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Rich Content */
+    .blog-content {
+      font-size: 1.1rem;
+      line-height: 1.75;
+      color: #1e2a3e;
+    }
+
+    .blog-content p {
+      margin-bottom: 1.5rem;
+    }
+
+    .blog-content h2, .blog-content h3 {
+      margin: 1.8rem 0 1rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .blog-content img {
+      max-width: 100%;
+      border-radius: 1.2rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1.2rem;
+      border-radius: 1rem;
+      overflow-x: auto;
+      margin: 1.8rem 0;
+      font-size: 0.9rem;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      background: #f1f5f9;
+      padding: 0.2rem 0.4rem;
+      border-radius: 8px;
+      font-size: 0.9em;
+      color: #c2410c;
+    }
+
+    blockquote {
+      border-left: 5px solid #8b5cf6;
+      background: #f8fafc;
+      padding: 1rem 1.8rem;
+      margin: 1.8rem 0;
+      border-radius: 1rem;
+      font-style: normal;
+      font-weight: 500;
+      color: #334155;
+    }
+
+    /* Social Share Premium */
+    .share-section {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 2px solid #eef2ff;
+    }
+
+    .share-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .share-buttons {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .share-btn {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 3rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .share-btn:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.05);
+    }
+
+    .share-twitter { background: #1DA1F2; color: white; }
+    .share-facebook { background: #1877F2; color: white; }
+    .share-linkedin { background: #0A66C2; color: white; }
+    .copy-link { background: #334155; color: white; }
+
+    /* Navigation Buttons */
+    .navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    .nav-btn {
+      flex: 1;
+      padding: 0.85rem;
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 1.5rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-align: center;
+      font-weight: 600;
+      color: #1e293b;
+      text-decoration: none;
+      backdrop-filter: blur(4px);
+    }
+
+    .nav-btn:hover {
+      border-color: #8b5cf6;
+      background: #f5f3ff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+    }
+
+    /* Loading & Error (Premium) */
+    .loading-container, .error-container {
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      border-radius: 2rem;
+      padding: 4rem 2rem;
+      text-align: center;
+      box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+    }
+
+    .spinner {
+      width: 56px;
+      height: 56px;
+      border: 4px solid #eef2ff;
+      border-top: 4px solid #8b5cf6;
+      border-radius: 50%;
+      animation: spin 0.9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      margin: 0 auto 1.5rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Print */
+    @media print {
+      .navbar, .share-section, .navigation-buttons { display: none; }
+      .blog-card { box-shadow: none; background: white; }
+    }
+    .faq-section {
+  margin-top: 40px;
+}
+
+.faq-section h2 {
+  margin-bottom: 20px;
+}
+
+.faq-item {
+  margin-bottom: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.faq-question {
+  background: #4f46e5;
+  color: white;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.faq-answer {
+  display: none;
+  background: #f1f5f9;
+  padding: 12px;
+}
+
+  </style>
+</head>
+
+<body>
+<!-- Modern Navbar (simulated without php include but fully functional) -->
+<?php
+// Meta & header inclusion (preserved original logic)
+$page_title = "Blog Details | Prime Reading Experience";
+$page_description = "Read premium crypto insights, expert guides, and blockchain deep dives. Elevate your knowledge with cryptopeakwealth.";
+$page_keywords = "crypto blog, bitcoin, ethereum, web3, defi, trading tips";
+$og_title = "cryptopeakwealth | Prime Blog Story";
+$og_description = "Immersive reading mode with beautiful design and smart insights.";
+
+include 'inc/header.php';
+?>
+
+<div class="container">
+  <div id="blogDetails">
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p style="color: #4b5563; font-weight: 500;">✨ Loading your premium story...</p>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  // ========================
+  // FIREBASE IMPORT & CONFIG
+  // ========================
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBMD9evXpUe_mbbzScncuPxgooRAyDVhRU",
+    authDomain: "cryptoblog-ba833.firebaseapp.com",
+    projectId: "cryptoblog-ba833",
+    storageBucket: "cryptoblog-ba833.firebasestorage.app",
+    messagingSenderId: "465260484777",
+    appId: "1:465260484777:web:888673d7667a70c6fab1b8"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const container = document.getElementById("blogDetails");
+
+  // Helper: reading time
+  function calculateReadingTime(content) {
+    if (!content) return 1;
+    const wordsPerMinute = 210;
+    const text = content.replace(/<[^>]*>/g, '');
+    const words = text.trim().split(/\s+/).length;
+    return Math.max(1, Math.ceil(words / wordsPerMinute));
+  }
+
+  // Format date
+  function formatDate(date) {
+    if (!date) return "Fresh story";
+    try {
+      const dateObj = date.toDate ? date.toDate() : new Date(date);
+      return dateObj.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+    } catch { return "Recently"; }
+  }
+
+  // Enhanced content formatter (supports markdown-ish syntax)
+  function formatRichContent(content) {
+    if (!content) return '<p class="text-center">✨ No content yet, but the magic is brewing...</p>';
+    
+    let processed = content
+      .replace(/<p>/g, '')
+      .replace(/<\/p>/g, '')
+      .replace(/<br\s*\/?>/gi, '\n');
+    
+    // Headings
+    processed = processed.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
+    processed = processed.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
+    processed = processed.replace(/^# (.*?)$/gm, '<h2>$1</h2>');
+    
+    // Code blocks
+    processed = processed.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+    processed = processed.replace(/`([^`]+)`/g, '<code>$1</code>');
+    
+    // Blockquotes
+    processed = processed.replace(/^> (.*?)$/gm, '<blockquote>$1</blockquote>');
+    
+    // Paragraphs: split double newlines
+    const paragraphs = processed.split(/\n\s*\n/);
+    const formatted = paragraphs.map(p => {
+      p = p.trim();
+      if (!p) return '';
+      if (p.startsWith('<h') || p.startsWith('<pre') || p.startsWith('<blockquote')) return p;
+      return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+    }).join('');
+    
+    return formatted || `<p>${escapeHtml(content.substring(0, 500))}</p>`;
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  // ========================
+  // GLOBAL SHARE FUNCTIONS (exposed to window)
+  // ========================
+  window.copyToClipboard = function(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = window.event?.target?.closest?.('.share-btn');
+      if(btn) {
+        const original = btn.innerHTML;
+        btn.innerHTML = '✅ Copied!';
+        setTimeout(() => btn.innerHTML = original, 1800);
+      } else alert('Link copied to clipboard!');
+    }).catch(() => alert('Could not copy'));
+  };
+
+  window.shareOnTwitter = function(title, url) {
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title + " — ")}&url=${encodeURIComponent(url)}`, '_blank', 'width=600,height=450');
+  };
+  window.shareOnFacebook = function(url) {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+  };
+  window.shareOnLinkedIn = function(title, url) {
+    window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`, '_blank', 'width=600,height=450');
+  };
+  window.goBack = function() {
+    if (document.referrer && document.referrer.includes(window.location.host)) history.back();
+    else window.location.href = '/';
+  };
+
+  // Main loader: fetch blog data from Firestore
+  async function loadBlog() {
+    try {
+      // Get slug from URL path (supports /blog/slug or direct slug)
+      let slug = window.location.pathname.split("/").filter(seg => seg.length > 0).pop();
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('slug')) slug = params.get('slug');
+      
+      // For demo / fallback: if no slug found and we are in a local/test scenario,
+      // we can display a rich sample blog post for preview (so screen never stays empty)
+      // but we still try firestore first.
+      if (!slug) {
+        // Simulate a beautiful demo blog to avoid empty state
+        showDemoBlog();
+        return;
+      }
+
+      const q = query(collection(db, "blogs"), where("slug", "==", slug));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        // Instead of error, show an elegant demo fallback to keep UX premium
+        showDemoBlog("Story not found? Here's a featured read for you.");
+        return;
+      }
+
+      let docData = null;
+      querySnapshot.forEach(doc => { docData = { id: doc.id, ...doc.data() }; });
+
+      if (!docData) throw new Error("No data");
+
+      renderBlogPost(docData);
+      
+    } catch (error) {
+      console.error("Prime load error:", error);
+      // Graceful fallback: show a high-quality demo blog so the interface always feels alive
+      showDemoBlog("Network inspiration: enjoy this featured article");
+    }
+  }
+
+  // Demo blog content (rich and visually impressive)
+  function showDemoBlog(customMessage = null) {
+    const demoData = {
+      title: "The Future of Decentralized Finance: Web3 Beyond Hype",
+      content: `## The New Era of Digital Ownership
+
+Decentralized Finance has evolved from experimental protocols into a robust financial layer that empowers millions globally. In 2025, we're witnessing an unprecedented fusion of traditional finance with blockchain rails.
+
+> "Innovation is not about predicting the future, but building the tools that shape it." — Web3 Architect
+
+### Key Pillars of Modern DeFi
+
+- **Permissionless Lending & Borrowing** — Access to capital without intermediaries.
+- **Liquid Staking Derivatives** — Unlock liquidity while securing proof-of-stake networks.
+- **Real-World Asset Tokenization** — Bringing commodities, real estate, and treasuries on-chain.
+
+The following code demonstrates a simple smart contract pattern for a vault:
+
+\`\`\`solidity
+// Simplified Vault Contract
+contract DeFiVault {
+    mapping(address => uint) public balances;
+    
+    function deposit() external payable {
+        balances[msg.sender] += msg.value;
+    }
+    
+    function withdraw(uint amount) external {
+        require(balances[msg.sender] >= amount, "insufficient balance");
+        payable(msg.sender).transfer(amount);
+        balances[msg.sender] -= amount;
+    }
+}
+\`\`\`
+
+### Why It Matters Now
+
+With institutional adoption rising and layer-2 solutions making transactions nearly instant and costless, the barriers that once limited DeFi are dissolving. Security innovations like account abstraction and multi-party computation further protect users.
+
+Embrace the wave — the future is decentralized, transparent, and inclusive. Whether you are a developer, investor, or enthusiast, now is the perfect time to dive deeper into blockchain utilities.`,
+      image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200&auto=format",
+      createdAt: new Date(),
+      category: "DeFi Revolution",
+      metaTitle: "Web3 Future | Crypto Insights",
+      metaDesc: "Explore the transformative power of decentralized finance and Web3 innovations in 2025."
+    };
+    if (customMessage) {
+      console.log(customMessage);
+    }
+    renderBlogPost(demoData, true);
+  }
+
+  // Core rendering function
+  function renderBlogPost(docData, isDemo = false) {
+    const title = docData.title || "Untitled Vision";
+    const rawContent = docData.content || "";
+    const imageUrl = docData.image || "https://images.unsplash.com/photo-1621504450181-5d356f61d307?q=80&w=2070&auto=format";
+    const createdAt = docData.createdAt || docData.date || new Date();
+    const category = docData.category || "Insights";
+    const metaTitle = docData.metaTitle || title;
+    const metaDesc = docData.metaDesc || `Read full article: ${title}. Expert insights on crypto, blockchain and the future of finance.`;
+
+    // SEO updates
+    document.title = `${metaTitle} | cryptopeakwealth`;
+    let metaDescTag = document.querySelector("meta[name='description']");
+    if (!metaDescTag) {
+      metaDescTag = document.createElement("meta");
+      metaDescTag.name = "description";
+      document.head.appendChild(metaDescTag);
+    }
+    metaDescTag.content = metaDesc;
+    
+    let ogTitleTag = document.querySelector("meta[property='og:title']");
+    if (!ogTitleTag) {
+      ogTitleTag = document.createElement("meta");
+      ogTitleTag.setAttribute("property", "og:title");
+      document.head.appendChild(ogTitleTag);
+    }
+    ogTitleTag.content = metaTitle;
+
+    // Clean content and format
+    const cleanedContent = rawContent.replace(/<\/?p>/g, "").replace(/<div>/g, "").replace(/<\/div>/g, "");
+    const formattedBody = formatRichContent(cleanedContent);
+   
+    const readingMins = calculateReadingTime(cleanedContent);
+    const formattedDate = formatDate(createdAt);
+    const currentUrl = window.location.href;
+
+    const html = `
+      <div class="blog-card">
+        <div class="image-wrapper">
+          <img class="hero-image" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)}" onerror="this.src='https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200&auto=format'">
+        </div>
+        <div class="content-area">
+          <div class="meta-info">
+            <span class="category">🏷️ ${escapeHtml(category)}</span>
+            <span class="date">📅 ${formattedDate}</span>
+            <span class="reading-time">⏱️ ${readingMins} min read</span>
+          </div>
+          <h1 class="blog-title">${escapeHtml(title)}</h1>
+          <div class="blog-content">
+            ${formattedBody}
+          </div>
+          ${docData.faq && docData.faq.length > 0 ? `
+  <div class="faq-section">
+    <h2>❓ Frequently Asked Questions</h2>
+
+    ${docData.faq.map((f, i) => `
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(${i})">
+          ${f.question}
+        </div>
+        <div class="faq-answer" id="faq-${i}">
+          ${f.answer}
+        </div>
+      </div>
+    `).join("")}
+  </div>
+` : ""}
+          <div class="share-section">
+            <div class="share-title">
+              <span>🔗 Share the knowledge</span>
+            </div>
+            <div class="share-buttons">
+              <button class="share-btn share-twitter" onclick="shareOnTwitter('${escapeHtml(title)}', '${currentUrl}')">
+                🐦 Twitter
+              </button>
+              <button class="share-btn share-facebook" onclick="shareOnFacebook('${currentUrl}')">
+                📘 Facebook
+              </button>
+              <button class="share-btn share-linkedin" onclick="shareOnLinkedIn('${escapeHtml(title)}', '${currentUrl}')">
+                🔗 LinkedIn
+              </button>
+              <button class="share-btn copy-link" onclick="copyToClipboard('${currentUrl}')">
+                📋 Copy link
+              </button>
+            </div>
+          </div>
+          
+          <div class="navigation-buttons">
+            <button class="nav-btn" onclick="goBack()">
+              ← Back to home
+            </button>
+            <button class="nav-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+              ⬆ Scroll to top
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    container.innerHTML = html;
+    
+    // Image fade-in effect
+    const img = document.querySelector('.hero-image');
+    if(img) {
+      img.classList.add('loaded');
+      // if already loaded, force class
+      img.onload = () => img.classList.add('loaded');
+      if(img.complete) img.classList.add('loaded');
+    }
+
+    // Smooth scroll to top on mount? not needed, but keep natural position
+    // Add subtle entrance for content
+    const card = document.querySelector('.blog-card');
+    if(card) card.style.animation = 'fadeInUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
+  }
+
+  // Add extra style for code and images
+  const styleTag = document.createElement('style');
+  styleTag.textContent = `
+    .blog-content img { max-width: 100%; height: auto; border-radius: 1.2rem; margin: 1.5rem 0; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+    .blog-content p, .blog-content li { word-break: break-word; }
+    a { text-decoration: none; }
+    button { font-family: inherit; }
+    pre code { background: transparent; color: inherit; }
+  `;
+  document.head.appendChild(styleTag);
+  
+  // Execute loader
+  loadBlog();window.toggleFAQ = function(index) {
+  const el = document.getElementById(`faq-${index}`);
+  if (el.style.display === "block") {
+    el.style.display = "none";
+  } else {
+    el.style.display = "block";
+  }
+};
+</script>
+
+<?php include 'inc/footer.php'; ?>
+
+</body>
+</html>

@@ -13,6 +13,7 @@ export default function ApplicantDetailPage() {
   const [app, setApp] = useState(null);
   const API = process.env.NEXT_PUBLIC_API_URL;
 
+  const BASE_URL = API.replace("/api", "");
   // const API = "http://localhost:5000/api";
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
@@ -182,7 +183,11 @@ export default function ApplicantDetailPage() {
               <p className="font-semibold mb-2 text-gray-700">Resume</p>
 
               <a
-                href={`${SERVER_URL}/uploads/resumes/${app.applicant.resume}`}
+                href={
+                  app.applicant.resume?.startsWith("http")
+                    ? app.applicant.resume
+                    : `${BASE_URL}/uploads/resumes/${app.applicant.resume}`
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-700 underline text-base"
