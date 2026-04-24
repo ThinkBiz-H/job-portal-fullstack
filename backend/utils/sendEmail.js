@@ -12,7 +12,7 @@ const sendEmail = async ({ to, subject, html }) => {
   });
 
   await transporter.sendMail({
-    from: `"ApnaJob" <${process.env.EMAIL_USER}>`,
+    from: `"Career Linker" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     html,

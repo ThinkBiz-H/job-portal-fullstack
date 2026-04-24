@@ -97,7 +97,7 @@ export default function PopularSearches() {
         <div className="text-center mb-12 md:mb-16 relative">
           <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full opacity-70"></div>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Popular <span className="text-orange-500">Searches</span> on Apna
+            Popular <span className="text-orange-500">Searches</span> on Career Linker
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
             Discover the most trending job categories that candidates are
@@ -136,7 +136,7 @@ export default function PopularSearches() {
                     Popular <br />
                     Searches on <br />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
-                      Apna
+                      Career Linker
                     </span>
                   </h2>
 

@@ -21,7 +21,8 @@ const userRoutes = require("./routes/userRoutes");
 const otpRoutes = require("./routes/otpRoutes");
 const sendEmail = require("./utils/sendEmail");
 const adminRoutes = require("./routes/adminRoutes");
-
+const aiRoutes = require("./routes/aiRoutes");
+const atsRoutes = require("./routes/atsRoutes");
 // ================= MIDDLEWARE =================
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
@@ -32,6 +33,8 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/otp", otpRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/ai", aiRoutes);
+app.use("/api/ats", atsRoutes);
 // ================= DATABASE =================
 const connectDB = async () => {
   try {

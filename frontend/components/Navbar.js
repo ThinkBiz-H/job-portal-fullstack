@@ -16,7 +16,8 @@ export default function Navbar() {
   const [showJobs, setShowJobs] = useState(false);
   const [showCity, setShowCity] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-
+  const [showResumeTools, setShowResumeTools] = useState(false);
+  const resumeRef = useRef(null);
   /* ---------------- MOBILE ---------------- */
   const [mobileMenu, setMobileMenu] = useState(false);
   const [mobileJobs, setMobileJobs] = useState(false);
@@ -29,7 +30,7 @@ export default function Navbar() {
   const profileRef = useRef(null);
   const pathname = usePathname();
   /* ================= LOAD USER ================= */
-
+  let timeout;
   useEffect(() => {
     const loadUser = () => {
       const token = localStorage.getItem("token");
@@ -122,7 +123,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center">
             <Image
               src="/web-logo/main-logo2.png"
-              alt="ApnaJob Logo"
+              alt="Career Linker Logo"
               width={140}
               height={40}
               priority
@@ -139,9 +140,57 @@ export default function Navbar() {
             {/* <Link href="#" className="hover:text-blue-600">
               Job Prep
             </Link> */}
-            <Link href="#" className="hover:text-blue-600">
-              Resume Tools
-            </Link>
+            <div
+              ref={resumeRef}
+              className="relative py-2"
+              onMouseEnter={() => {
+                clearTimeout(timeout);
+                setShowResumeTools(true);
+              }}
+              onMouseLeave={() => {
+                timeout = setTimeout(() => {
+                  setShowResumeTools(false);
+                }, 200);
+              }}
+            >
+              <span className="cursor-pointer font-medium hover:text-blue-600">
+                Resume Tools ▾
+              </span>
+
+              {showResumeTools && (
+                <div className="absolute top-full mt-1 w-72 bg-white shadow-xl rounded-xl border p-4 z-50">
+                  {/* ATS */}
+                  <Link
+                    href="/ats-checker"
+                    onClick={() => setShowResumeTools(false)}
+                  >
+                    <div className="p-3 rounded-lg hover:bg-gray-100 cursor-pointer transition">
+                      <h3 className="font-semibold text-blue-600">
+                        ATS Checker
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        Analyze your resume & get score
+                      </p>
+                    </div>
+                  </Link>
+
+                  {/* Resume Builder */}
+                  <Link
+                    href="/resume-builder"
+                    onClick={() => setShowResumeTools(false)}
+                  >
+                    <div className="p-3 rounded-lg hover:bg-gray-100 cursor-pointer transition mt-2">
+                      <h3 className="font-semibold text-green-600">
+                        Resume Builder
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        Create professional resume
+                      </p>
+                    </div>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* ================= DESKTOP AUTH ================= */}
@@ -267,13 +316,25 @@ export default function Navbar() {
                 Job Prep
               </Link> */}
 
-              <Link
-                href="/resume-tools"
-                onClick={() => setMobileMenu(false)}
-                className="block font-medium py-2"
-              >
-                Resume Tools
-              </Link>
+              <div className="py-2">
+                <p className="font-medium">Resume Tools</p>
+
+                <Link
+                  href="/ats-checker"
+                  onClick={() => setMobileMenu(false)}
+                  className="block pl-3 py-1 text-sm text-gray-600"
+                >
+                  ATS Checker
+                </Link>
+
+                <Link
+                  href="/resume-builder"
+                  onClick={() => setMobileMenu(false)}
+                  className="block pl-3 py-1 text-sm text-gray-600"
+                >
+                  Resume Builder
+                </Link>
+              </div>
             </div>
 
             <hr />

@@ -17,7 +17,7 @@ const testimonials = [
     name: "Shiwangi Singla",
     rating: 4.6,
     image: "https://randomuser.me/api/portraits/women/44.jpg",
-    text: "Apna helped me get my first job within weeks. The process was smooth and stress-free.",
+    text: "Career Linker helped me get my first job within weeks. The process was smooth and stress-free.",
     role: "Marketing Executive",
     company: "TechCorp Ltd.",
     joined: "2023",

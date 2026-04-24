@@ -192,7 +192,7 @@ export default function Footer() {
               </div>
               <div>
                 <h4 className="font-bold text-lg text-gray-900">
-                  Get the Apna App
+                  Get the Career Linker App
                 </h4>
                 <p className="text-gray-600 text-sm">Find jobs on the go</p>
               </div>
@@ -215,7 +215,7 @@ export default function Footer() {
               <div className="h-6 w-px bg-gray-300"></div>
               <div className="flex items-center gap-2 text-gray-700">
                 <Mail className="w-5 h-5" />
-                <span className="font-medium">support@apna.com</span>
+                <span className="font-medium">support@careerslinker.com</span>
               </div>
             </div>
           </div>

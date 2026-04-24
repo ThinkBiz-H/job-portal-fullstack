@@ -783,21 +783,136 @@ exports.updateJobseekerProfile = async (req, res) => {
       });
     }
 
-    const { basic, userInfo } = req.body;
+    const {
+      basic,
+      userInfo,
+      education,
+      skills,
+      experience,
+      certificate,
+      language,
+      resume,
+    } = req.body;
 
     if (basic) {
-      if (basic.email) user.email = basic.email.toLowerCase();
-      if (basic.mobile) user.phone = basic.mobile;
-      if (basic.dob) user.dateOfBirth = new Date(basic.dob);
-      if (basic.gender) user.gender = basic.gender;
+      if (basic.email) {
+        const normalizedEmail = String(basic.email).toLowerCase().trim();
+        const existingUser = await User.findOne({ email: normalizedEmail });
+
+        if (
+          existingUser &&
+          existingUser._id.toString() !== user._id.toString()
+        ) {
+          return res.status(400).json({
+            success: false,
+            message: "Email already used",
+          });
+        }
+
+        user.email = normalizedEmail;
+      }
+
+      if (basic.mobile) {
+        const normalizedPhone = String(basic.mobile).trim();
+        const existingUser = await User.findOne({ phone: normalizedPhone });
+
+        if (
+          existingUser &&
+          existingUser._id.toString() !== user._id.toString()
+        ) {
+          return res.status(400).json({
+            success: false,
+            message: "Phone already used",
+          });
+        }
+
+        user.phone = normalizedPhone;
+      }
+
+      if ("dob" in basic) {
+        user.dateOfBirth = basic.dob ? new Date(basic.dob) : null;
+      }
+
+      if (basic.gender) {
+        user.gender = basic.gender;
+      }
     }
 
     if (userInfo) {
-      if (userInfo.name) user.name = userInfo.name;
-      if (userInfo.college) user.college = userInfo.college;
-      if (userInfo.location) user.location = userInfo.location;
-      if (userInfo.image) user.profileImage = userInfo.image;
+      if ("name" in userInfo) user.name = String(userInfo.name || "");
+      if ("college" in userInfo) user.college = String(userInfo.college || "");
+      if ("location" in userInfo) {
+        user.location = String(userInfo.location || "");
+      }
+      if ("image" in userInfo) {
+        user.profileImage = String(
+          userInfo.image || "/images/default-avatar.png",
+        );
+      }
     }
+
+    if (!user.jobseekerProfile) {
+      user.jobseekerProfile = {
+        skills: [],
+        educationDetails: [],
+        experience: [],
+        certifications: [],
+        languages: [],
+        bio: "",
+      };
+    }
+
+    if (Array.isArray(education)) {
+      user.jobseekerProfile.educationDetails = education.map((edu) => ({
+        degree: String(edu?.degree || ""),
+        college: String(edu?.college || ""),
+        field: String(edu?.field || ""),
+        batch: String(edu?.batch || ""),
+        type: String(edu?.type || ""),
+      }));
+    }
+
+    if (Array.isArray(skills)) {
+      user.jobseekerProfile.skills = skills
+        .map((skill) => String(skill || "").trim())
+        .filter(Boolean)
+        .map((name) => ({ name }));
+    }
+
+    if (Array.isArray(experience)) {
+      user.jobseekerProfile.experience = experience.map((exp) => ({
+        company: String(exp?.company || ""),
+        position: String(exp?.position || ""),
+        startDate: exp?.startDate ? new Date(exp.startDate) : null,
+        endDate: exp?.endDate ? new Date(exp.endDate) : null,
+        currentlyWorking: Boolean(exp?.currentlyWorking),
+        description: String(exp?.description || ""),
+      }));
+    }
+
+    if (Array.isArray(certificate)) {
+      user.jobseekerProfile.certifications = certificate.map((cert) => ({
+        name: String(cert?.name || ""),
+        issuer: String(cert?.issuer || ""),
+        issueDate: cert?.issueDate ? new Date(cert.issueDate) : null,
+        expiryDate: cert?.expiryDate ? new Date(cert.expiryDate) : null,
+        credentialId: String(cert?.credentialId || ""),
+        url: String(cert?.url || ""),
+      }));
+    }
+
+    if (Array.isArray(language)) {
+      user.jobseekerProfile.languages = language.map((lang) => ({
+        language: String(lang?.language || ""),
+        proficiency: String(lang?.proficiency || "Basic"),
+      }));
+    }
+
+    if ("resume" in req.body) {
+      user.resume = String(resume || "");
+    }
+
+    user.markModified("jobseekerProfile");
 
     await user.save();
 

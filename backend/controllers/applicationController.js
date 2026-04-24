@@ -53,7 +53,7 @@ exports.applyJob = async (req, res) => {
         <p><b>${job.title}</b> at <b>${job.company}</b></p>
         <p>We’ll notify you for further updates.</p>
         <br/>
-        <p>– ApnaJob Team 🚀</p>
+        <p>– Career Linker Team 🚀</p>
       `,
     });
 

@@ -143,7 +143,7 @@ export default function EmployerSection() {
               >
                 <Building2 className="w-5 h-5 text-orange-400" />
                 <span className="text-sm font-bold text-orange-400 uppercase tracking-widest">
-                  APNA FOR EMPLOYERS
+                  Career Linker FOR EMPLOYERS
                 </span>
                 <Briefcase className="w-5 h-5 text-orange-400" />
               </div>

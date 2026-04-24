@@ -223,7 +223,7 @@ export default function TrendingRolesSlider() {
         </div> */}
 
         <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-          Trending <span className="text-orange-400">Job Roles</span> on Apna
+          Trending <span className="text-orange-400">Job Roles</span> on Career Linker
         </h2>
 
         <p className="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto">

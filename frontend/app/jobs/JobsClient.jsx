@@ -25,7 +25,7 @@ import {
 export default function JobsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const API = process.env.NEXT_PUBLIC_API_URL;
+  const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
   // URL से parameters पढ़ें
   const jobFromURL = searchParams.get("job") || "";
@@ -87,6 +87,52 @@ export default function JobsPage() {
     if (t.includes("contract")) return "contract";
 
     return "";
+  };
+
+  const parseExperienceValue = (value = "") => {
+    const normalized = value.trim().toLowerCase();
+
+    if (!normalized || normalized === "all") return null;
+    if (normalized === "fresher") return 0;
+
+    const parsed = parseInt(normalized, 10);
+    return Number.isNaN(parsed) ? null : parsed;
+  };
+
+  const normalizeText = (value = "") =>
+    String(value).trim().toLowerCase().replace(/\s+/g, " ");
+
+  const getExperienceRange = (experience = {}) => {
+    const min = Number(experience?.min) || 0;
+    const rawMax = Number(experience?.max) || 0;
+
+    // Dirty data handling:
+    // 0/0 => fresher or unspecified, keep exact 0
+    // min>0 and max<=0 => treat as "min and above"
+    if (min === 0 && rawMax === 0) {
+      return { min: 0, max: 0 };
+    }
+
+    if (rawMax <= 0 || rawMax < min) {
+      return { min, max: 99 };
+    }
+
+    return { min, max: rawMax };
+  };
+
+  const normalizeSalaryForFilter = (value) => {
+    const numericValue = Number(value) || 0;
+
+    if (!numericValue) return 0;
+
+    // Small values in current data are effectively LPA.
+    // Convert LPA to approximate monthly INR to match the slider scale.
+    if (numericValue <= 1000) {
+      return Math.round((numericValue * 100000) / 12);
+    }
+
+    // Large values are already stored in INR.
+    return numericValue;
   };
 
   // Filter options (MOBILE)
@@ -251,7 +297,15 @@ export default function JobsPage() {
     setExp(expFromURL);
     setCity(cityFromURL);
     if (jobFromURL || expFromURL || cityFromURL) {
-      handleSearch();
+      handleSearch({
+        jobValue: jobFromURL,
+        expValue: expFromURL,
+        cityValue: cityFromURL,
+      });
+    } else {
+      setAppliedJob("");
+      setAppliedExp("");
+      setAppliedCity("");
     }
   }, [jobFromURL, expFromURL, cityFromURL]);
 
@@ -292,6 +346,7 @@ export default function JobsPage() {
       applyFilters();
     }
   }, [
+    jobsData,
     appliedJob,
     appliedExp,
     appliedCity,
@@ -303,10 +358,10 @@ export default function JobsPage() {
   ]);
 
   // ================= SEARCH FUNCTION =================
-  const handleSearch = () => {
-    const j = job.trim();
-    const e = exp.trim();
-    const c = city.trim();
+  const handleSearch = (values = {}) => {
+    const j = (values.jobValue ?? job).trim();
+    const e = (values.expValue ?? exp).trim();
+    const c = (values.cityValue ?? city).trim();
 
     setAppliedJob(j);
     setAppliedExp(e);
@@ -326,34 +381,37 @@ export default function JobsPage() {
 
     let filtered = [...jobsData];
 
-    const finalJob = appliedJob.toLowerCase();
-    const finalCity = appliedCity.toLowerCase();
+    const finalJob = normalizeText(appliedJob);
+    const finalCity = normalizeText(appliedCity);
     const finalExp = appliedExp;
 
     /* ===== JOB ===== */
     if (finalJob) {
       filtered = filtered.filter((j) =>
-        j.title?.toLowerCase().includes(finalJob),
+        [j.title, j.company, ...(j.skillsRequired || [])]
+          .filter(Boolean)
+          .some((value) => normalizeText(value).includes(finalJob)),
       );
     }
 
     /* ===== CITY ===== */
     if (finalCity) {
       filtered = filtered.filter((j) =>
-        j.location?.toLowerCase().includes(finalCity),
+        normalizeText(j.location).includes(finalCity),
       );
     }
 
     /* ===== EXPERIENCE ===== */
     if (finalExp && finalExp !== "All") {
-      const expNum = parseInt(finalExp);
+      const expNum = parseExperienceValue(finalExp);
 
-      filtered = filtered.filter((j) => {
-        const min = j.experience?.min || 0;
-        const max = j.experience?.max || 99;
+      if (expNum !== null) {
+        filtered = filtered.filter((j) => {
+          const { min, max } = getExperienceRange(j.experience);
 
-        return expNum >= min && expNum <= max;
-      });
+          return expNum >= min && expNum <= max;
+        });
+      }
     }
 
     /* ===== DATE ===== */
@@ -376,7 +434,9 @@ export default function JobsPage() {
 
     /* ===== SALARY ===== */
     if (salary < 150000) {
-      filtered = filtered.filter((j) => (j.salary?.max || 0) <= salary);
+      filtered = filtered.filter(
+        (j) => normalizeSalaryForFilter(j.salary?.max) >= salary,
+      );
     }
 
     /* ===== WORK MODE ===== */
@@ -401,7 +461,11 @@ export default function JobsPage() {
 
     /* ===== SORT ===== */
     if (sortBy === "Salary - High to low") {
-      filtered.sort((a, b) => (b.salary?.max || 0) - (a.salary?.max || 0));
+      filtered.sort(
+        (a, b) =>
+          normalizeSalaryForFilter(b.salary?.max) -
+          normalizeSalaryForFilter(a.salary?.max),
+      );
     } else if (sortBy === "Date posted - New to Old") {
       filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
@@ -430,6 +494,7 @@ export default function JobsPage() {
     setWorkModes([]);
     setWorkTypes([]);
     setSortBy("Relevant");
+    setActiveFilter(null);
     router.push("/jobs");
     setFilteredJobs(jobsData);
   };
@@ -475,7 +540,6 @@ export default function JobsPage() {
 
   const closeActiveFilter = () => {
     setActiveFilter(null);
-    applyFilters();
   };
 
   // Render mobile filter dropdown content

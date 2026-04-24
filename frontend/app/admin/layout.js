@@ -55,6 +55,10 @@ import { usePathname } from "next/navigation";
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
 
+  if (pathname === "/admin/login") {
+    return children;
+  }
+
   const menu = [
     { name: "Dashboard", path: "/admin/dashboard" },
     { name: "Users", path: "/admin/users" },

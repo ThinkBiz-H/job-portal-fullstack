@@ -5,10 +5,10 @@ import ProfileModal from "@/components/ProfileModal";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-export default function ProfilePage() {
-  // const API = "http://localhost:5000/api";
-  const API = process.env.NEXT_PUBLIC_API_URL;
+const API =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
+export default function ProfilePage() {
   const router = useRouter();
 
   const [profile, setProfile] = useState({
@@ -35,6 +35,7 @@ export default function ProfilePage() {
   const [modal, setModal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [appliedJobs, setAppliedJobs] = useState([]);
+  const [saving, setSaving] = useState(false);
 
   const formatDate = (value) => {
     if (!value) return "";
@@ -168,11 +169,10 @@ export default function ProfilePage() {
   const handleDownloadResume = () => {
     if (profile.resume) {
       const link = document.createElement("a");
+      const uploadBaseURL = API.replace(/\/api\/?$/, "");
 
-      // ✅ ALWAYS server filename use kar
-      link.href = `http://localhost:5000/uploads/resumes/${profile.resume}`;
+      link.href = `${uploadBaseURL}/uploads/resumes/${profile.resume}`;
 
-      // ✅ USER ko original name dikhe
       link.download = profile.resumeName || "resume.pdf";
 
       document.body.appendChild(link);
@@ -183,6 +183,7 @@ export default function ProfilePage() {
 
   const saveProfileToBackend = async () => {
     try {
+      setSaving(true);
       const token = localStorage.getItem("token");
 
       const cleanedData = {
@@ -252,7 +253,7 @@ export default function ProfilePage() {
 
       if (res.data.success) {
         alert("Profile saved successfully!");
-        fetchProfile();
+        await fetchProfile();
       }
     } catch (err) {
       console.log("❌ Save Profile Error:", err.response?.data || err.message);
@@ -260,6 +261,8 @@ export default function ProfilePage() {
         "Failed to save profile: " +
           (err.response?.data?.message || err.message),
       );
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -280,9 +283,10 @@ export default function ProfilePage() {
         <div className="flex justify-end mb-6">
           <button
             onClick={saveProfileToBackend}
-            className="px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition"
+            disabled={saving}
+            className="px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            💾 Save Profile
+            {saving ? "Saving..." : "💾 Save Profile"}
           </button>
         </div>
 
@@ -410,7 +414,7 @@ export default function ProfilePage() {
                             </h5>
 
                             <p className="text-sm text-gray-600 mt-1">
-                              {app.job?.companyName || "Company"} •{" "}
+                              {app.job?.company || "Company"} •{" "}
                               {app.job?.location || "Location"}
                             </p>
 

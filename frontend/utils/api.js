@@ -15,7 +15,7 @@ export const apiCall = async (endpoint, options = {}) => {
 
   try {
     const response = await fetch(`${API_URL}${endpoint}`, {
-      ...options,
+        ...options,     
       headers,
     });
 
